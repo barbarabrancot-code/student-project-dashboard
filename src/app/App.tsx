@@ -18,7 +18,8 @@ const navItems: { id: ViewId; short: string; label: string; views: ViewId[] }[] 
 ];
 
 export default function App() {
-  const isMobile = new URLSearchParams(window.location.search).get('mobile') === 'true';
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone === true;
+  const isMobile = new URLSearchParams(window.location.search).get('mobile') === 'true' || isStandalone;
   const [currentView, setCurrentView] = useState<ViewId>('t1');
 
   return (
