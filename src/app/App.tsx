@@ -4,13 +4,17 @@ import PainelDeTurma from './components/PainelDeTurma';
 import AvaliacaoFinal from './components/AvaliacaoFinal';
 import AcompanhamentoEmpresa from './components/AcompanhamentoEmpresa';
 import BancoDeTalentos from './components/BancoDeTalentos';
+import Onboarding from './components/Onboarding';
+import Perfil from './components/Perfil';
+import Avaliacoes from './components/Avaliacoes';
 
-type ViewId = 't1' | 't2' | 'teacher' | 'grading' | 'company' | 'talents';
+type ViewId = 't1' | 't2' | 'teacher' | 'grading' | 'company' | 'talents' | 'onboarding' | 'perfil' | 'avaliacoes';
 
 const navItems: { id: ViewId; short: string; label: string; views: ViewId[] }[] = [
-  { id: 't1',      short: 'AL', label: 'Aluno',     views: ['t1', 't2']             },
-  { id: 'teacher', short: 'PR', label: 'Professor', views: ['teacher', 'grading']   },
-  { id: 'company', short: 'EM', label: 'Empresa',   views: ['company', 'talents']   },
+  { id: 'onboarding', short: 'EN', label: 'Entrada',   views: ['onboarding']                          },
+  { id: 't1',         short: 'AL', label: 'Aluno',     views: ['t1', 't2', 'perfil', 'avaliacoes']    },
+  { id: 'teacher',    short: 'PR', label: 'Professor', views: ['teacher', 'grading']                  },
+  { id: 'company',    short: 'EM', label: 'Empresa',   views: ['company', 'talents']                  },
 ];
 
 export default function App() {
@@ -47,7 +51,9 @@ export default function App() {
       {/* Área principal */}
       <div className="flex-1 overflow-auto h-full">
 
-      {currentView === 't2' ? (
+      {currentView === 'onboarding' ? (
+        <Onboarding onNavigate={(v: string) => setCurrentView(v as ViewId)} />
+      ) : currentView === 't2' ? (
         <EntregaDoGrupo onNavigate={(v: string) => setCurrentView(v as ViewId)} />
       ) : currentView === 'teacher' ? (
         <PainelDeTurma onNavigate={(v: string) => setCurrentView(v as ViewId)} />
@@ -57,6 +63,10 @@ export default function App() {
         <AcompanhamentoEmpresa onNavigate={(v: string) => setCurrentView(v as ViewId)} />
       ) : currentView === 'talents' ? (
         <BancoDeTalentos onNavigate={(v: string) => setCurrentView(v as ViewId)} />
+      ) : currentView === 'perfil' ? (
+        <Perfil onNavigate={(v: string) => setCurrentView(v as ViewId)} />
+      ) : currentView === 'avaliacoes' ? (
+        <Avaliacoes onNavigate={(v: string) => setCurrentView(v as ViewId)} />
       ) : (
         <div className="flex items-center justify-center min-h-full">
           <div className="w-[375px] h-[812px] bg-white overflow-y-auto relative flex flex-col">
@@ -265,10 +275,10 @@ function RecentUpdates() {
 
 function BottomNav({ onNavigate }: { onNavigate: (view: string) => void }) {
   const navItems = [
-    { icon: 'home',    label: 'Home',    viewId: 't1', active: true  },
-    { icon: 'project', label: 'Projeto', viewId: 't2', active: false },
-    { icon: 'group',   label: 'Grupo',   viewId: null, active: false },
-    { icon: 'profile', label: 'Perfil',  viewId: null, active: false },
+    { icon: 'home',    label: 'Home',       viewId: 't1',         active: true  },
+    { icon: 'project', label: 'Projeto',    viewId: 't2',         active: false },
+    { icon: 'star',    label: 'Avaliações', viewId: 'avaliacoes', active: false },
+    { icon: 'profile', label: 'Perfil',     viewId: 'perfil',     active: false },
   ];
 
   return (
@@ -291,11 +301,9 @@ function BottomNav({ onNavigate }: { onNavigate: (view: string) => void }) {
                 <path d="M3 3h18v18H3z" /><path d="M3 9h18" /><path d="M9 21V9" />
               </svg>
             )}
-            {item.icon === 'group' && (
+            {item.icon === 'star' && (
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
               </svg>
             )}
             {item.icon === 'profile' && (
