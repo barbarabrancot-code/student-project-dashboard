@@ -70,15 +70,17 @@ export default function App() {
         <Avaliacoes onNavigate={(v: string) => setCurrentView(v as ViewId)} />
       ) : (
         <div className="flex items-center justify-center min-h-full">
-          <div className="w-[375px] h-[812px] bg-white overflow-y-auto relative flex flex-col">
+          <div className="w-[375px] h-[812px] bg-white relative flex flex-col">
             <Header />
 
-            <div className="flex-1 pb-20">
-              <ProjectCard />
-              <Timeline />
-              <NextDeliveryCard />
-              <GroupStatus />
-              <RecentUpdates />
+            <div className="flex-1 overflow-y-auto">
+              <div className="pb-4">
+                <ProjectCard />
+                <Timeline />
+                <NextDeliveryCard />
+                <GroupStatus />
+                <RecentUpdates />
+              </div>
             </div>
 
             <BottomNav onNavigate={(v: string) => setCurrentView(v as ViewId)} />
@@ -283,7 +285,7 @@ function BottomNav({ onNavigate }: { onNavigate: (view: string) => void }) {
   ];
 
   return (
-    <div className="sticky bottom-0 bg-white border-t border-gray-100 px-4 py-2 flex justify-around">
+    <div className="bg-white border-t border-gray-100 px-4 py-2 flex justify-around">
       {navItems.map((item, index) => (
         <button
           key={index}
