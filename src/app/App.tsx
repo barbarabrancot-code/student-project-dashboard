@@ -18,13 +18,14 @@ const navItems: { id: ViewId; short: string; label: string; views: ViewId[] }[] 
 ];
 
 export default function App() {
+  const isMobile = new URLSearchParams(window.location.search).get('mobile') === 'true';
   const [currentView, setCurrentView] = useState<ViewId>('t1');
 
   return (
     <div className="flex w-screen h-screen bg-gray-50 overflow-hidden">
 
-      {/* Sidebar recolhida — expande com hover */}
-      <div className="group flex-shrink-0 w-12 hover:w-52 transition-all duration-300 bg-gray-900 flex flex-col overflow-hidden">
+      {/* Sidebar recolhida — escondida no modo mobile */}
+      {!isMobile && <div className="group flex-shrink-0 w-12 hover:w-52 transition-all duration-300 bg-gray-900 flex flex-col overflow-hidden">
         <div className="p-3 border-b border-gray-700 flex-shrink-0">
           <div className="w-6 h-6 bg-gray-600 rounded" />
         </div>
@@ -46,7 +47,7 @@ export default function App() {
             </button>
           ))}
         </nav>
-      </div>
+      </div>}
 
       {/* Área principal */}
       <div className="flex-1 overflow-auto h-full">

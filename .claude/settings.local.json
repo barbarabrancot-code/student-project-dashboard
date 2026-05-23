@@ -3,7 +3,10 @@
     "allow": [
       "Bash(dir \"C:\\\\Users\\\\barba\\\\projetos\\\\Student Project Dashboard Wireframe\\\\.claude\\\\skills\" 2>nul || echo \"sem skills\")",
       "Bash(pnpm dev *)",
-      "Bash(ping -n 3 127.0.0.1)"
+      "Bash(ping -n 3 127.0.0.1)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)"
     ],
     "additionalDirectories": [
       "c:\\Users\\barba\\projetos\\Student Project Dashboard Wireframe"
