@@ -8,13 +8,13 @@ export default function Avaliacoes({ onNavigate, isMobile }: { onNavigate: (view
       <div className={`bg-white relative flex flex-col ${isMobile ? 'w-full h-full' : 'w-[375px] h-[812px]'}`}>
         <Header onBack={() => onNavigate('t1')} />
         <div className="flex-1 overflow-y-auto">
-          <div className="px-4 pt-4 pb-4">
+          <div className="px-4 pt-4 pb-20">
             <p className="text-xs text-gray-400 mb-4">SafeLab — Semestre 2026/1</p>
             <Tabs aba={aba} onAba={setAba} />
             {aba === 'professor' ? <TabProfessor /> : <TabEmpresa />}
           </div>
         </div>
-        <BottomNav onNavigate={onNavigate} />
+        <BottomNav onNavigate={onNavigate} isMobile={isMobile} />
       </div>
     </div>
   );
@@ -213,7 +213,7 @@ function TabEmpresa() {
   );
 }
 
-function BottomNav({ onNavigate }: { onNavigate: (view: string) => void }) {
+function BottomNav({ onNavigate, isMobile }: { onNavigate: (view: string) => void; isMobile?: boolean }) {
   const navItems = [
     { icon: 'home',    label: 'Home',       viewId: 't1',         active: false },
     { icon: 'project', label: 'Projeto',    viewId: 't2',         active: false },
@@ -222,7 +222,7 @@ function BottomNav({ onNavigate }: { onNavigate: (view: string) => void }) {
   ];
 
   return (
-    <div className="bg-white border-t border-gray-100 px-4 py-2 flex justify-around">
+    <div className={`bg-white border-t border-gray-100 px-4 py-2 flex justify-around ${isMobile ? 'fixed bottom-0 left-0 right-0 z-50' : ''}`}>
       {navItems.map((item, index) => (
         <button
           key={index}
