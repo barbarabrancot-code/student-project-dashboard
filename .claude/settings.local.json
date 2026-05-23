@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir \"C:\\\\Users\\\\barba\\\\projetos\\\\Student Project Dashboard Wireframe\\\\.claude\\\\skills\" 2>nul || echo \"sem skills\")",
+      "Bash(pnpm dev *)",
+      "Bash(ping -n 3 127.0.0.1)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\barba\\projetos\\Student Project Dashboard Wireframe"
+    ]
+  }
+}
