@@ -50,12 +50,12 @@ export default function App() {
       </div>}
 
       {/* Área principal */}
-      <div className="flex-1 overflow-auto h-full">
+      <div className={`flex-1 h-full ${isMobile ? 'overflow-hidden' : 'overflow-auto'}`}>
 
       {currentView === 'onboarding' ? (
         <Onboarding onNavigate={(v: string) => setCurrentView(v as ViewId)} />
       ) : currentView === 't2' ? (
-        <EntregaDoGrupo onNavigate={(v: string) => setCurrentView(v as ViewId)} />
+        <EntregaDoGrupo onNavigate={(v: string) => setCurrentView(v as ViewId)} isMobile={isMobile} />
       ) : currentView === 'teacher' ? (
         <PainelDeTurma onNavigate={(v: string) => setCurrentView(v as ViewId)} />
       ) : currentView === 'grading' ? (
@@ -65,12 +65,12 @@ export default function App() {
       ) : currentView === 'talents' ? (
         <BancoDeTalentos onNavigate={(v: string) => setCurrentView(v as ViewId)} />
       ) : currentView === 'perfil' ? (
-        <Perfil onNavigate={(v: string) => setCurrentView(v as ViewId)} />
+        <Perfil onNavigate={(v: string) => setCurrentView(v as ViewId)} isMobile={isMobile} />
       ) : currentView === 'avaliacoes' ? (
-        <Avaliacoes onNavigate={(v: string) => setCurrentView(v as ViewId)} />
+        <Avaliacoes onNavigate={(v: string) => setCurrentView(v as ViewId)} isMobile={isMobile} />
       ) : (
-        <div className="flex items-center justify-center min-h-full">
-          <div className="w-[375px] h-[812px] bg-white relative flex flex-col">
+        <div className={isMobile ? 'w-full h-full flex flex-col' : 'flex items-center justify-center min-h-full'}>
+          <div className={`bg-white relative flex flex-col ${isMobile ? 'w-full h-full' : 'w-[375px] h-[812px]'}`}>
             <Header />
 
             <div className="flex-1 overflow-y-auto">

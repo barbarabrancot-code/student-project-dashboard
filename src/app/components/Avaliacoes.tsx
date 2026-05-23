@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
-export default function Avaliacoes({ onNavigate }: { onNavigate: (view: string) => void }) {
+export default function Avaliacoes({ onNavigate, isMobile }: { onNavigate: (view: string) => void; isMobile?: boolean }) {
   const [aba, setAba] = useState<'professor' | 'empresa'>('professor');
 
   return (
-    <div className="flex items-center justify-center min-h-full">
-      <div className="w-[375px] h-[812px] bg-white relative flex flex-col">
+    <div className={isMobile ? 'w-full h-full flex flex-col' : 'flex items-center justify-center min-h-full'}>
+      <div className={`bg-white relative flex flex-col ${isMobile ? 'w-full h-full' : 'w-[375px] h-[812px]'}`}>
         <Header onBack={() => onNavigate('t1')} />
         <div className="flex-1 overflow-y-auto">
           <div className="px-4 pt-4 pb-4">
