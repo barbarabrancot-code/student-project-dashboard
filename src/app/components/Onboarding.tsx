@@ -72,7 +72,7 @@ export default function Onboarding({ onNavigate }: { onNavigate: (view: string) 
       <div className="w-[375px] h-[812px] bg-white overflow-y-auto relative flex flex-col">
         {passo === 'cadastro' && <Cadastro onNext={() => setPasso('perfil')} />}
         {passo === 'perfil' && <CriarPerfil onNext={() => setPasso('mbti')} />}
-        {passo === 'mbti' && <TesteMBTI respostas={respostas} onResposta={handleResposta} onNext={avancarMBTI} />}
+        {passo === 'mbti' && <TesteMBTI respostas={respostas} onResposta={handleResposta} onNext={avancarMBTI} onPular={() => onNavigate('t1')} />}
         {passo === 'resultado' && <ResultadoMBTI tipo={tipo} onNavigate={onNavigate} onReiniciar={reiniciar} />}
       </div>
     </div>
@@ -201,10 +201,11 @@ function CriarPerfil({ onNext }: { onNext: () => void }) {
   );
 }
 
-function TesteMBTI({ respostas, onResposta, onNext }: {
+function TesteMBTI({ respostas, onResposta, onNext, onPular }: {
   respostas: Record<number, Resposta>;
   onResposta: (id: number, resposta: Resposta) => void;
   onNext: () => void;
+  onPular: () => void;
 }) {
   const respondidas = Object.keys(respostas).length;
   const todasRespondidas = respondidas === perguntas.length;
@@ -215,7 +216,7 @@ function TesteMBTI({ respostas, onResposta, onNext }: {
         style={{ background: 'linear-gradient(to right, #0F766E, #3B82F6)' }}>
         <div className="w-6" />
         <h1 className="text-base text-white font-medium">Perfil de Personalidade</h1>
-        <span className="text-xs text-white/70 font-medium">3 / 3</span>
+        <button onClick={onPular} className="text-xs text-white/70 font-medium hover:text-white">Pular</button>
       </div>
 
       <div className="px-4 pt-4 pb-6">
@@ -296,7 +297,7 @@ function ResultadoMBTI({ tipo, onNavigate, onReiniciar }: {
           onClick={() => onNavigate('t1')}
           className="w-full py-3 bg-[#3B82F6] text-white rounded-xl font-medium text-sm mb-3"
         >
-          Ir para o Dashboard
+          Finalizar e entrar no app
         </button>
         <button
           onClick={onReiniciar}
