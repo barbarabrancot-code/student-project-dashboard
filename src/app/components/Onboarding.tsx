@@ -137,6 +137,7 @@ function Cadastro({ onNext, onPular }: { onNext: () => void; onPular: () => void
 function CriarPerfil({ onNext }: { onNext: () => void }) {
   const [nome, setNome] = useState('');
   const [bio, setBio] = useState('');
+  const [fotoSelecionada, setFotoSelecionada] = useState(false);
 
   return (
     <>
@@ -149,14 +150,20 @@ function CriarPerfil({ onNext }: { onNext: () => void }) {
 
       <div className="flex-1 px-6 pt-6 pb-6">
         <div className="flex flex-col items-center mb-6">
-          <div className="w-24 h-24 rounded-full bg-gray-100 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center cursor-pointer mb-2">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
-              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-              <circle cx="12" cy="13" r="4" />
-            </svg>
-            <span className="text-xs text-gray-400 mt-1">Foto</span>
+          <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-dashed border-gray-300 bg-gray-100 flex flex-col items-center justify-center cursor-pointer mb-2">
+            {fotoSelecionada ? (
+              <img src="/foto-de-perfil.png" alt="Foto de perfil" className="w-full h-full object-cover" />
+            ) : (
+              <>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                  <circle cx="12" cy="13" r="4" />
+                </svg>
+                <span className="text-xs text-gray-400 mt-1">Foto</span>
+              </>
+            )}
           </div>
-          <button className="text-sm text-[#3B82F6]">Escolher foto</button>
+          <button onClick={() => setFotoSelecionada(true)} className="text-sm text-[#3B82F6]">Escolher foto</button>
         </div>
 
         <label className="block text-xs font-medium text-gray-600 mb-2">Nome completo</label>
