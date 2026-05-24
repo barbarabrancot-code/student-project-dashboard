@@ -70,7 +70,7 @@ export default function Onboarding({ onNavigate }: { onNavigate: (view: string) 
   return (
     <div className="flex items-center justify-center min-h-full">
       <div className="w-[375px] h-[812px] bg-white overflow-y-auto relative flex flex-col">
-        {passo === 'cadastro' && <Cadastro onNext={() => setPasso('perfil')} />}
+        {passo === 'cadastro' && <Cadastro onNext={() => setPasso('perfil')} onPular={() => onNavigate('t1')} />}
         {passo === 'perfil' && <CriarPerfil onNext={() => setPasso('mbti')} />}
         {passo === 'mbti' && <TesteMBTI respostas={respostas} onResposta={handleResposta} onNext={avancarMBTI} onPular={() => onNavigate('t1')} />}
         {passo === 'resultado' && <ResultadoMBTI tipo={tipo} onNavigate={onNavigate} onReiniciar={reiniciar} />}
@@ -79,7 +79,7 @@ export default function Onboarding({ onNavigate }: { onNavigate: (view: string) 
   );
 }
 
-function Cadastro({ onNext }: { onNext: () => void }) {
+function Cadastro({ onNext, onPular }: { onNext: () => void; onPular: () => void }) {
   const [matricula, setMatricula] = useState('');
 
   return (
@@ -123,6 +123,12 @@ function Cadastro({ onNext }: { onNext: () => void }) {
           Primeiro acesso?{' '}
           <a href="#" className="text-[#3B82F6]">Saiba como encontrar sua matrícula</a>
         </p>
+
+        <div className="mt-8 flex justify-center">
+          <button onClick={onPular} className="text-sm text-gray-400 underline underline-offset-2">
+            Ir direto para a página inicial
+          </button>
+        </div>
       </div>
     </>
   );
