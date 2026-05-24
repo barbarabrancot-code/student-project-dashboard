@@ -20,10 +20,10 @@ const navItems: { id: ViewId; short: string; label: string; views: ViewId[] }[] 
 export default function App() {
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone === true;
   const isMobile = new URLSearchParams(window.location.search).get('mobile') === 'true' || isStandalone;
-  const [currentView, setCurrentView] = useState<ViewId>('t1');
+  const [currentView, setCurrentView] = useState<ViewId>(isMobile ? 'onboarding' : 't1');
 
   return (
-    <div className="flex w-screen h-screen bg-gray-50 overflow-hidden">
+    <div className="flex w-screen bg-gray-50 overflow-hidden" style={{ height: '100dvh' }}>
 
       {/* Sidebar recolhida — escondida no modo mobile */}
       {!isMobile && <div className="group flex-shrink-0 w-12 hover:w-52 transition-all duration-300 bg-gray-900 flex flex-col overflow-hidden">
@@ -75,7 +75,7 @@ export default function App() {
             <Header />
 
             <div className="flex-1 overflow-y-auto">
-              <div className="pb-4">
+              <div className="pb-20">
                 <ProjectCard />
                 <Timeline />
                 <NextDeliveryCard />
@@ -84,7 +84,7 @@ export default function App() {
               </div>
             </div>
 
-            <BottomNav onNavigate={(v: string) => setCurrentView(v as ViewId)} />
+            <BottomNav onNavigate={(v: string) => setCurrentView(v as ViewId)} isMobile={isMobile} />
           </div>
         </div>
       )}
@@ -277,7 +277,7 @@ function RecentUpdates() {
   );
 }
 
-function BottomNav({ onNavigate }: { onNavigate: (view: string) => void }) {
+function BottomNav({ onNavigate, isMobile }: { onNavigate: (view: string) => void; isMobile?: boolean }) {
   const navItems = [
     { icon: 'home',    label: 'Home',       viewId: 't1',         active: true  },
     { icon: 'project', label: 'Projeto',    viewId: 't2',         active: false },
@@ -286,7 +286,7 @@ function BottomNav({ onNavigate }: { onNavigate: (view: string) => void }) {
   ];
 
   return (
-    <div className="bg-white border-t border-gray-100 px-4 py-2 flex justify-around">
+    <div className={`bg-white border-t border-gray-100 px-4 py-2 flex justify-around ${isMobile ? 'fixed bottom-0 left-0 right-0 z-50' : ''}`}>
       {navItems.map((item, index) => (
         <button
           key={index}
