@@ -56,149 +56,187 @@ function Tabs({ aba, onAba }: { aba: string; onAba: (a: 'professor' | 'empresa')
 }
 
 function TabProfessor() {
-  const criterios = [
-    { label: 'Participação ao longo do semestre', peso: '20%', nota: 7.5, progresso: 75 },
-    { label: 'Qualidade das entregas intermediárias', peso: '40%', nota: 8.5, progresso: 85 },
-    { label: 'Banca final', peso: '40%', nota: 8.4, progresso: 84 },
-  ];
+  const [parcaisAberto, setParcaisAberto] = useState(true);
+  const [finalAberto, setFinalAberto] = useState(true);
 
   const parciais = [
-    { titulo: 'Entrega 1 — Análise Inicial', data: '14/04/2026', nota: 8.5 },
-    { titulo: 'Entrega 2 — Mapeamento de Riscos', data: '05/05/2026', nota: 8.5 },
+    { titulo: 'Entrega 1 — Análise Inicial', data: '14/04/2026', nota: 8.5, comentario: '' },
+    { titulo: 'Entrega 2 — Mapeamento de Riscos', data: '05/05/2026', nota: 8.5, comentario: '' },
+    { titulo: 'Entrega 3 — Plano de Ação', data: '26/05/2026', nota: 9.0, comentario: 'Plano detalhado e com metas claras.' },
+    { titulo: 'Entrega 4 — Implementação Parcial', data: '09/06/2026', nota: 8.0, comentario: 'Boa execução, alguns ajustes necessários.' },
+    { titulo: 'Entrega 5 — Relatório Final', data: '23/06/2026', nota: 9.0, comentario: 'Relatório completo e bem apresentado.' },
   ];
 
   return (
     <>
-      <div className="mb-5">
-        <div className="text-sm font-medium text-gray-900 mb-3">Avaliações Parciais</div>
-        <div className="space-y-3">
-          {parciais.map((p, i) => (
-            <div key={i} className="flex items-center justify-between p-4 border border-gray-200 rounded-xl">
-              <div>
-                <div className="text-sm font-medium text-gray-900">{p.titulo}</div>
-                <div className="text-xs text-[#0F766E] mt-0.5">{p.data}</div>
+      <div className="mb-5 border border-gray-200 rounded-xl overflow-hidden">
+        <button
+          onClick={() => setParcaisAberto(v => !v)}
+          className="w-full flex items-center justify-between px-4 py-3 bg-white"
+        >
+          <span className="text-sm font-medium text-gray-900">Avaliações Parciais</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2"
+            className={`transition-transform ${parcaisAberto ? 'rotate-180' : ''}`}>
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </button>
+        {parcaisAberto && (
+          <div className="border-t border-gray-100 divide-y divide-gray-100">
+            {parciais.map((p, i) => (
+              <div key={i} className="flex items-start justify-between px-4 py-3">
+                <div className="flex-1 mr-3">
+                  <div className="text-sm font-medium text-gray-900">{p.titulo}</div>
+                  <div className="text-xs text-[#0F766E] mt-0.5">{p.data}</div>
+                  {p.comentario && <div className="text-xs text-gray-500 mt-1">{p.comentario}</div>}
+                </div>
+                <span className="w-10 h-8 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-center text-sm font-semibold text-gray-900 flex-shrink-0">
+                  {p.nota}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="mb-5 border border-gray-200 rounded-xl overflow-hidden">
+        <button
+          onClick={() => setFinalAberto(v => !v)}
+          className="w-full flex items-center justify-between px-4 py-3 bg-white"
+        >
+          <span className="text-sm font-medium text-gray-900">Avaliação Final</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2"
+            className={`transition-transform ${finalAberto ? 'rotate-180' : ''}`}>
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </button>
+        {finalAberto && (
+          <div className="border-t border-gray-100">
+            <div className="flex items-start justify-between px-4 py-3">
+              <div className="flex-1 mr-3">
+                <div className="text-sm font-medium text-gray-900">Nota final</div>
+                <div className="text-xs text-[#0F766E] mt-0.5">14/06/2026</div>
+                <div className="text-xs text-gray-500 mt-1">Excelente evolução ao longo do semestre.</div>
               </div>
               <span className="w-10 h-8 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-center text-sm font-semibold text-gray-900 flex-shrink-0">
-                {p.nota}
+                8.5
               </span>
             </div>
-          ))}
-        </div>
+          </div>
+        )}
       </div>
 
-      <div className="p-5 border border-gray-200 rounded-xl mb-5 text-center">
-        <div className="text-sm text-[#0F766E] mb-2">Nota Final do Professor</div>
-        <div className="text-5xl font-bold text-gray-900 mb-1">8.2</div>
-        <div className="text-sm text-gray-400">de 10.0</div>
-      </div>
-
-      <div className="text-sm font-medium text-gray-900 mb-3">Detalhamento da Nota</div>
-      <div className="space-y-3 mb-5">
-        {criterios.map((c, i) => (
-          <div key={i} className="p-3 border border-gray-200 rounded-xl">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="flex-1 text-sm text-gray-700">{c.label}</span>
-              <span className="text-xs text-gray-400">{c.peso}</span>
-              <span className="w-10 h-8 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-center text-sm font-semibold text-gray-900">
-                {c.nota}
-              </span>
-            </div>
-            <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-              <div
-                className="h-full rounded-full"
-                style={{ width: `${c.progresso}%`, background: 'linear-gradient(to right, #0F766E, #34D399)' }}
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="text-sm font-medium text-gray-900 mb-3">Comentário do Professor</div>
-      <div className="p-4 border border-gray-200 rounded-xl mb-4">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 bg-gray-100 rounded-full flex-shrink-0 flex items-center justify-center">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
-              <circle cx="12" cy="8" r="4" /><path d="M6 20v-1a6 6 0 0 1 12 0v1" />
-            </svg>
-          </div>
-          <div>
-            <div className="text-sm font-medium text-gray-900">Prof. Carla Mendes</div>
-            <div className="text-xs text-gray-400">Segurança do Trabalho</div>
-          </div>
-        </div>
-        <p className="text-sm text-gray-700 leading-relaxed">
-          Ana demonstrou excelente evolução ao longo do semestre. Sua dedicação e capacidade analítica foram fundamentais para o sucesso do projeto. Continue desenvolvendo suas habilidades de liderança.
-        </p>
+      <div className="text-sm font-medium text-gray-900 mb-3">Evolução</div>
+      <div className="border border-gray-200 rounded-xl p-4 mb-4">
+        <GraficoRadar />
       </div>
     </>
   );
 }
 
+function GraficoRadar() {
+  const cx = 140, cy = 128, r = 75;
+  const eixos = ['Pontualidade', 'Proatividade', 'Comunicação', 'Compromisso', 'Execução'];
+  const inicio = [0.55, 0.50, 0.60, 0.65, 0.55];
+  const final  = [0.88, 0.82, 0.90, 0.85, 0.87];
+
+  const ang = (i: number) => (Math.PI * 2 * i) / eixos.length - Math.PI / 2;
+  const pt  = (i: number, v: number) => ({ x: cx + r * v * Math.cos(ang(i)), y: cy + r * v * Math.sin(ang(i)) });
+  const lp  = (i: number) => ({ x: cx + (r + 22) * Math.cos(ang(i)), y: cy + (r + 22) * Math.sin(ang(i)) });
+
+  const poly = (vals: number[]) =>
+    vals.map((v, i) => { const p = pt(i, v); return `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`; }).join(' ') + 'Z';
+
+  return (
+    <>
+      <div className="flex items-center gap-4 mb-2 justify-end">
+        <div className="flex items-center gap-1.5">
+          <div className="w-4 h-0.5 bg-[#34D399]" />
+          <span className="text-xs text-gray-400">início</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="w-4 h-0.5 bg-[#3B82F6]" />
+          <span className="text-xs text-gray-400">final</span>
+        </div>
+      </div>
+      <svg viewBox="0 0 280 265" className="w-full">
+        {[0.25, 0.5, 0.75, 1.0].map(g => (
+          <polygon key={g}
+            points={eixos.map((_, i) => { const p = pt(i, g); return `${p.x.toFixed(1)},${p.y.toFixed(1)}`; }).join(' ')}
+            fill="none" stroke="#E5E7EB" strokeWidth="1" />
+        ))}
+        {eixos.map((_, i) => { const p = pt(i, 1); return <line key={i} x1={cx} y1={cy} x2={p.x.toFixed(1)} y2={p.y.toFixed(1)} stroke="#E5E7EB" strokeWidth="1" />; })}
+        <path d={poly(inicio)} fill="#34D399" fillOpacity="0.15" stroke="#34D399" strokeWidth="1.5" />
+        <path d={poly(final)}  fill="#3B82F6" fillOpacity="0.15" stroke="#3B82F6" strokeWidth="1.5" />
+        {eixos.map((nome, i) => { const p = lp(i); return (
+          <text key={i} x={p.x.toFixed(1)} y={p.y.toFixed(1)} textAnchor="middle" dominantBaseline="middle" fontSize="9" fill="#6B7280">{nome}</text>
+        );})}
+      </svg>
+    </>
+  );
+}
+
 function TabEmpresa() {
-  const aspectos = [
-    { label: 'Compreensão do ambiente laboratorial', nota: 8.5, progresso: 85 },
-    { label: 'Aplicabilidade das soluções propostas', nota: 8.0, progresso: 80 },
-    { label: 'Qualidade técnica do trabalho', nota: 8.5, progresso: 85 },
-    { label: 'Apresentação e comunicação', nota: 7.5, progresso: 75 },
-  ];
+  const [parcaisAberto, setParcaisAberto] = useState(true);
+  const [finalAberto, setFinalAberto] = useState(true);
 
   const parciais = [
-    { titulo: 'Entrega 1 — Análise Inicial', data: '14/04/2026', nota: 8.5 },
-    { titulo: 'Entrega 2 — Mapeamento de Riscos', data: '05/05/2026', nota: 8.0 },
+    { titulo: 'Entrega 1 — Análise Inicial', data: '14/04/2026', comentario: 'Boa compreensão do ambiente e dos riscos mapeados.' },
+    { titulo: 'Entrega 2 — Mapeamento de Riscos', data: '05/05/2026', comentario: 'Soluções práticas e bem aplicadas ao contexto.' },
   ];
 
   return (
     <>
-      <div className="mb-5">
-        <div className="text-sm font-medium text-gray-900 mb-3">Avaliações Parciais</div>
-        <div className="space-y-3">
-          {parciais.map((p, i) => (
-            <div key={i} className="flex items-center justify-between p-4 border border-gray-200 rounded-xl">
-              <div>
+      <div className="mb-5 border border-gray-200 rounded-xl overflow-hidden">
+        <button
+          onClick={() => setParcaisAberto(v => !v)}
+          className="w-full flex items-center justify-between px-4 py-3 bg-white"
+        >
+          <span className="text-sm font-medium text-gray-900">Avaliações Parciais</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2"
+            className={`transition-transform ${parcaisAberto ? 'rotate-180' : ''}`}>
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </button>
+        {parcaisAberto && (
+          <div className="border-t border-gray-100 divide-y divide-gray-100">
+            {parciais.map((p, i) => (
+              <div key={i} className="px-4 py-3">
                 <div className="text-sm font-medium text-gray-900">{p.titulo}</div>
                 <div className="text-xs text-[#0F766E] mt-0.5">{p.data}</div>
+                <div className="text-xs text-gray-500 mt-1">{p.comentario}</div>
               </div>
-              <span className="w-10 h-8 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-center text-sm font-semibold text-gray-900 flex-shrink-0">
-                {p.nota}
-              </span>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      <div className="p-5 border border-gray-200 rounded-xl mb-5 text-center">
-        <div className="text-sm text-[#0F766E] mb-2">Nota da Empresa</div>
-        <div className="text-5xl font-bold text-gray-900 mb-1">8.0</div>
-        <div className="text-sm text-gray-400">de 10.0</div>
-      </div>
-
-      <div className="text-sm font-medium text-gray-900 mb-3">Aspectos Avaliados</div>
-      <div className="space-y-3 mb-5">
-        {aspectos.map((a, i) => (
-          <div key={i} className="p-3 border border-gray-200 rounded-xl">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="flex-1 text-sm text-gray-700">{a.label}</span>
-              <span className="w-10 h-8 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-center text-sm font-semibold text-gray-900">
-                {a.nota}
-              </span>
-            </div>
-            <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-              <div
-                className="h-full rounded-full"
-                style={{ width: `${a.progresso}%`, background: 'linear-gradient(to right, #0F766E, #34D399)' }}
-              />
+      <div className="mb-5 border border-gray-200 rounded-xl overflow-hidden">
+        <button
+          onClick={() => setFinalAberto(v => !v)}
+          className="w-full flex items-center justify-between px-4 py-3 bg-white"
+        >
+          <span className="text-sm font-medium text-gray-900">Avaliação Final</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2"
+            className={`transition-transform ${finalAberto ? 'rotate-180' : ''}`}>
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </button>
+        {finalAberto && (
+          <div className="border-t border-gray-100">
+            <div className="px-4 py-3">
+              <div className="text-sm font-medium text-gray-900">Nota final</div>
+              <div className="text-xs text-[#0F766E] mt-0.5">14/06/2026</div>
+              <div className="text-xs text-gray-500 mt-1">Destacamos a qualidade da matriz de riscos desenvolvida.</div>
             </div>
           </div>
-        ))}
+        )}
       </div>
 
       <div className="text-sm font-medium text-gray-900 mb-3">Feedback da Empresa</div>
       <div className="p-4 border border-gray-200 rounded-xl mb-4">
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 bg-gray-100 rounded-xl flex-shrink-0 flex items-center justify-center">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="M9 22V12h6v10" />
-            </svg>
+          <div className="w-10 h-10 rounded-xl flex-shrink-0 overflow-hidden">
+            <img src="/sabin.png" alt="Laboratório Sabin" className="w-full h-full object-cover" />
           </div>
           <div>
             <div className="text-sm font-medium text-gray-900">Laboratório Sabin</div>
@@ -206,7 +244,7 @@ function TabEmpresa() {
           </div>
         </div>
         <p className="text-sm text-[#0F766E] leading-relaxed">
-          O grupo demonstrou excelente compreensão dos riscos ocupacionais e apresentou soluções práticas e aplicáveis ao nosso contexto. Destacamos a qualidade da matriz de riscos desenvolvida.
+          Ana demonstrou excelente proatividade e comprometimento durante todo o projeto. Sua capacidade de comunicação e pontualidade foram diferenciais importantes para a equipe.
         </p>
       </div>
     </>
