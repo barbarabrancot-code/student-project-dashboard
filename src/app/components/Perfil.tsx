@@ -8,7 +8,6 @@ export default function Perfil({ onNavigate, isMobile }: { onNavigate: (view: st
             <PerfilInfo />
             <ProjetoAtual />
             <Certificacoes />
-            <Habilidades />
           </div>
         </div>
         <BottomNav onNavigate={onNavigate} isMobile={isMobile} />
@@ -79,7 +78,7 @@ function Certificacoes() {
   return (
     <div className="mx-4 mb-5">
       <div className="text-sm font-medium text-gray-900 mb-3">Certificações</div>
-      <div className="space-y-3">
+      <div className="space-y-3 mb-4">
         {certs.map((cert, i) => (
           <div key={i} className="flex items-center gap-3 p-3 border border-gray-200 rounded-xl">
             <div className="w-8 h-8 rounded-lg bg-[#0F766E]/10 flex items-center justify-center flex-shrink-0">
@@ -95,6 +94,17 @@ function Certificacoes() {
           </div>
         ))}
       </div>
+
+      <label htmlFor="cert-upload" className="border-2 border-dashed border-gray-200 rounded-xl p-4 flex flex-col items-center cursor-pointer hover:border-[#0F766E]/40 transition-colors">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="17 8 12 3 7 8" />
+          <line x1="12" y1="3" x2="12" y2="15" />
+        </svg>
+        <span className="text-sm text-gray-500 mt-2">Arraste ou clique para enviar</span>
+        <span className="text-xs text-gray-400 mt-1">PDF, PNG até 5MB</span>
+      </label>
+      <input id="cert-upload" type="file" accept=".pdf,.png" className="hidden" />
     </div>
   );
 }
@@ -140,7 +150,7 @@ function BottomNav({ onNavigate, isMobile }: { onNavigate: (view: string) => voi
   ];
 
   return (
-    <div className={`bg-white border-t border-gray-100 px-4 py-2 flex justify-around ${isMobile ? 'fixed bottom-0 left-0 right-0 z-50' : ''}`}>
+    <div className={`bg-white border-t border-gray-100 px-4 pt-2 flex justify-around ${isMobile ? 'fixed bottom-0 left-0 right-0 z-50' : ''}`} style={isMobile ? { paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' } : {}}>
       {navItems.map((item, index) => (
         <button
           key={index}

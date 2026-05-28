@@ -260,7 +260,7 @@ function BottomNav({ onNavigate, isMobile }: { onNavigate: (view: string) => voi
   ];
 
   return (
-    <div className={`bg-white border-t border-gray-100 px-4 py-2 flex justify-around ${isMobile ? 'fixed bottom-0 left-0 right-0 z-50' : ''}`}>
+    <div className={`bg-white border-t border-gray-100 px-4 pt-2 flex justify-around ${isMobile ? 'fixed bottom-0 left-0 right-0 z-50' : ''}`} style={isMobile ? { paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' } : {}}>
       {navItems.map((item, index) => (
         <button
           key={index}

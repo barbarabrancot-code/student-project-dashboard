@@ -47,7 +47,7 @@ function calcularTipo(respostas: Record<number, Resposta>): string {
   ].join('');
 }
 
-export default function Onboarding({ onNavigate }: { onNavigate: (view: string) => void }) {
+export default function Onboarding({ onNavigate, isMobile }: { onNavigate: (view: string) => void; isMobile?: boolean }) {
   const [passo, setPasso] = useState<Passo>('cadastro');
   const [respostas, setRespostas] = useState<Record<number, Resposta>>({});
   const [tipo, setTipo] = useState('');
@@ -67,13 +67,25 @@ export default function Onboarding({ onNavigate }: { onNavigate: (view: string) 
     setPasso('cadastro');
   };
 
+  const passos: Passo[] = ['cadastro', 'perfil', 'mbti'];
+  const passoAtual = passos.indexOf(passo);
+
   return (
-    <div className="flex items-center justify-center min-h-full">
-      <div className="w-[375px] h-[812px] bg-white overflow-y-auto relative flex flex-col">
-        {passo === 'cadastro' && <Cadastro onNext={() => setPasso('perfil')} onPular={() => onNavigate('t1')} />}
-        {passo === 'perfil' && <CriarPerfil onNext={() => setPasso('mbti')} />}
-        {passo === 'mbti' && <TesteMBTI respostas={respostas} onResposta={handleResposta} onNext={avancarMBTI} onPular={() => onNavigate('t1')} />}
-        {passo === 'resultado' && <ResultadoMBTI tipo={tipo} onNavigate={onNavigate} onReiniciar={reiniciar} />}
+    <div className={isMobile ? 'w-full h-full' : 'flex items-center justify-center min-h-full'}>
+      <div className={`bg-white flex flex-col overflow-hidden ${isMobile ? 'w-full h-full' : 'w-[375px] h-[812px]'}`}>
+        {passo !== 'resultado' && (
+          <div className="flex gap-1.5 px-4 pt-3 pb-1 flex-shrink-0">
+            {passos.map((_, i) => (
+              <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= passoAtual ? 'bg-[#0F766E]' : 'bg-gray-200'}`} />
+            ))}
+          </div>
+        )}
+        <div className="flex-1 overflow-y-auto">
+          {passo === 'cadastro' && <Cadastro onNext={() => setPasso('perfil')} onPular={() => onNavigate('t1')} />}
+          {passo === 'perfil' && <CriarPerfil onNext={() => setPasso('mbti')} />}
+          {passo === 'mbti' && <TesteMBTI respostas={respostas} onResposta={handleResposta} onNext={avancarMBTI} onPular={() => onNavigate('t1')} />}
+          {passo === 'resultado' && <ResultadoMBTI tipo={tipo} onNavigate={onNavigate} onReiniciar={reiniciar} />}
+        </div>
       </div>
     </div>
   );
@@ -184,22 +196,6 @@ function CriarPerfil({ onNext }: { onNext: () => void }) {
           className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#0F766E] resize-none mb-4"
         />
 
-        <div className="mb-6">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-xs font-medium text-gray-600">Certificados</span>
-            <span className="px-2 py-0.5 bg-gray-100 text-gray-400 rounded-full text-xs">opcional</span>
-          </div>
-          <div className="border-2 border-dashed border-gray-200 rounded-xl p-4 flex flex-col items-center cursor-pointer hover:border-[#0F766E]/40 transition-colors">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="17 8 12 3 7 8" />
-              <line x1="12" y1="3" x2="12" y2="15" />
-            </svg>
-            <span className="text-sm text-gray-500 mt-2">Arraste ou clique para enviar</span>
-            <span className="text-xs text-gray-400 mt-1">PDF, PNG até 5MB</span>
-          </div>
-        </div>
-
         <button
           onClick={onNext}
           disabled={!nome.trim()}
@@ -264,7 +260,7 @@ function TesteMBTI({ respostas, onResposta, onNext, onPular }: {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 px-4 py-4 bg-white border-t border-gray-100 flex gap-3 z-50">
+      <div className="fixed bottom-0 left-0 right-0 px-4 pt-4 bg-white border-t border-gray-100 flex gap-3 z-50" style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
         <button
           onClick={onPular}
           className="flex-1 py-3 bg-white border border-gray-200 text-gray-700 rounded-xl font-medium text-sm"
