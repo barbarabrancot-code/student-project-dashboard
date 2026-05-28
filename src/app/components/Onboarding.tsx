@@ -229,10 +229,10 @@ function TesteMBTI({ respostas, onResposta, onNext, onPular }: {
         style={{ background: 'linear-gradient(to right, #0F766E, #3B82F6)' }}>
         <div className="w-6" />
         <h1 className="text-base text-white font-medium">Perfil de Personalidade</h1>
-        <button onClick={onPular} className="text-xs text-white/70 font-medium hover:text-white">Pular</button>
+        <div className="w-6" />
       </div>
 
-      <div className="px-4 pt-4 pb-6">
+      <div className="px-4 pt-4 pb-28">
         <p className="text-sm text-gray-500 mb-1 text-center">
           Responda com sinceridade — não há respostas certas ou erradas
         </p>
@@ -262,11 +262,19 @@ function TesteMBTI({ respostas, onResposta, onNext, onPular }: {
             </div>
           ))}
         </div>
+      </div>
 
+      <div className="fixed bottom-0 left-0 right-0 px-4 py-4 bg-white border-t border-gray-100 flex gap-3 z-50">
+        <button
+          onClick={onPular}
+          className="flex-1 py-3 bg-white border border-gray-200 text-gray-700 rounded-xl font-medium text-sm"
+        >
+          Pular
+        </button>
         <button
           onClick={onNext}
           disabled={!todasRespondidas}
-          className={`w-full mt-6 py-3 rounded-xl font-medium text-sm transition-colors ${
+          className={`flex-[2] py-3 rounded-xl font-medium text-sm transition-colors ${
             todasRespondidas ? 'bg-[#3B82F6] text-white' : 'bg-gray-100 text-gray-400'
           }`}
         >
