@@ -1,6 +1,6 @@
 {
-  "name": "Student Project Dashboard",
-  "short_name": "Dashboard",
+  "name": "Companion",
+  "short_name": "Companion",
   "description": "Plataforma de projetos acadêmicos",
   "start_url": "/student-project-dashboard/?mobile=true",
   "scope": "/student-project-dashboard/",
