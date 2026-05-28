@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import EmpresaApp from './components/EmpresaApp';
 import EntregaDoGrupo from './components/EntregaDoGrupo';
 import PainelDeTurma from './components/PainelDeTurma';
 import AvaliacaoFinal from './components/AvaliacaoFinal';
@@ -19,8 +20,18 @@ const navItems: { id: ViewId; short: string; label: string; views: ViewId[] }[] 
 
 export default function App() {
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone === true;
-  const isMobile = new URLSearchParams(window.location.search).get('mobile') === 'true' || isStandalone;
+  const appParam = new URLSearchParams(window.location.search).get('app');
+  const isMobile = appParam === 'aluno' || new URLSearchParams(window.location.search).get('mobile') === 'true' || isStandalone;
+  const isEmpresa = appParam === 'empresa';
   const [currentView, setCurrentView] = useState<ViewId>(isMobile ? 'onboarding' : 't1');
+
+  if (isEmpresa) {
+    return (
+      <div className="w-screen bg-white overflow-hidden" style={{ height: '100dvh' }}>
+        <EmpresaApp />
+      </div>
+    );
+  }
 
   return (
     <div className="flex w-screen bg-gray-50 overflow-hidden" style={{ height: '100dvh' }}>
@@ -72,6 +83,7 @@ export default function App() {
       ) : (
         <div className={isMobile ? 'w-full h-full flex flex-col' : 'flex items-center justify-center min-h-full'}>
           <div className={`bg-white relative flex flex-col ${isMobile ? 'w-full h-full' : 'w-[375px] h-[812px]'}`}>
+            <Header />
             <div className="flex-1 overflow-y-auto">
               <div className="pb-20">
                 <ProjectCard />
@@ -93,17 +105,8 @@ export default function App() {
 
 function Header() {
   return (
-    <div className="sticky top-0 z-10 px-4 py-3 flex items-center justify-between border-b border-white/20"
-      style={{ background: 'linear-gradient(to right, #0F766E, #3B82F6)' }}>
-      <div className="w-6" />
-      <h1 className="text-base text-white">Meu Desafio</h1>
-      <div className="w-6 h-6 flex items-center justify-center text-white">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-          <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-        </svg>
-      </div>
-    </div>
+    <div className="sticky top-0 z-10 h-12 flex-shrink-0"
+      style={{ background: 'linear-gradient(to right, #0F766E, #3B82F6)' }} />
   );
 }
 
