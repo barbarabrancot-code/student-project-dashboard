@@ -44,28 +44,40 @@ const grupos: Grupo[] = [
   },
 ];
 
-type Tela = 'home' | 'grupo' | 'aluno';
+type Tela = 'home' | 'alunos' | 'grupo' | 'aluno';
 
 export default function EmpresaApp() {
   const [tela, setTela] = useState<Tela>('home');
   const [grupoAtual, setGrupoAtual] = useState<Grupo | null>(null);
   const [alunoAtual, setAlunoAtual] = useState<Aluno | null>(null);
   const [modalDestaque, setModalDestaque] = useState(false);
+  const [voltarParaAlunos, setVoltarParaAlunos] = useState(false);
 
   const irParaGrupo = (g: Grupo) => { setGrupoAtual(g); setTela('grupo'); };
-  const irParaAluno = (a: Aluno) => { setAlunoAtual(a); setModalDestaque(false); setTela('aluno'); };
+  const irParaAluno = (a: Aluno, fromAlunos = false) => {
+    setAlunoAtual(a);
+    setVoltarParaAlunos(fromAlunos);
+    setModalDestaque(false);
+    setTela('aluno');
+  };
+  const voltarDeAluno = () => setTela(voltarParaAlunos ? 'alunos' : 'grupo');
+  const showNavbar = tela === 'home' || tela === 'alunos';
 
   return (
     <div className="w-full h-full flex flex-col bg-white relative overflow-hidden">
       {tela === 'home' && <HomeEmpresa onGrupo={irParaGrupo} />}
+      {tela === 'alunos' && <TelaAlunos onAluno={(a) => irParaAluno(a, true)} />}
       {tela === 'grupo' && grupoAtual && (
         <GrupoDetalhe grupo={grupoAtual} onVoltar={() => setTela('home')} onAluno={irParaAluno} />
       )}
       {tela === 'aluno' && alunoAtual && (
-        <AlunoDetalhe aluno={alunoAtual} onVoltar={() => setTela('grupo')} onDestaque={() => setModalDestaque(true)} />
+        <AlunoDetalhe aluno={alunoAtual} onVoltar={voltarDeAluno} onDestaque={() => setModalDestaque(true)} />
       )}
       {modalDestaque && alunoAtual && (
         <ModalDestaque aluno={alunoAtual} onContinuar={() => setModalDestaque(false)} />
+      )}
+      {showNavbar && (
+        <NavbarEmpresa ativa={tela === 'alunos' ? 'alunos' : 'home'} onChange={(v) => setTela(v)} />
       )}
     </div>
   );
@@ -79,7 +91,7 @@ function HomeEmpresa({ onGrupo }: { onGrupo: (g: Grupo) => void }) {
   ];
 
   return (
-    <div className="flex-1 overflow-y-auto px-5 pt-8 pb-6">
+    <div className="flex-1 overflow-y-auto px-5 pt-8 pb-24">
       <h1 className="text-xl font-semibold text-gray-900 mb-3 leading-snug">
         SafeLab — Mapeamento de Riscos Ocupacionais
       </h1>
@@ -157,10 +169,7 @@ function GrupoDetalhe({ grupo, onVoltar, onAluno }: {
   onAluno: (a: Aluno) => void;
 }) {
   const [comentario, setComentario] = useState('');
-  const [estrelas, setEstrelas] = useState<Record<string, boolean>>({});
-
-  const toggleEstrela = (iniciais: string) =>
-    setEstrelas(prev => ({ ...prev, [iniciais]: !prev[iniciais] }));
+  const [feedbackGrupo, setFeedbackGrupo] = useState('');
 
   return (
     <>
@@ -192,29 +201,38 @@ function GrupoDetalhe({ grupo, onVoltar, onAluno }: {
           />
         </div>
 
+        <div className="mb-5">
+          <div className="flex items-center gap-1.5 mb-1">
+            <span className="text-sm font-medium text-gray-900">Feedback para o grupo</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" /><path d="M12 8v4m0 4h.01" />
+            </svg>
+          </div>
+          <p className="text-xs text-gray-400 mb-2">Visível para o grupo após encerramento da banca</p>
+          <textarea
+            value={feedbackGrupo}
+            onChange={e => setFeedbackGrupo(e.target.value)}
+            placeholder="O que este grupo pode melhorar ou manteve de positivo?"
+            rows={3}
+            className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-[#0F766E] resize-none"
+          />
+        </div>
+
         <div className="border-t border-gray-100 mb-5" />
 
         <div className="text-sm font-medium text-gray-900 mb-3">Alunos do grupo</div>
         <div className="space-y-2">
           {grupo.membros.map((aluno, i) => (
-            <div key={i} className="flex items-center p-3 border border-gray-200 rounded-xl">
+            <button key={i} onClick={() => onAluno(aluno)}
+              className="w-full flex items-center p-3 border border-gray-200 rounded-xl text-left">
               <div className="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0 mr-3">
                 <span className="text-xs font-semibold text-white">{aluno.iniciais}</span>
               </div>
               <span className="flex-1 text-sm font-medium text-gray-900">{aluno.nome}</span>
-              <button onClick={() => toggleEstrela(aluno.iniciais)} className="w-8 h-8 flex items-center justify-center mr-1">
-                <svg width="18" height="18" viewBox="0 0 24 24"
-                  fill={estrelas[aluno.iniciais] ? '#F59E0B' : 'none'}
-                  stroke={estrelas[aluno.iniciais] ? '#F59E0B' : '#9CA3AF'} strokeWidth="2">
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                </svg>
-              </button>
-              <button onClick={() => onAluno(aluno)} className="w-6 h-6 flex items-center justify-center text-gray-400">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M9 18l6-6-6-6" />
-                </svg>
-              </button>
-            </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </button>
           ))}
         </div>
       </div>
@@ -250,7 +268,7 @@ function AlunoDetalhe({ aluno, onVoltar, onDestaque }: {
         </button>
         <h1 className="flex-1 text-base font-semibold text-gray-900">{aluno.nome}</h1>
         <button onClick={handleDestaque} className="w-8 h-8 flex items-center justify-center">
-          <svg width="20" height="20" viewBox="0 0 24 24"
+          <svg width="28" height="28" viewBox="0 0 24 24"
             fill={destacado ? '#F59E0B' : 'none'}
             stroke={destacado ? '#F59E0B' : '#9CA3AF'} strokeWidth="2">
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
@@ -306,34 +324,43 @@ function AlunoDetalhe({ aluno, onVoltar, onDestaque }: {
 
           <div>
             <div className="text-sm font-medium text-gray-900 mb-1">Avaliação (opcional)</div>
-            <div className="text-xs text-gray-500 mb-3">Avaliação geral do aluno</div>
-            <div className="flex justify-between mb-2">
-              {[1, 2, 3, 4, 5].map(n => (
-                <button key={n} onClick={() => setAvaliacao(n)}
-                  className={`w-11 h-11 rounded-full border-2 flex items-center justify-center text-sm font-semibold transition-colors ${
-                    avaliacao === n
-                      ? 'bg-[#0F766E] border-[#0F766E] text-white'
-                      : 'border-gray-200 text-gray-600'
-                  }`}>
-                  {n}
-                </button>
-              ))}
+            <div className="text-xs text-gray-500 mb-4">Avaliação geral do aluno</div>
+            <div className="relative">
+              <div className="absolute top-[18px] left-[18px] right-[18px] flex pointer-events-none">
+                {[1,2,3,4].map(i => (
+                  <div key={i} className={`flex-1 h-0.5 ${avaliacao && i < avaliacao ? 'bg-[#34D399]' : 'bg-gray-200'}`} />
+                ))}
+              </div>
+              <div className="flex justify-between">
+                {[1,2,3,4,5].map(n => (
+                  <button key={n} onClick={() => setAvaliacao(avaliacao === n ? null : n)}
+                    className={`w-9 h-9 rounded-full border-2 flex items-center justify-center relative z-10 transition-colors ${
+                      avaliacao && n <= avaliacao
+                        ? 'bg-[#0F766E] border-[#0F766E]'
+                        : 'bg-white border-gray-200'
+                    }`}>
+                    {avaliacao && n <= avaliacao && (
+                      <div className="w-2.5 h-2.5 bg-white rounded-full" />
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between mt-3">
               <span className="text-xs text-gray-400">Abaixo do esperado</span>
               <span className="text-xs text-gray-400">Superou expectativas</span>
             </div>
-            <p className="text-xs text-gray-400 mt-2">Esta avaliação é opcional e pode ser editada depois</p>
           </div>
+
         </div>
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 flex gap-3">
-        <button className="flex-1 py-3 bg-gray-900 text-white rounded-xl text-sm font-medium">
-          Salvar
-        </button>
         <button onClick={() => setAvaliacao(null)} className="px-4 py-3 text-sm font-medium text-gray-500">
           Limpar avaliação
+        </button>
+        <button className="flex-1 py-3 bg-gray-900 text-white rounded-xl text-sm font-medium">
+          Salvar
         </button>
       </div>
     </>
@@ -387,6 +414,127 @@ function ModalDestaque({ aluno, onContinuar }: { aluno: Aluno; onContinuar: () =
           className="w-full py-3 bg-gray-900 text-white rounded-xl text-sm font-medium">
           Continuar avaliação
         </button>
+      </div>
+    </div>
+  );
+}
+
+function NavbarEmpresa({ ativa, onChange }: {
+  ativa: 'home' | 'alunos';
+  onChange: (v: 'home' | 'alunos') => void;
+}) {
+  return (
+    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 flex">
+      <button onClick={() => onChange('home')}
+        className={`flex-1 py-3 flex flex-col items-center gap-1 ${ativa === 'home' ? 'text-[#0F766E]' : 'text-gray-400'}`}>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+        <span className="text-xs">Home</span>
+      </button>
+      <button onClick={() => onChange('alunos')}
+        className={`flex-1 py-3 flex flex-col items-center gap-1 ${ativa === 'alunos' ? 'text-[#0F766E]' : 'text-gray-400'}`}>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>
+        <span className="text-xs">Alunos</span>
+      </button>
+    </div>
+  );
+}
+
+const mockAvaliacoes: Record<string, number> = {
+  AS: 4, BC: 4, DS: 3, MF: 5, PG: 4, TK: 4, VL: 2,
+};
+
+function TelaAlunos({ onAluno }: { onAluno: (a: Aluno) => void }) {
+  type Filtro = 'todos' | 'destacados' | 'com-avaliacao' | 'sem-avaliacao';
+  const [filtro, setFiltro] = useState<Filtro>('todos');
+  const [destaques, setDestaques] = useState<Record<string, boolean>>({ AS: true, BC: true });
+
+  const todosAlunos = grupos.flatMap(g => g.membros);
+
+  const toggleDestaque = (iniciais: string) =>
+    setDestaques(prev => ({ ...prev, [iniciais]: !prev[iniciais] }));
+
+  const filtrados = todosAlunos.filter(a => {
+    if (filtro === 'destacados') return !!destaques[a.iniciais];
+    if (filtro === 'com-avaliacao') return !!mockAvaliacoes[a.iniciais];
+    if (filtro === 'sem-avaliacao') return !mockAvaliacoes[a.iniciais];
+    return true;
+  });
+
+  const abas: { id: Filtro; label: string }[] = [
+    { id: 'todos',          label: 'Todos' },
+    { id: 'destacados',     label: '★ Destacados' },
+    { id: 'com-avaliacao',  label: 'Com avaliação' },
+    { id: 'sem-avaliacao',  label: 'Sem avaliação' },
+  ];
+
+  return (
+    <div className="flex-1 overflow-y-auto pb-24">
+      <div className="sticky top-0 z-10 bg-white px-4 pt-5 pb-3 border-b border-gray-100">
+        <p className="text-xs text-gray-500 mb-3">SafeLab · Segurança do Trabalho · 2025.1</p>
+        <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
+          {abas.map(a => (
+            <button key={a.id} onClick={() => setFiltro(a.id)}
+              className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                filtro === a.id ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'
+              }`}>
+              {a.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 p-4">
+        {filtrados.map((aluno, i) => {
+          const av = mockAvaliacoes[aluno.iniciais] ?? null;
+          const dest = !!destaques[aluno.iniciais];
+          return (
+            <div key={i} onClick={() => onAluno(aluno)}
+              className={`relative cursor-pointer p-3 border rounded-2xl flex flex-col items-center ${
+                dest ? 'border-2 border-gray-700' : 'border border-gray-200'
+              }`}>
+              <button
+                onClick={e => { e.stopPropagation(); toggleDestaque(aluno.iniciais); }}
+                className="absolute top-2.5 right-2.5">
+                <svg width="16" height="16" viewBox="0 0 24 24"
+                  fill={dest ? '#F59E0B' : 'none'}
+                  stroke={dest ? '#F59E0B' : '#9CA3AF'} strokeWidth="2">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+              </button>
+              <div className="w-14 h-14 rounded-full bg-gray-300 flex items-center justify-center mb-2 mt-1">
+                <span className="text-sm font-semibold text-gray-600">{aluno.iniciais}</span>
+              </div>
+              <div className="text-sm font-semibold text-gray-900 text-center mb-0.5">{aluno.nome}</div>
+              <div className="text-xs text-[#0F766E] mb-2 text-center">Seg. do Trabalho</div>
+              {av !== null ? (
+                <div className="flex gap-1 mb-2">
+                  {[1,2,3,4,5].map(n => (
+                    <div key={n} className={`w-3 h-3 rounded-full ${n <= av ? 'bg-gray-700' : 'bg-gray-200'}`} />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-xs text-gray-400 italic mb-2">Sem avaliação</div>
+              )}
+              <div className="flex gap-3">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={av ? '#374151' : '#D1D5DB'} strokeWidth="2">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                </svg>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={av ? '#374151' : '#D1D5DB'} strokeWidth="2">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                  <line x1="1" y1="1" x2="23" y2="23" />
+                </svg>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

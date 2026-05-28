@@ -153,12 +153,8 @@ function CriarPerfil({ onNext }: { onNext: () => void }) {
 
   return (
     <>
-      <div className="sticky top-0 z-10 px-4 py-3 flex items-center justify-between border-b border-white/20"
-        style={{ background: 'linear-gradient(to right, #0F766E, #3B82F6)' }}>
-        <div className="w-6" />
-        <h1 className="text-base text-white font-medium">Criar Perfil</h1>
-        <span className="text-xs text-white/70 font-medium">2 / 3</span>
-      </div>
+      <div className="sticky top-0 z-10 h-12 flex-shrink-0"
+        style={{ background: 'linear-gradient(to right, #0F766E, #3B82F6)' }} />
 
       <div className="flex-1 px-6 pt-6 pb-6">
         <div className="flex flex-col items-center mb-6">
@@ -221,12 +217,8 @@ function TesteMBTI({ respostas, onResposta, onNext, onPular }: {
 
   return (
     <>
-      <div className="sticky top-0 z-10 px-4 py-3 flex items-center justify-between border-b border-white/20"
-        style={{ background: 'linear-gradient(to right, #0F766E, #3B82F6)' }}>
-        <div className="w-6" />
-        <h1 className="text-base text-white font-medium">Perfil de Personalidade</h1>
-        <div className="w-6" />
-      </div>
+      <div className="sticky top-0 z-10 h-12 flex-shrink-0"
+        style={{ background: 'linear-gradient(to right, #0F766E, #3B82F6)' }} />
 
       <div className="px-4 pt-4 pb-40">
         <p className="text-sm text-gray-500 mb-1 text-center">

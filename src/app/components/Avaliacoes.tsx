@@ -6,7 +6,7 @@ export default function Avaliacoes({ onNavigate, isMobile }: { onNavigate: (view
   return (
     <div className={isMobile ? 'w-full h-full flex flex-col' : 'flex items-center justify-center min-h-full'}>
       <div className={`bg-white relative flex flex-col ${isMobile ? 'w-full h-full' : 'w-[375px] h-[812px]'}`}>
-        <Header onBack={() => onNavigate('t1')} />
+        <Header />
         <div className="flex-1 overflow-y-auto">
           <div className="px-4 pt-4 pb-20">
             <p className="text-xs text-gray-400 mb-4">SafeLab — Semestre 2026/1</p>
@@ -20,18 +20,10 @@ export default function Avaliacoes({ onNavigate, isMobile }: { onNavigate: (view
   );
 }
 
-function Header({ onBack }: { onBack: () => void }) {
+function Header() {
   return (
-    <div className="sticky top-0 z-10 px-4 py-3 flex items-center justify-between border-b border-white/20"
-      style={{ background: 'linear-gradient(to right, #0F766E, #3B82F6)' }}>
-      <button onClick={onBack} className="w-6 h-6 flex items-center justify-center text-white">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M15 18l-6-6 6-6" />
-        </svg>
-      </button>
-      <h1 className="text-base text-white font-medium">Avaliação Final</h1>
-      <div className="w-6" />
-    </div>
+    <div className="sticky top-0 z-10 h-12 flex-shrink-0"
+      style={{ background: 'linear-gradient(to right, #0F766E, #3B82F6)' }} />
   );
 }
 
