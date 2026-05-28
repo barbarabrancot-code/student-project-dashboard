@@ -232,7 +232,7 @@ function TesteMBTI({ respostas, onResposta, onNext, onPular }: {
         <div className="w-6" />
       </div>
 
-      <div className="px-4 pt-4 pb-28">
+      <div className="px-4 pt-4 pb-40">
         <p className="text-sm text-gray-500 mb-1 text-center">
           Responda com sinceridade — não há respostas certas ou erradas
         </p>
