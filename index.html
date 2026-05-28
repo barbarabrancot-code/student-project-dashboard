@@ -19,12 +19,17 @@
 
     <body>
       <div id="root"></div>
-      <script type="module" src="/src/main.tsx"></script>
       <script>
+        window.installPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+          e.preventDefault();
+          window.installPrompt = e;
+        });
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.register('/student-project-dashboard/sw.js', { scope: '/student-project-dashboard/' });
         }
       </script>
+      <script type="module" src="/src/main.tsx"></script>
     </body>
   </html>
   
