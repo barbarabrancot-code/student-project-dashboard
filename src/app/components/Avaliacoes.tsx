@@ -56,8 +56,8 @@ function Tabs({ aba, onAba }: { aba: string; onAba: (a: 'professor' | 'empresa')
 }
 
 function TabProfessor() {
-  const [parcaisAberto, setParcaisAberto] = useState(true);
-  const [finalAberto, setFinalAberto] = useState(true);
+  const [parcaisAberto, setParcaisAberto] = useState(false);
+  const [finalAberto, setFinalAberto] = useState(false);
 
   const parciais = [
     { titulo: 'Entrega 1 — Análise Inicial', data: '14/04/2026', nota: 8.5, comentario: '' },
@@ -176,8 +176,8 @@ function GraficoRadar() {
 }
 
 function TabEmpresa() {
-  const [parcaisAberto, setParcaisAberto] = useState(true);
-  const [finalAberto, setFinalAberto] = useState(true);
+  const [parcaisAberto, setParcaisAberto] = useState(false);
+  const [finalAberto, setFinalAberto] = useState(false);
 
   const parciais = [
     { titulo: 'Entrega 1 — Análise Inicial', data: '14/04/2026', comentario: 'Boa compreensão do ambiente e dos riscos mapeados.' },
