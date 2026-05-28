@@ -72,8 +72,6 @@ export default function App() {
       ) : (
         <div className={isMobile ? 'w-full h-full flex flex-col' : 'flex items-center justify-center min-h-full'}>
           <div className={`bg-white relative flex flex-col ${isMobile ? 'w-full h-full' : 'w-[375px] h-[812px]'}`}>
-            <Header />
-
             <div className="flex-1 overflow-y-auto">
               <div className="pb-20">
                 <ProjectCard />
