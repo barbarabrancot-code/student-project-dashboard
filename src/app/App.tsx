@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import TelaInstalacao from './components/TelaInstalacao';
 import EntregaDoGrupo from './components/EntregaDoGrupo';
 import PainelDeTurma from './components/PainelDeTurma';
 import AvaliacaoFinal from './components/AvaliacaoFinal';
@@ -21,16 +20,7 @@ const navItems: { id: ViewId; short: string; label: string; views: ViewId[] }[] 
 export default function App() {
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone === true;
   const isMobile = new URLSearchParams(window.location.search).get('mobile') === 'true' || isStandalone;
-  const [showInstall, setShowInstall] = useState(isMobile && !isStandalone);
   const [currentView, setCurrentView] = useState<ViewId>(isMobile ? 'onboarding' : 't1');
-
-  if (showInstall) {
-    return (
-      <div className="w-screen overflow-hidden" style={{ height: '100dvh' }}>
-        <TelaInstalacao onContinuar={() => setShowInstall(false)} />
-      </div>
-    );
-  }
 
   return (
     <div className="flex w-screen bg-gray-50 overflow-hidden" style={{ height: '100dvh' }}>
