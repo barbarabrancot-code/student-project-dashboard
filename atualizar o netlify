@@ -1,0 +1,10 @@
+Rodar pnpm build (gera a pasta dist)
+Arrastar a pasta dist para o Netlify
+Rode esses 3 comandos no terminal do VS Code (Ctrl + J):
+
+
+git add -A
+
+git commit -m "adiciona perfil, avaliacoes e onboarding"
+
+git push

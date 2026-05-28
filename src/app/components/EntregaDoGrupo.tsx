@@ -4,14 +4,14 @@ export default function EntregaDoGrupo({ onNavigate, isMobile }: { onNavigate: (
       <div className={`bg-white relative flex flex-col ${isMobile ? 'w-full h-full' : 'w-[375px] h-[812px]'}`}>
         <Header />
         <div className="flex-1 overflow-y-auto">
-          <div className="pb-4">
+          <div className="pb-20">
             <DeliveryBanner />
             <TaskList />
             <DocumentsSection />
             <SelfAssessmentBanner />
           </div>
         </div>
-        <BottomNav onNavigate={onNavigate} />
+        <BottomNav onNavigate={onNavigate} isMobile={isMobile} />
       </div>
     </div>
   );
@@ -151,7 +151,7 @@ function SelfAssessmentBanner() {
   );
 }
 
-function BottomNav({ onNavigate }: { onNavigate: (view: string) => void }) {
+function BottomNav({ onNavigate, isMobile }: { onNavigate: (view: string) => void; isMobile?: boolean }) {
   const navItems = [
     { icon: 'home',    label: 'Home',       viewId: 't1',         active: false },
     { icon: 'project', label: 'Projeto',    viewId: 't2',         active: true  },
@@ -160,7 +160,7 @@ function BottomNav({ onNavigate }: { onNavigate: (view: string) => void }) {
   ];
 
   return (
-    <div className="bg-white border-t border-gray-100 px-4 py-2 flex justify-around">
+    <div className={`bg-white border-t border-gray-100 px-4 py-2 flex justify-around ${isMobile ? 'fixed bottom-0 left-0 right-0 z-50' : ''}`}>
       {navItems.map((item, index) => (
         <button
           key={index}
