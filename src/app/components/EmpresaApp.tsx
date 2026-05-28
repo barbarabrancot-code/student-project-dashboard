@@ -44,31 +44,39 @@ const grupos: Grupo[] = [
   },
 ];
 
-type Tela = 'home' | 'alunos' | 'grupo' | 'aluno';
+type Tela = 'home' | 'alunos' | 'aluno-visualizacao' | 'grupo' | 'aluno';
 
 export default function EmpresaApp() {
   const [tela, setTela] = useState<Tela>('home');
   const [grupoAtual, setGrupoAtual] = useState<Grupo | null>(null);
   const [alunoAtual, setAlunoAtual] = useState<Aluno | null>(null);
   const [modalDestaque, setModalDestaque] = useState(false);
-  const [voltarParaAlunos, setVoltarParaAlunos] = useState(false);
+  const [origemAluno, setOrigemAluno] = useState<Tela>('grupo');
 
   const irParaGrupo = (g: Grupo) => { setGrupoAtual(g); setTela('grupo'); };
-  const irParaAluno = (a: Aluno, fromAlunos = false) => {
+  const irParaVisualizacao = (a: Aluno) => { setAlunoAtual(a); setTela('aluno-visualizacao'); };
+  const irParaAluno = (a: Aluno, origem: Tela = 'grupo') => {
     setAlunoAtual(a);
-    setVoltarParaAlunos(fromAlunos);
+    setOrigemAluno(origem);
     setModalDestaque(false);
     setTela('aluno');
   };
-  const voltarDeAluno = () => setTela(voltarParaAlunos ? 'alunos' : 'grupo');
+  const voltarDeAluno = () => setTela(origemAluno);
   const showNavbar = tela === 'home' || tela === 'alunos';
 
   return (
     <div className="w-full h-full flex flex-col bg-white relative overflow-hidden">
       {tela === 'home' && <HomeEmpresa onGrupo={irParaGrupo} />}
-      {tela === 'alunos' && <TelaAlunos onAluno={(a) => irParaAluno(a, true)} />}
+      {tela === 'alunos' && <TelaAlunos onAluno={irParaVisualizacao} />}
+      {tela === 'aluno-visualizacao' && alunoAtual && (
+        <AlunoVisualizacao
+          aluno={alunoAtual}
+          onVoltar={() => setTela('alunos')}
+          onEditar={() => irParaAluno(alunoAtual, 'aluno-visualizacao')}
+        />
+      )}
       {tela === 'grupo' && grupoAtual && (
-        <GrupoDetalhe grupo={grupoAtual} onVoltar={() => setTela('home')} onAluno={irParaAluno} />
+        <GrupoDetalhe grupo={grupoAtual} onVoltar={() => setTela('home')} onAluno={(a) => irParaAluno(a, 'grupo')} />
       )}
       {tela === 'aluno' && alunoAtual && (
         <AlunoDetalhe aluno={alunoAtual} onVoltar={voltarDeAluno} onDestaque={() => setModalDestaque(true)} />
@@ -451,6 +459,41 @@ const mockAvaliacoes: Record<string, number> = {
   AS: 4, BC: 4, DS: 3, MF: 5, PG: 4, TK: 4, VL: 2,
 };
 
+const entregas = [
+  { id: 'e1',    nome: 'Entrega 1 — Análise Inicial',       data: '14/04/2026' },
+  { id: 'e2',    nome: 'Entrega 2 — Mapeamento de Riscos',  data: '05/05/2026' },
+  { id: 'banca', nome: 'Banca Final',                       data: '28/05/2026' },
+];
+
+type DadosEntrega = { av: number; feedback: string; notaInterna: string };
+
+const mockDadosPorEntrega: Record<string, Record<string, DadosEntrega>> = {
+  AS: {
+    e1:    { av: 4, feedback: 'Bom levantamento inicial dos riscos. A análise demonstrou compreensão adequada da NR-32, mas pode aprofundar mais nos aspectos biológicos.', notaInterna: 'Boa entrega inicial. Potencial de crescimento evidente.' },
+    e2:    { av: 4, feedback: 'Mapeamento detalhado e bem estruturado. Boa identificação dos agentes de risco no ambiente laboratorial.', notaInterna: 'Evolução consistente em relação à primeira entrega.' },
+    banca: { av: 4, feedback: 'Excelente apresentação. Ana demonstrou domínio técnico sobre NR-32 e soube articular os conceitos com a realidade do laboratório.', notaInterna: 'Candidata forte para vaga de estagiário. Considerar para próximo processo seletivo.' },
+  },
+  BC: {
+    e1:    { av: 3, feedback: 'Entrega satisfatória. Bruno identificou os principais riscos, mas a análise poderia ser mais aprofundada.', notaInterna: 'Perfil técnico em desenvolvimento.' },
+    e2:    { av: 4, feedback: 'Mapeamento bem executado. Melhora visível em relação à entrega anterior.', notaInterna: 'Evolução positiva.' },
+    banca: { av: 4, feedback: 'Bruno apresentou com segurança os resultados do levantamento de riscos. Boa comunicação.', notaInterna: 'Perfil técnico sólido.' },
+  },
+  DS: {
+    e1:    { av: 3, feedback: 'Entrega dentro do esperado. Pode aprofundar mais na análise crítica.', notaInterna: 'Acompanhar nas próximas entregas.' },
+    e2:    { av: 3, feedback: 'Mapeamento completo mas análise ainda superficial em alguns pontos.', notaInterna: 'Evolução lenta. Dar atenção especial.' },
+    banca: { av: 3, feedback: 'Apresentação dentro do esperado. Diana pode aprofundar mais na análise crítica dos riscos identificados.', notaInterna: 'Desempenho estável, sem grande evolução.' },
+  },
+  MF: {
+    e1:    { av: 5, feedback: 'Análise excepcional na primeira entrega. Mariana demonstrou domínio técnico e visão crítica.', notaInterna: 'Alto potencial já evidente na primeira entrega.' },
+    e2:    { av: 5, feedback: 'Mapeamento exemplar. Detalhamento técnico acima da média do grupo.', notaInterna: 'Indicada para programa de mentoria.' },
+    banca: { av: 5, feedback: 'Mariana se destacou pela organização e clareza na apresentação. Liderança visível no grupo.', notaInterna: 'Alto potencial. Indicada para programa de mentoria da empresa.' },
+  },
+};
+
+function getGrupoDoAluno(iniciais: string): string {
+  return grupos.find(g => g.membros.some(m => m.iniciais === iniciais))?.nome ?? '';
+}
+
 function TelaAlunos({ onAluno }: { onAluno: (a: Aluno) => void }) {
   type Filtro = 'todos' | 'destacados' | 'com-avaliacao' | 'sem-avaliacao';
   const [filtro, setFiltro] = useState<Filtro>('todos');
@@ -497,9 +540,13 @@ function TelaAlunos({ onAluno }: { onAluno: (a: Aluno) => void }) {
           const dest = !!destaques[aluno.iniciais];
           return (
             <div key={i} onClick={() => onAluno(aluno)}
-              className={`relative cursor-pointer p-3 border rounded-2xl flex flex-col items-center ${
-                dest ? 'border-2 border-gray-700' : 'border border-gray-200'
-              }`}>
+              className="relative cursor-pointer p-3 rounded-2xl flex flex-col items-center"
+              style={dest ? {
+                border: '2px solid transparent',
+                background: 'linear-gradient(white, white) padding-box, linear-gradient(135deg, #34D399, #0F766E) border-box',
+              } : {
+                border: '1px solid #E5E7EB',
+              }}>
               <button
                 onClick={e => { e.stopPropagation(); toggleDestaque(aluno.iniciais); }}
                 className="absolute top-2.5 right-2.5">
@@ -537,5 +584,131 @@ function TelaAlunos({ onAluno }: { onAluno: (a: Aluno) => void }) {
         })}
       </div>
     </div>
+  );
+}
+
+function AlunoVisualizacao({ aluno, onVoltar, onEditar }: {
+  aluno: Aluno;
+  onVoltar: () => void;
+  onEditar: () => void;
+}) {
+  const [entregaId, setEntregaId] = useState('e1');
+  const [dropdownAberto, setDropdownAberto] = useState(false);
+
+  const grupo = getGrupoDoAluno(aluno.iniciais);
+  const entregaAtual = entregas.find(e => e.id === entregaId)!;
+  const dados: DadosEntrega | undefined = mockDadosPorEntrega[aluno.iniciais]?.[entregaId];
+
+  return (
+    <>
+      <div className="sticky top-0 z-10 bg-white px-4 py-3 flex items-center border-b border-gray-100">
+        <button onClick={onVoltar} className="w-6 h-6 flex items-center justify-center text-gray-600">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+      </div>
+
+      <div className="flex-1 overflow-y-auto pb-24">
+        <div className="flex flex-col items-center px-4 pt-6 pb-5">
+          <div className="w-20 h-20 rounded-full bg-gray-600 flex items-center justify-center mb-3">
+            <span className="text-lg font-semibold text-white">{aluno.iniciais}</span>
+          </div>
+          <h1 className="text-lg font-semibold text-gray-900 mb-2">{aluno.nome}</h1>
+          <div className="flex gap-2">
+            <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">Seg. do Trabalho</span>
+            {grupo && <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">{grupo}</span>}
+          </div>
+        </div>
+
+        <div className="border-t border-gray-100" />
+
+        <div className="px-4 pt-5 space-y-5">
+          <div>
+            <p className="text-sm font-medium text-gray-900 mb-2">Selecione a entrega</p>
+            <div className="relative">
+              <button onClick={() => setDropdownAberto(!dropdownAberto)}
+                className="w-full p-3 border border-gray-200 rounded-xl flex items-center justify-between text-left">
+                <div>
+                  <div className="text-sm font-semibold text-gray-900">{entregaAtual.nome}</div>
+                  <div className="text-xs text-gray-500">{entregaAtual.data}</div>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
+                  {dropdownAberto
+                    ? <path d="M18 15l-6-6-6 6" />
+                    : <path d="M6 9l6 6 6-6" />}
+                </svg>
+              </button>
+              {dropdownAberto && (
+                <div className="absolute top-full left-0 right-0 mt-1 border border-gray-200 rounded-xl bg-white shadow-md z-20 overflow-hidden">
+                  {entregas.map((e, i) => (
+                    <button key={e.id}
+                      onClick={() => { setEntregaId(e.id); setDropdownAberto(false); }}
+                      className={`w-full p-3 text-left ${i < entregas.length - 1 ? 'border-b border-gray-100' : ''} ${e.id === entregaId ? 'bg-gray-50' : ''}`}>
+                      <div className="text-sm font-semibold text-gray-900">{e.nome}</div>
+                      <div className="text-xs text-gray-500">{e.data}</div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {dados ? (
+            <>
+              <div>
+                <p className="text-sm font-medium text-gray-900 mb-3">Avaliação desta entrega</p>
+                <div className="flex items-center gap-3">
+                  <div className="flex gap-1.5">
+                    {[1,2,3,4,5].map(n => (
+                      <div key={n} className={`w-9 h-9 rounded-full border-2 flex items-center justify-center text-sm font-semibold ${
+                        n <= dados.av ? 'bg-gray-800 border-gray-800 text-white' : 'border-gray-200 text-gray-400'
+                      }`}>{n}</div>
+                    ))}
+                  </div>
+                  <span className="text-sm text-gray-500 font-medium">{dados.av}/5</span>
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth="2">
+                    <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
+                  </svg>
+                  <span className="text-sm font-medium text-gray-900">Feedback para o aluno</span>
+                </div>
+                <div className="p-3 border border-gray-200 rounded-xl text-sm text-[#3B82F6] leading-relaxed">
+                  {dados.feedback}
+                </div>
+                <p className="text-xs text-gray-400 mt-1.5">Visível para o aluno após encerramento da banca</p>
+              </div>
+
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth="2">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                    <line x1="1" y1="1" x2="23" y2="23" />
+                  </svg>
+                  <span className="text-sm font-medium text-gray-900">Nota interna</span>
+                </div>
+                <div className="p-3 border border-gray-200 rounded-xl text-sm text-[#3B82F6] leading-relaxed">
+                  {dados.notaInterna}
+                </div>
+                <p className="text-xs text-gray-400 mt-1.5">Visível só para você</p>
+              </div>
+            </>
+          ) : (
+            <p className="text-sm text-gray-400 italic text-center py-6">Sem avaliação registrada para esta entrega</p>
+          )}
+        </div>
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4">
+        <button onClick={onEditar}
+          className="w-full py-3 bg-gray-900 text-white rounded-xl text-sm font-medium">
+          Editar avaliação
+        </button>
+      </div>
+    </>
   );
 }
