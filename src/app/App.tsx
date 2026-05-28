@@ -145,7 +145,7 @@ function Timeline() {
   ];
 
   return (
-    <div className="mb-6">
+    <div className="my-8">
       <div className="overflow-x-auto">
         <div className="flex items-center justify-between min-w-max px-4">
           {milestones.map((milestone, index) => (
