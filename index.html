@@ -20,6 +20,11 @@
     <body>
       <div id="root"></div>
       <script type="module" src="/src/main.tsx"></script>
+      <script>
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/student-project-dashboard/sw.js', { scope: '/student-project-dashboard/' });
+        }
+      </script>
     </body>
   </html>
   
