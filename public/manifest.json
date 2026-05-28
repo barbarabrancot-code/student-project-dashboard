@@ -2,7 +2,7 @@
   "name": "Student Project Dashboard",
   "short_name": "Dashboard",
   "description": "Plataforma de projetos acadêmicos",
-  "start_url": "/?mobile=true",
+  "start_url": "/student-project-dashboard/?mobile=true",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#ffffff",
