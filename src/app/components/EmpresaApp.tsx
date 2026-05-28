@@ -87,32 +87,37 @@ function HomeEmpresa({ onGrupo }: { onGrupo: (g: Grupo) => void }) {
         Semana 8 de 16
       </span>
 
-      <div className="flex items-start justify-between mb-8 px-1">
-        {marcos.map((m, i) => (
-          <div key={i} className="flex items-center">
-            <div className="flex flex-col items-center">
-              <div className={`w-9 h-9 rounded-full border-2 flex items-center justify-center ${
+      <div className="relative mb-8">
+        <div className="absolute top-[22px] left-[22px] right-[22px] flex pointer-events-none">
+          {marcos.slice(0, -1).map((m, i) => (
+            <div key={i} className={`flex-1 h-0.5 ${m.status === 'completed' ? 'bg-[#34D399]' : 'bg-gray-200'}`} />
+          ))}
+        </div>
+        <div className="flex justify-between">
+          {marcos.map((m, i) => (
+            <div key={i} className="flex flex-col items-center">
+              <div className={`w-11 h-11 rounded-full border-2 flex items-center justify-center relative z-10 ${
                 m.status === 'completed' ? 'bg-[#0F766E] border-[#0F766E]' :
-                m.status === 'current'   ? 'border-[#0F766E] bg-white' :
-                'border-gray-200 bg-white'
+                m.status === 'current'   ? 'bg-white border-[#0F766E]' :
+                'bg-white border-gray-200'
               }`}>
                 {m.status === 'completed' && (
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
                     <path d="M20 6L9 17l-5-5" />
                   </svg>
                 )}
-                {m.status === 'current' && <div className="w-2.5 h-2.5 bg-[#0F766E] rounded-full" />}
+                {m.status === 'current' && <div className="w-3 h-3 bg-[#0F766E] rounded-full" />}
               </div>
               <div className="mt-2 text-center">
-                <div className="text-xs font-medium text-gray-800 whitespace-nowrap">{m.label}</div>
+                <div className={`text-xs whitespace-nowrap ${m.status === 'current' ? 'font-semibold text-gray-900' : 'font-medium text-gray-700'}`}>
+                  {m.label}
+                </div>
                 <div className="text-xs text-gray-400">{m.sub}</div>
               </div>
             </div>
-            {i < marcos.length - 1 && (
-              <div className={`h-0.5 w-8 mx-1 mb-5 ${m.status === 'completed' ? 'bg-[#34D399]' : 'bg-gray-200'}`} />
-            )}
-          </div>
-        ))}
+          ))}
+        </div>
+        <p className="text-xs text-gray-400 text-center mt-3">Sua participação está concentrada nesses 3 momentos</p>
       </div>
 
       <p className="text-xs text-gray-400 mb-4">Toque em um grupo para avaliar</p>

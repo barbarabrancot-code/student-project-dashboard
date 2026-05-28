@@ -140,48 +140,47 @@ function ProjectCard() {
 }
 
 function Timeline() {
-  const milestones = [
-    { label: 'Kickoff', week: 'Sem 1', status: 'completed' },
-    { label: 'Entrega 1', week: 'Sem 6', status: 'completed' },
-    { label: 'Validação', week: 'Sem 13', status: 'current' },
-    { label: 'Banca Final', week: 'Sem 16', status: 'future' }
+  const marcos = [
+    { label: 'Kickoff',     sub: 'Sem 1',  status: 'completed' },
+    { label: 'Entrega 1',   sub: 'Sem 6',  status: 'completed' },
+    { label: 'Validação',   sub: 'Sem 13', status: 'current'   },
+    { label: 'Banca Final', sub: 'Sem 16', status: 'future'    },
   ];
 
   return (
-    <div className="my-8">
-      <div className="overflow-x-auto">
-        <div className="flex items-center justify-between min-w-max px-4">
-          {milestones.map((milestone, index) => (
-            <div key={index} className="flex items-center">
-              <div className="flex flex-col items-center">
-                <div className={`w-10 h-10 rounded-full border-2 flex items-center justify-center ${
-                  milestone.status === 'completed' ? 'bg-[#0F766E] border-[#0F766E]' :
-                  milestone.status === 'current' ? 'border-[#3B82F6] bg-white' :
-                  'border-gray-200 bg-white'
-                }`}>
-                  {milestone.status === 'completed' && (
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
-                      <path d="M20 6L9 17l-5-5" />
-                    </svg>
-                  )}
-                  {milestone.status === 'current' && (
-                    <div className="w-3 h-3 bg-[#3B82F6] rounded-full" />
-                  )}
-                </div>
-                <div className="mt-2 text-xs text-center whitespace-nowrap">
-                  <div className="text-gray-800 font-medium">{milestone.label}</div>
-                  <div className="text-gray-400">{milestone.week}</div>
-                </div>
+    <div className="mx-4 mb-6">
+      <div className="relative">
+        <div className="absolute top-[22px] left-[22px] right-[22px] flex pointer-events-none">
+          {marcos.slice(0, -1).map((m, i) => (
+            <div key={i} className={`flex-1 h-0.5 ${m.status === 'completed' ? 'bg-[#34D399]' : 'bg-gray-200'}`} />
+          ))}
+        </div>
+        <div className="flex justify-between">
+          {marcos.map((m, i) => (
+            <div key={i} className="flex flex-col items-center">
+              <div className={`w-11 h-11 rounded-full border-2 flex items-center justify-center relative z-10 ${
+                m.status === 'completed' ? 'bg-[#0F766E] border-[#0F766E]' :
+                m.status === 'current'   ? 'bg-white border-[#0F766E]' :
+                'bg-white border-gray-200'
+              }`}>
+                {m.status === 'completed' && (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
+                    <path d="M20 6L9 17l-5-5" />
+                  </svg>
+                )}
+                {m.status === 'current' && <div className="w-3 h-3 bg-[#0F766E] rounded-full" />}
               </div>
-              {index < milestones.length - 1 && (
-                <div className={`h-0.5 w-16 mx-2 ${
-                  milestone.status === 'completed' ? 'bg-[#34D399]' : 'bg-gray-200'
-                }`} />
-              )}
+              <div className="mt-2 text-center">
+                <div className={`text-xs whitespace-nowrap ${m.status === 'current' ? 'font-semibold text-gray-900' : 'font-medium text-gray-700'}`}>
+                  {m.label}
+                </div>
+                <div className="text-xs text-gray-400">{m.sub}</div>
+              </div>
             </div>
           ))}
         </div>
       </div>
+      <p className="text-xs text-gray-400 text-center mt-3">Acompanhe seu progresso no semestre</p>
     </div>
   );
 }
