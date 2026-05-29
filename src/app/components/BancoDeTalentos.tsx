@@ -224,8 +224,25 @@ function StudentGrid({ selectedStudents, setSelectedStudents, favoritedStudents,
   );
 }
 
+const avaliacoesAluno = [
+  { id: 'e1',    nome: 'Entrega 1 — Análise Inicial',       data: '14/04/2026', nota: 8.5,
+    comentarioProf: 'Boa entrega! O levantamento inicial está bem estruturado. Para a próxima, aprofundem a análise dos agentes biológicos e relacionem mais diretamente com a NR-32.',
+    comentarioEmpresa: 'Boa compreensão do ambiente e dos riscos mapeados.' },
+  { id: 'e2',    nome: 'Entrega 2 — Mapeamento de Riscos',  data: '05/05/2026', nota: 8.5,
+    comentarioProf: 'Mapeamento completo. Fiquei satisfeita com o nível de detalhe. Revisem as medidas de controle para os riscos de categoria A antes da validação.',
+    comentarioEmpresa: 'Soluções práticas e bem aplicadas ao contexto.' },
+  { id: 'e3',    nome: 'Entrega 3 — Plano de Ação',         data: '26/05/2026', nota: 9.0,
+    comentarioProf: 'Plano detalhado e com metas claras.',
+    comentarioEmpresa: '' },
+  { id: 'banca', nome: 'Banca Final',                       data: '14/06/2026', nota: 9.1,
+    comentarioProf: 'Ana demonstrou excelente capacidade analítica e liderança. Superou as expectativas na aplicação prática da NR-32.',
+    comentarioEmpresa: 'O grupo demonstrou excelente compreensão dos riscos ocupacionais. A análise foi completa e as recomendações são aplicáveis ao nosso contexto.' },
+];
+
 function StudentProfilePanel({ studentId, onClose, showContactForm, setShowContactForm }: any) {
   const [activeTab, setActiveTab] = useState<'portfolio' | 'cv' | 'reviews'>('portfolio');
+  const [entregaId, setEntregaId] = useState('banca');
+  const [dropdownAberto, setDropdownAberto] = useState(false);
 
   const mbtiDimensions = [
     { label: 'Extroversão vs Introversão', value: 65, side: 'I' },
@@ -344,7 +361,7 @@ function StudentProfilePanel({ studentId, onClose, showContactForm, setShowConta
             </div>
 
             <div className="p-3 bg-white border border-gray-200 rounded-xl">
-              <div className="text-sm font-medium text-gray-900 mb-2">Certificações</div>
+              <div className="text-sm font-medium text-gray-900 mb-2">Certificações (2)</div>
               <div className="space-y-2">
                 {[{ code: 'NR-32', name: 'Segurança em Serviços de Saúde' }, { code: 'NR-09', name: 'Programa de Prevenção de Riscos' }].map((cert, idx) => (
                   <div key={idx} className="flex items-center gap-2">
@@ -362,7 +379,65 @@ function StudentProfilePanel({ studentId, onClose, showContactForm, setShowConta
               </div>
             </div>
           </>
-        )}
+        {activeTab === 'reviews' && (() => {
+          const entrega = avaliacoesAluno.find(e => e.id === entregaId)!;
+          return (
+            <>
+              <div className="mb-4">
+                <p className="text-sm font-medium text-gray-900 mb-2">Selecione a entrega</p>
+                <div className="relative">
+                  <button onClick={() => setDropdownAberto(!dropdownAberto)}
+                    className="w-full p-3 border border-gray-200 rounded-xl flex items-center justify-between text-left">
+                    <div>
+                      <div className="text-sm font-semibold text-gray-900">{entrega.nome}</div>
+                      <div className="text-xs text-gray-500">{entrega.data}</div>
+                    </div>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
+                      {dropdownAberto ? <path d="M18 15l-6-6-6 6" /> : <path d="M6 9l6 6 6-6" />}
+                    </svg>
+                  </button>
+                  {dropdownAberto && (
+                    <div className="absolute top-full left-0 right-0 mt-1 border border-gray-200 rounded-xl bg-white shadow-md z-20 overflow-hidden">
+                      {avaliacoesAluno.map((e, i) => (
+                        <button key={e.id}
+                          onClick={() => { setEntregaId(e.id); setDropdownAberto(false); }}
+                          className={`w-full p-3 text-left flex items-center justify-between ${i < avaliacoesAluno.length - 1 ? 'border-b border-gray-100' : ''} ${e.id === entregaId ? 'bg-gray-50' : ''}`}>
+                          <div>
+                            <div className="text-sm font-semibold text-gray-900">{e.nome}</div>
+                            <div className="text-xs text-gray-500">{e.data}</div>
+                          </div>
+                          <span className="text-sm font-semibold text-gray-700">{e.nota}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="p-3 bg-[#0F766E]/5 border border-[#0F766E]/20 rounded-xl mb-3">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-6 h-6 rounded-full bg-[#0F766E] flex items-center justify-center flex-shrink-0">
+                    <span className="text-white font-semibold" style={{ fontSize: '9px' }}>PC</span>
+                  </div>
+                  <span className="text-xs font-medium text-[#0F766E]">Prof. Carla · Nota: {entrega.nota}</span>
+                </div>
+                <p className="text-sm text-gray-700 leading-relaxed">{entrega.comentarioProf}</p>
+              </div>
+
+              {entrega.comentarioEmpresa && (
+                <div className="p-3 bg-[#3B82F6]/5 border border-[#3B82F6]/20 rounded-xl mb-4">
+                  <div className="text-xs text-[#3B82F6] font-medium mb-2">Avaliação da Sabin</div>
+                  <p className="text-sm text-gray-700 leading-relaxed">{entrega.comentarioEmpresa}</p>
+                </div>
+              )}
+
+              <div className="text-sm font-medium text-gray-900 mb-2">Evolução</div>
+              <div className="border border-gray-200 rounded-xl p-3">
+                <RadarChart />
+              </div>
+            </>
+          );
+        })()}
       </div>
 
       <div className="p-4 border-t border-gray-200">
@@ -390,5 +465,46 @@ function StudentProfilePanel({ studentId, onClose, showContactForm, setShowConta
         )}
       </div>
     </div>
+  );
+}
+
+function RadarChart() {
+  const cx = 130, cy = 118, r = 70;
+  const eixos = ['Pontualidade', 'Proatividade', 'Comunicação', 'Compromisso', 'Execução'];
+  const inicio = [0.55, 0.50, 0.60, 0.65, 0.55];
+  const final  = [0.88, 0.82, 0.90, 0.85, 0.87];
+
+  const ang = (i: number) => (Math.PI * 2 * i) / eixos.length - Math.PI / 2;
+  const pt  = (i: number, v: number) => ({ x: cx + r * v * Math.cos(ang(i)), y: cy + r * v * Math.sin(ang(i)) });
+  const lp  = (i: number) => ({ x: cx + (r + 22) * Math.cos(ang(i)), y: cy + (r + 22) * Math.sin(ang(i)) });
+  const poly = (vals: number[]) =>
+    vals.map((v, i) => { const p = pt(i, v); return `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`; }).join(' ') + 'Z';
+
+  return (
+    <>
+      <div className="flex items-center gap-4 mb-1 justify-end">
+        <div className="flex items-center gap-1.5">
+          <div className="w-4 h-0.5 bg-[#34D399]" />
+          <span className="text-xs text-gray-400">início</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="w-4 h-0.5 bg-[#3B82F6]" />
+          <span className="text-xs text-gray-400">final</span>
+        </div>
+      </div>
+      <svg viewBox="0 0 260 245" className="w-full">
+        {[0.25, 0.5, 0.75, 1.0].map(g => (
+          <polygon key={g}
+            points={eixos.map((_, i) => { const p = pt(i, g); return `${p.x.toFixed(1)},${p.y.toFixed(1)}`; }).join(' ')}
+            fill="none" stroke="#E5E7EB" strokeWidth="1" />
+        ))}
+        {eixos.map((_, i) => { const p = pt(i, 1); return <line key={i} x1={cx} y1={cy} x2={p.x.toFixed(1)} y2={p.y.toFixed(1)} stroke="#E5E7EB" strokeWidth="1" />; })}
+        <path d={poly(inicio)} fill="#34D399" fillOpacity="0.15" stroke="#34D399" strokeWidth="1.5" />
+        <path d={poly(final)}  fill="#3B82F6" fillOpacity="0.15" stroke="#3B82F6" strokeWidth="1.5" />
+        {eixos.map((nome, i) => { const p = lp(i); return (
+          <text key={i} x={p.x.toFixed(1)} y={p.y.toFixed(1)} textAnchor="middle" dominantBaseline="middle" fontSize="9" fill="#6B7280">{nome}</text>
+        );})}
+      </svg>
+    </>
   );
 }

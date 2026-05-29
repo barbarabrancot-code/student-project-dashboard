@@ -1,9 +1,18 @@
 import { useState } from 'react';
 
+const entregasProf = [
+  { id: 'e1',    nome: 'Entrega 1 — Análise Inicial',      semana: 'Semana 6'  },
+  { id: 'e2',    nome: 'Entrega 2 — Mapeamento de Riscos', semana: 'Semana 10' },
+  { id: 'e3',    nome: 'Entrega 3 — Plano de Ação',        semana: 'Semana 13' },
+  { id: 'banca', nome: 'Banca Final',                      semana: 'Semana 16' },
+];
+
 export default function AvaliacaoFinal({ onNavigate }: { onNavigate: (view: string) => void }) {
   const [expandedGroup, setExpandedGroup] = useState<number>(3);
   const [grades, setGrades] = useState({ participacao: 7.5, entregas: 8.5, bancaProfessor: 8.0 });
+  const [entregaId, setEntregaId] = useState('banca');
 
+  const entregaAtual = entregasProf.find(e => e.id === entregaId)!;
   const bancaCompany = 8.0;
   const bancaFinal = (bancaCompany * 0.2) + (grades.bancaProfessor * 0.8);
   const notaFinal = (grades.participacao * 0.2) + (grades.entregas * 0.4) + (bancaFinal * 0.4);
@@ -12,7 +21,13 @@ export default function AvaliacaoFinal({ onNavigate }: { onNavigate: (view: stri
     <div className="w-full h-full min-h-screen bg-gray-50 flex overflow-hidden">
       <Sidebar onNavigate={onNavigate} />
       <div className="flex-1 overflow-y-auto">
-        <PageHeader evaluatedCount={3} totalGroups={6} />
+        <PageHeader
+          evaluatedCount={3}
+          totalGroups={6}
+          entregaId={entregaId}
+          setEntregaId={setEntregaId}
+          entregaAtual={entregaAtual}
+        />
         <GroupAccordionList
           expandedGroup={expandedGroup}
           setExpandedGroup={setExpandedGroup}
@@ -29,11 +44,10 @@ export default function AvaliacaoFinal({ onNavigate }: { onNavigate: (view: stri
 
 function Sidebar({ onNavigate }: { onNavigate: (view: string) => void }) {
   const navItems = [
-    { label: 'Painel',        viewId: 'teacher', active: false },
-    { label: 'Avaliação',     viewId: 'grading', active: true  },
-    { label: 'Minhas Turmas', viewId: null,       active: false },
-    { label: 'Projeto',       viewId: null,       active: false },
-    { label: 'Perfil',        viewId: null,       active: false },
+    { label: 'Painel',    viewId: 'teacher', active: false },
+    { label: 'Avaliação', viewId: 'grading', active: true  },
+    { label: 'Projeto',   viewId: null,      active: false },
+    { label: 'Perfil',    viewId: null,      active: false },
   ];
 
   return (
@@ -66,27 +80,52 @@ function Sidebar({ onNavigate }: { onNavigate: (view: string) => void }) {
   );
 }
 
-function PageHeader({ evaluatedCount, totalGroups }: { evaluatedCount: number; totalGroups: number }) {
-  const allEvaluated = evaluatedCount === totalGroups;
+function PageHeader({ evaluatedCount, totalGroups, entregaId, setEntregaId, entregaAtual }: {
+  evaluatedCount: number;
+  totalGroups: number;
+  entregaId: string;
+  setEntregaId: (id: string) => void;
+  entregaAtual: { id: string; nome: string; semana: string };
+}) {
+  const [dropdownAberto, setDropdownAberto] = useState(false);
 
   return (
     <div className="bg-white border-b border-gray-200 px-6 py-4">
-      <div className="text-xs text-gray-400 mb-2">Segurança do Trabalho T2 &gt; Avaliação Final</div>
+      <div className="text-xs text-gray-400 mb-2">Segurança do Trabalho T2 &gt; Avaliação</div>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <h1 className="text-gray-900">Avaliação Final — Semana 16</h1>
+          <h1 className="text-gray-900">Avaliação — {entregaAtual.semana}</h1>
           <span className="px-3 py-1 bg-[#0F766E]/10 text-[#0F766E] border border-[#0F766E]/20 rounded-full text-xs font-medium">
             {evaluatedCount} de {totalGroups} grupos avaliados
           </span>
         </div>
-        <button
-          className={`px-6 py-3 rounded-xl text-sm font-medium transition-colors ${
-            allEvaluated ? 'bg-[#3B82F6] text-white hover:bg-[#2563EB]' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-          }`}
-          disabled={!allEvaluated}
-        >
-          Publicar todas as notas
-        </button>
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <button
+              onClick={() => setDropdownAberto(!dropdownAberto)}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm bg-white transition-colors"
+              style={{ border: '2px solid transparent', background: 'linear-gradient(white, white) padding-box, linear-gradient(135deg, #34D399, #0F766E) border-box' }}>
+              <span className="font-medium text-gray-900">{entregaAtual.nome}</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
+                {dropdownAberto ? <path d="M18 15l-6-6-6 6" /> : <path d="M6 9l6 6 6-6" />}
+              </svg>
+            </button>
+            {dropdownAberto && (
+              <div className="absolute top-full right-0 mt-1 w-72 border border-gray-200 rounded-xl bg-white shadow-lg z-20 overflow-hidden">
+                {entregasProf.map((e, i) => (
+                  <button key={e.id}
+                    onClick={() => { setEntregaId(e.id); setDropdownAberto(false); }}
+                    className={`w-full px-4 py-3 text-left flex items-center justify-between ${
+                      i < entregasProf.length - 1 ? 'border-b border-gray-100' : ''
+                    } ${e.id === entregaId ? 'bg-gray-50' : 'hover:bg-gray-50'}`}>
+                    <span className="text-sm font-medium text-gray-900">{e.nome}</span>
+                    <span className="text-xs text-gray-400">{e.semana}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -164,18 +203,14 @@ function GroupAccordionList({ expandedGroup, setExpandedGroup, grades, setGrades
 function CompanyFeedback() {
   return (
     <div className="p-4 bg-[#0F766E]/5 border border-[#0F766E]/20 rounded-xl">
-      <div className="flex items-center justify-between mb-3">
+      <div className="mb-3">
         <div className="text-sm font-medium text-gray-900">Avaliação da Empresa — Sabin</div>
-        <div className="text-sm text-gray-600">
-          Nota: <span className="px-2 py-1 bg-white border border-[#0F766E]/30 rounded-lg text-[#0F766E] font-medium">8.0 / 10</span>
-        </div>
       </div>
       <div className="p-3 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 mb-2">
         O grupo demonstrou excelente compreensão dos riscos ocupacionais no ambiente laboratorial.
         A análise foi completa e as recomendações são aplicáveis ao nosso contexto.
         Destacamos a qualidade da matriz de riscos apresentada.
       </div>
-      <div className="text-xs text-gray-400">Corresponde a 20% da nota da banca</div>
     </div>
   );
 }

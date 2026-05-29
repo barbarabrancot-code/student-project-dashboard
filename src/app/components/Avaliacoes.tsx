@@ -48,71 +48,69 @@ function Tabs({ aba, onAba }: { aba: string; onAba: (a: 'professor' | 'empresa')
 }
 
 function TabProfessor() {
-  const [parcaisAberto, setParcaisAberto] = useState(false);
-  const [finalAberto, setFinalAberto] = useState(false);
+  const [entregaId, setEntregaId] = useState('e1');
+  const [dropdownAberto, setDropdownAberto] = useState(false);
 
-  const parciais = [
-    { titulo: 'Entrega 1 — Análise Inicial', data: '14/04/2026', nota: 8.5, comentario: '' },
-    { titulo: 'Entrega 2 — Mapeamento de Riscos', data: '05/05/2026', nota: 8.5, comentario: '' },
-    { titulo: 'Entrega 3 — Plano de Ação', data: '26/05/2026', nota: 9.0, comentario: 'Plano detalhado e com metas claras.' },
-    { titulo: 'Entrega 4 — Implementação Parcial', data: '09/06/2026', nota: 8.0, comentario: 'Boa execução, alguns ajustes necessários.' },
-    { titulo: 'Entrega 5 — Relatório Final', data: '23/06/2026', nota: 9.0, comentario: 'Relatório completo e bem apresentado.' },
+  const avaliacoes = [
+    { id: 'e1',    nome: 'Entrega 1 — Análise Inicial',       data: '14/04/2026', nota: 8.5, comentario: 'Boa entrega! O levantamento inicial está bem estruturado. Para a próxima, aprofundem a análise dos agentes biológicos e relacionem mais diretamente com a NR-32.' },
+    { id: 'e2',    nome: 'Entrega 2 — Mapeamento de Riscos',  data: '05/05/2026', nota: 8.5, comentario: 'Mapeamento completo. Fiquei satisfeita com o nível de detalhe. Revisem as medidas de controle para os riscos de categoria A antes da validação.' },
+    { id: 'e3',    nome: 'Entrega 3 — Plano de Ação',         data: '26/05/2026', nota: 9.0, comentario: 'Plano detalhado e com metas claras.' },
+    { id: 'e4',    nome: 'Entrega 4 — Implementação Parcial', data: '09/06/2026', nota: 8.0, comentario: 'Boa execução, alguns ajustes necessários.' },
+    { id: 'e5',    nome: 'Entrega 5 — Relatório Final',       data: '23/06/2026', nota: 9.0, comentario: 'Relatório completo e bem apresentado.' },
+    { id: 'banca', nome: 'Banca Final',                       data: '14/06/2026', nota: 8.5, comentario: 'Excelente evolução ao longo do semestre.' },
   ];
+
+  const entregaAtual = avaliacoes.find(e => e.id === entregaId)!;
 
   return (
     <>
-      <div className="mb-5 border border-gray-200 rounded-xl overflow-hidden">
-        <button
-          onClick={() => setParcaisAberto(v => !v)}
-          className="w-full flex items-center justify-between px-4 py-3 bg-white"
-        >
-          <span className="text-sm font-medium text-gray-900">Avaliações Parciais</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2"
-            className={`transition-transform ${parcaisAberto ? 'rotate-180' : ''}`}>
-            <path d="M6 9l6 6 6-6" />
-          </svg>
-        </button>
-        {parcaisAberto && (
-          <div className="border-t border-gray-100 divide-y divide-gray-100">
-            {parciais.map((p, i) => (
-              <div key={i} className="flex items-start justify-between px-4 py-3">
-                <div className="flex-1 mr-3">
-                  <div className="text-sm font-medium text-gray-900">{p.titulo}</div>
-                  <div className="text-xs text-[#0F766E] mt-0.5">{p.data}</div>
-                  {p.comentario && <div className="text-xs text-gray-500 mt-1">{p.comentario}</div>}
-                </div>
-                <span className="w-10 h-8 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-center text-sm font-semibold text-gray-900 flex-shrink-0">
-                  {p.nota}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
+      <div className="mb-5">
+        <p className="text-sm font-medium text-gray-900 mb-2">Selecione a entrega</p>
+        <div className="relative">
+          <button onClick={() => setDropdownAberto(!dropdownAberto)}
+            className="w-full p-3 border border-gray-200 rounded-xl flex items-center justify-between text-left">
+            <div>
+              <div className="text-sm font-semibold text-gray-900">{entregaAtual.nome}</div>
+              <div className="text-xs text-gray-500">{entregaAtual.data}</div>
+            </div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
+              {dropdownAberto ? <path d="M18 15l-6-6-6 6" /> : <path d="M6 9l6 6 6-6" />}
+            </svg>
+          </button>
+          {dropdownAberto && (
+            <div className="absolute top-full left-0 right-0 mt-1 border border-gray-200 rounded-xl bg-white shadow-md z-20 overflow-hidden">
+              {avaliacoes.map((e, i) => (
+                <button key={e.id}
+                  onClick={() => { setEntregaId(e.id); setDropdownAberto(false); }}
+                  className={`w-full p-3 text-left ${i < avaliacoes.length - 1 ? 'border-b border-gray-100' : ''} ${e.id === entregaId ? 'bg-gray-50' : ''}`}>
+                  <div className="text-sm font-semibold text-gray-900">{e.nome}</div>
+                  <div className="text-xs text-gray-500">{e.data}</div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
-      <div className="mb-5 border border-gray-200 rounded-xl overflow-hidden">
-        <button
-          onClick={() => setFinalAberto(v => !v)}
-          className="w-full flex items-center justify-between px-4 py-3 bg-white"
-        >
-          <span className="text-sm font-medium text-gray-900">Avaliação Final</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2"
-            className={`transition-transform ${finalAberto ? 'rotate-180' : ''}`}>
-            <path d="M6 9l6 6 6-6" />
-          </svg>
-        </button>
-        {finalAberto && (
-          <div className="border-t border-gray-100">
-            <div className="flex items-start justify-between px-4 py-3">
-              <div className="flex-1 mr-3">
-                <div className="text-sm font-medium text-gray-900">Nota final</div>
-                <div className="text-xs text-[#0F766E] mt-0.5">14/06/2026</div>
-                <div className="text-xs text-gray-500 mt-1">Excelente evolução ao longo do semestre.</div>
+      <div className="mb-5 border border-gray-200 rounded-xl p-4">
+        <div className="flex items-start justify-between mb-3">
+          <div className="flex-1 mr-3">
+            <div className="text-sm font-medium text-gray-900">{entregaAtual.nome}</div>
+            <div className="text-xs text-[#0F766E] mt-0.5">{entregaAtual.data}</div>
+          </div>
+          <span className="w-12 h-10 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-center text-base font-semibold text-gray-900 flex-shrink-0">
+            {entregaAtual.nota}
+          </span>
+        </div>
+        {entregaAtual.comentario && (
+          <div className="pt-3 border-t border-gray-100">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-6 h-6 rounded-full bg-[#0F766E] flex items-center justify-center flex-shrink-0">
+                <span className="text-xs font-semibold text-white" style={{ fontSize: '9px' }}>PC</span>
               </div>
-              <span className="w-10 h-8 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-center text-sm font-semibold text-gray-900 flex-shrink-0">
-                8.5
-              </span>
+              <span className="text-xs font-medium text-gray-700">Prof. Carla</span>
             </div>
+            <p className="text-xs text-gray-600 leading-relaxed">{entregaAtual.comentario}</p>
           </div>
         )}
       </div>

@@ -48,7 +48,6 @@ export default function PainelDeTurma({ onNavigate }: { onNavigate: (view: strin
 
       <div className="flex-1 overflow-y-auto">
         <PageHeader />
-        <SummaryStats />
         <SemesterTimeline />
         <FilterBar activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
         <GroupCardsGrid setSelectedGroup={setSelectedGroup} />
@@ -66,9 +65,8 @@ export default function PainelDeTurma({ onNavigate }: { onNavigate: (view: strin
 function Sidebar({ onNavigate }: { onNavigate: (view: string) => void }) {
   const navItems = [
     { label: 'Painel',        viewId: 'teacher', active: true  },
-    { label: 'Avaliação',     viewId: 'grading', active: false },
-    { label: 'Minhas Turmas', viewId: null,       active: false },
-    { label: 'Projeto',       viewId: null,       active: false },
+    { label: 'Avaliação', viewId: 'grading', active: false },
+    { label: 'Projeto',   viewId: null,      active: false },
     { label: 'Perfil',        viewId: null,       active: false },
   ];
 
@@ -163,7 +161,7 @@ function SemesterTimeline() {
   const currentWeek = 8;
 
   return (
-    <div className="px-6 pb-6">
+    <div className="px-6 pb-6" style={{ paddingTop: '64px' }}>
       <div className="bg-white border border-gray-200 rounded-xl p-8">
         <div className="relative px-8">
           <div className="absolute left-8 right-8 top-6 h-0.5 bg-gray-200" style={{ zIndex: 0 }} />

@@ -17,12 +17,19 @@ const documentosPorEntrega: Record<string, { nome: string; uploader: string; tim
   banca: [],
 };
 
+const comentariosPorEntrega: Record<string, { texto: string; data: string } | null> = {
+  e1:    { texto: 'Boa entrega! O levantamento inicial está bem estruturado. Para a próxima, aprofundem a análise dos agentes biológicos e relacionem mais diretamente com a NR-32.', data: 'há 1 dia' },
+  e2:    { texto: 'Mapeamento completo. Fiquei satisfeita com o nível de detalhe. Revisem as medidas de controle para os riscos de categoria A antes da validação.', data: 'há 2 dias' },
+  banca: null,
+};
+
 export default function EntregaDoGrupo({ onNavigate, isMobile }: { onNavigate: (view: string) => void; isMobile?: boolean }) {
   const [entregaId, setEntregaId] = useState('e1');
   const [dropdownAberto, setDropdownAberto] = useState(false);
 
   const entregaAtual = entregasMock.find(e => e.id === entregaId)!;
   const documentos = documentosPorEntrega[entregaId] ?? [];
+  const comentario = comentariosPorEntrega[entregaId] ?? null;
 
   return (
     <div className={isMobile ? 'w-full h-full flex flex-col' : 'flex items-center justify-center min-h-full'}>
@@ -93,6 +100,24 @@ export default function EntregaDoGrupo({ onNavigate, isMobile }: { onNavigate: (
                 + Enviar nova versão
               </button>
             </div>
+
+            {comentario && (
+              <div className="mx-4 mb-6">
+                <div className="text-sm font-medium text-gray-900 mb-3">Comentário da professora</div>
+                <div className="p-4 border border-[#0F766E]/20 rounded-xl bg-[#0F766E]/5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-8 h-8 rounded-full bg-[#0F766E] flex items-center justify-center flex-shrink-0">
+                      <span className="text-xs font-semibold text-white">PC</span>
+                    </div>
+                    <div>
+                      <div className="text-xs font-semibold text-gray-900">Prof. Carla</div>
+                      <div className="text-xs text-gray-400">{comentario.data}</div>
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-700 leading-relaxed">{comentario.texto}</p>
+                </div>
+              </div>
+            )}
 
           </div>
         </div>

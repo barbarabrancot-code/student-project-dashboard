@@ -9,13 +9,14 @@ import Onboarding from './components/Onboarding';
 import Perfil from './components/Perfil';
 import Avaliacoes from './components/Avaliacoes';
 
-type ViewId = 't1' | 't2' | 'teacher' | 'grading' | 'company' | 'talents' | 'onboarding' | 'perfil' | 'avaliacoes';
+type ViewId = 't1' | 't2' | 'teacher' | 'grading' | 'company' | 'talents' | 'onboarding' | 'perfil' | 'avaliacoes' | 'empresa-app';
 
 const navItems: { id: ViewId; short: string; label: string; views: ViewId[] }[] = [
-  { id: 'onboarding', short: 'EN', label: 'Entrada',   views: ['onboarding']                          },
-  { id: 't1',         short: 'AL', label: 'Aluno',     views: ['t1', 't2', 'perfil', 'avaliacoes']    },
-  { id: 'teacher',    short: 'PR', label: 'Professor', views: ['teacher', 'grading']                  },
-  { id: 'company',    short: 'EM', label: 'Empresa',   views: ['company', 'talents']                  },
+  { id: 'onboarding',  short: 'EN', label: 'Entrada',          views: ['onboarding']                          },
+  { id: 't1',          short: 'AL', label: 'Aluno',            views: ['t1', 't2', 'perfil', 'avaliacoes']    },
+  { id: 'teacher',     short: 'PR', label: 'Professor',        views: ['teacher', 'grading']                  },
+  { id: 'company',     short: 'EM', label: 'Empresa',          views: ['company', 'talents']                  },
+  { id: 'empresa-app', short: 'CA', label: 'Companion App',   views: ['empresa-app']                         },
 ];
 
 export default function App() {
@@ -76,6 +77,12 @@ export default function App() {
         <AcompanhamentoEmpresa onNavigate={(v: string) => setCurrentView(v as ViewId)} />
       ) : currentView === 'talents' ? (
         <BancoDeTalentos onNavigate={(v: string) => setCurrentView(v as ViewId)} />
+      ) : currentView === 'empresa-app' ? (
+        <div className="flex items-center justify-center min-h-full">
+          <div className="w-[375px] h-[812px] bg-white relative flex flex-col overflow-hidden rounded-2xl shadow-xl border border-gray-200">
+            <EmpresaApp />
+          </div>
+        </div>
       ) : currentView === 'perfil' ? (
         <Perfil onNavigate={(v: string) => setCurrentView(v as ViewId)} isMobile={isMobile} />
       ) : currentView === 'avaliacoes' ? (
