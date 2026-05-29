@@ -243,6 +243,7 @@ function StudentProfilePanel({ studentId, onClose, showContactForm, setShowConta
   const [activeTab, setActiveTab] = useState<'portfolio' | 'cv' | 'reviews'>('portfolio');
   const [entregaId, setEntregaId] = useState('banca');
   const [dropdownAberto, setDropdownAberto] = useState(false);
+  const entregaAtual = avaliacoesAluno.find(e => e.id === entregaId)!;
 
   const mbtiDimensions = [
     { label: 'Extroversão vs Introversão', value: 65, side: 'I' },
@@ -379,65 +380,64 @@ function StudentProfilePanel({ studentId, onClose, showContactForm, setShowConta
               </div>
             </div>
           </>
-        {activeTab === 'reviews' && (() => {
-          const entrega = avaliacoesAluno.find(e => e.id === entregaId)!;
-          return (
-            <>
-              <div className="mb-4">
-                <p className="text-sm font-medium text-gray-900 mb-2">Selecione a entrega</p>
-                <div className="relative">
-                  <button onClick={() => setDropdownAberto(!dropdownAberto)}
-                    className="w-full p-3 border border-gray-200 rounded-xl flex items-center justify-between text-left">
-                    <div>
-                      <div className="text-sm font-semibold text-gray-900">{entrega.nome}</div>
-                      <div className="text-xs text-gray-500">{entrega.data}</div>
-                    </div>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
-                      {dropdownAberto ? <path d="M18 15l-6-6-6 6" /> : <path d="M6 9l6 6 6-6" />}
-                    </svg>
-                  </button>
-                  {dropdownAberto && (
-                    <div className="absolute top-full left-0 right-0 mt-1 border border-gray-200 rounded-xl bg-white shadow-md z-20 overflow-hidden">
-                      {avaliacoesAluno.map((e, i) => (
-                        <button key={e.id}
-                          onClick={() => { setEntregaId(e.id); setDropdownAberto(false); }}
-                          className={`w-full p-3 text-left flex items-center justify-between ${i < avaliacoesAluno.length - 1 ? 'border-b border-gray-100' : ''} ${e.id === entregaId ? 'bg-gray-50' : ''}`}>
-                          <div>
-                            <div className="text-sm font-semibold text-gray-900">{e.nome}</div>
-                            <div className="text-xs text-gray-500">{e.data}</div>
-                          </div>
-                          <span className="text-sm font-semibold text-gray-700">{e.nota}</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
+        )}
 
-              <div className="p-3 bg-[#0F766E]/5 border border-[#0F766E]/20 rounded-xl mb-3">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-6 h-6 rounded-full bg-[#0F766E] flex items-center justify-center flex-shrink-0">
-                    <span className="text-white font-semibold" style={{ fontSize: '9px' }}>PC</span>
+        {activeTab === 'reviews' && (
+          <>
+            <div className="mb-4">
+              <p className="text-sm font-medium text-gray-900 mb-2">Selecione a entrega</p>
+              <div className="relative">
+                <button onClick={() => setDropdownAberto(!dropdownAberto)}
+                  className="w-full p-3 border border-gray-200 rounded-xl flex items-center justify-between text-left">
+                  <div>
+                    <div className="text-sm font-semibold text-gray-900">{entregaAtual.nome}</div>
+                    <div className="text-xs text-gray-500">{entregaAtual.data}</div>
                   </div>
-                  <span className="text-xs font-medium text-[#0F766E]">Prof. Carla · Nota: {entrega.nota}</span>
-                </div>
-                <p className="text-sm text-gray-700 leading-relaxed">{entrega.comentarioProf}</p>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
+                    {dropdownAberto ? <path d="M18 15l-6-6-6 6" /> : <path d="M6 9l6 6 6-6" />}
+                  </svg>
+                </button>
+                {dropdownAberto && (
+                  <div className="absolute top-full left-0 right-0 mt-1 border border-gray-200 rounded-xl bg-white shadow-md z-20 overflow-hidden">
+                    {avaliacoesAluno.map((e, i) => (
+                      <button key={e.id}
+                        onClick={() => { setEntregaId(e.id); setDropdownAberto(false); }}
+                        className={`w-full p-3 text-left flex items-center justify-between ${i < avaliacoesAluno.length - 1 ? 'border-b border-gray-100' : ''} ${e.id === entregaId ? 'bg-gray-50' : ''}`}>
+                        <div>
+                          <div className="text-sm font-semibold text-gray-900">{e.nome}</div>
+                          <div className="text-xs text-gray-500">{e.data}</div>
+                        </div>
+                        <span className="text-sm font-semibold text-gray-700">{e.nota}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
+            </div>
 
-              {entrega.comentarioEmpresa && (
-                <div className="p-3 bg-[#3B82F6]/5 border border-[#3B82F6]/20 rounded-xl mb-4">
-                  <div className="text-xs text-[#3B82F6] font-medium mb-2">Avaliação da Sabin</div>
-                  <p className="text-sm text-gray-700 leading-relaxed">{entrega.comentarioEmpresa}</p>
+            <div className="p-3 bg-[#0F766E]/5 border border-[#0F766E]/20 rounded-xl mb-3">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-6 h-6 rounded-full bg-[#0F766E] flex items-center justify-center flex-shrink-0">
+                  <span className="text-white font-semibold" style={{ fontSize: '9px' }}>PC</span>
                 </div>
-              )}
-
-              <div className="text-sm font-medium text-gray-900 mb-2">Evolução</div>
-              <div className="border border-gray-200 rounded-xl p-3">
-                <RadarChart />
+                <span className="text-xs font-medium text-[#0F766E]">Prof. Carla · Nota: {entregaAtual.nota}</span>
               </div>
-            </>
-          );
-        })()}
+              <p className="text-sm text-gray-700 leading-relaxed">{entregaAtual.comentarioProf}</p>
+            </div>
+
+            {entregaAtual.comentarioEmpresa && (
+              <div className="p-3 bg-[#3B82F6]/5 border border-[#3B82F6]/20 rounded-xl mb-4">
+                <div className="text-xs text-[#3B82F6] font-medium mb-2">Avaliação da Sabin</div>
+                <p className="text-sm text-gray-700 leading-relaxed">{entregaAtual.comentarioEmpresa}</p>
+              </div>
+            )}
+
+            <div className="text-sm font-medium text-gray-900 mb-2">Evolução</div>
+            <div className="border border-gray-200 rounded-xl p-3">
+              <RadarChart />
+            </div>
+          </>
+        )}
       </div>
 
       <div className="p-4 border-t border-gray-200">
