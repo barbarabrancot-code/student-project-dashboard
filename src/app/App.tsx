@@ -79,7 +79,8 @@ export default function App() {
         <BancoDeTalentos onNavigate={(v: string) => setCurrentView(v as ViewId)} />
       ) : currentView === 'empresa-app' ? (
         <div className="flex items-center justify-center min-h-full">
-          <div className="w-[375px] h-[812px] bg-white relative flex flex-col overflow-hidden rounded-2xl shadow-xl border border-gray-200">
+          <div className="w-[375px] h-[812px] bg-white relative flex flex-col overflow-hidden rounded-2xl shadow-xl border border-gray-200"
+            style={{ transform: 'translateZ(0)' }}>
             <EmpresaApp />
           </div>
         </div>
