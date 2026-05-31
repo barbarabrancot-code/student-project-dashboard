@@ -6,6 +6,7 @@ type Criterios = {
   proatividade: number;
   comunicacao: number;
   compromisso: number;
+  execucao: number;
 };
 
 function LikertScale({ value, onChange }: { value: number; onChange: (v: number) => void }) {
@@ -55,7 +56,10 @@ export default function PainelDeTurma({ onNavigate }: { onNavigate: (view: strin
 
       <AnimatePresence>
         {selectedGroup && (
-          <FeedbackPanel groupId={selectedGroup} onClose={() => setSelectedGroup(null)} />
+          <>
+            <div className="fixed inset-0 z-40" onClick={() => setSelectedGroup(null)} />
+            <FeedbackPanel groupId={selectedGroup} onClose={() => setSelectedGroup(null)} />
+          </>
         )}
       </AnimatePresence>
     </div>
@@ -119,36 +123,6 @@ function PageHeader() {
   );
 }
 
-function SummaryStats() {
-  const stats = [
-    { label: '6 Grupos ativos', highlight: false, icon: '👥' },
-    { label: '2 Entregas concluídas', highlight: false, icon: '✅' },
-    { label: '1 Grupo em risco', highlight: true, icon: '⚠️' },
-    { label: 'Próximo marco: Validação — 5 semanas', highlight: false, icon: '📅' }
-  ];
-
-  return (
-    <div className="px-6 py-6">
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
-        {stats.map((stat, index) => (
-          <div
-            key={index}
-            className={`p-4 rounded-xl border ${
-              stat.highlight
-                ? 'border-amber-300 bg-amber-50'
-                : 'border-gray-200 bg-white'
-            }`}
-          >
-            <div className="text-xl mb-1">{stat.icon}</div>
-            <div className={`text-sm font-medium ${stat.highlight ? 'text-amber-800' : 'text-gray-700'}`}>
-              {stat.label}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 function SemesterTimeline() {
   const milestones = [
@@ -329,12 +303,6 @@ function GroupCardsGrid({ setSelectedGroup }: { setSelectedGroup: (id: number) =
                 Último registro: {group.lastActivity}
               </div>
 
-              <div className="flex items-center gap-2 mb-3">
-                <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusInfo.className}`}>
-                  {statusInfo.label}
-                </span>
-              </div>
-
               <div className="flex gap-2">
                 <button className="flex-1 py-2 bg-white border border-gray-200 text-gray-600 rounded-lg text-sm hover:bg-gray-50 transition-colors">
                   Ver entregas
@@ -365,13 +333,14 @@ function FeedbackPanel({ groupId, onClose }: { groupId: number; onClose: () => v
   const criterios: { id: keyof Criterios; label: string }[] = [
     { id: 'pontualidade', label: 'Pontualidade' },
     { id: 'proatividade', label: 'Proatividade' },
-    { id: 'comunicacao', label: 'Comunicação' },
-    { id: 'compromisso', label: 'Compromisso' },
+    { id: 'comunicacao',  label: 'Comunicação'  },
+    { id: 'compromisso',  label: 'Compromisso'  },
+    { id: 'execucao',     label: 'Execução'     },
   ];
 
   const [expandedId, setExpandedId] = useState<number>(0);
   const [avaliacoes, setAvaliacoes] = useState<Record<number, Criterios>>(
-    Object.fromEntries(alunos.map(a => [a.id, { pontualidade: 0, proatividade: 0, comunicacao: 0, compromisso: 0 }]))
+    Object.fromEntries(alunos.map(a => [a.id, { pontualidade: 0, proatividade: 0, comunicacao: 0, compromisso: 0, execucao: 0 }]))
   );
   const [comentarios, setComentarios] = useState<Record<number, string>>(
     Object.fromEntries(alunos.map(a => [a.id, '']))
@@ -386,7 +355,7 @@ function FeedbackPanel({ groupId, onClose }: { groupId: number; onClose: () => v
 
   return (
     <motion.div
-      className="fixed top-0 right-0 h-screen w-[360px] bg-white border-l border-gray-200 shadow-xl flex flex-col z-50"
+      className="fixed top-0 right-0 h-screen w-[468px] bg-white border-l border-gray-200 shadow-xl flex flex-col z-50"
       initial={{ x: '100%' }}
       animate={{ x: 0 }}
       exit={{ x: '100%' }}
@@ -429,7 +398,16 @@ function FeedbackPanel({ groupId, onClose }: { groupId: number; onClose: () => v
                   transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
                   className="overflow-hidden"
                 >
-                  <div className="px-4 pb-5 space-y-4 bg-gray-50">
+                  <div className="px-4 pb-5 space-y-6 bg-gray-50">
+                    <div className="pt-4">
+                      <div className="flex items-center gap-2 mb-1">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="2">
+                          <path d="M18 20V10M12 20V4M6 20v-6" />
+                        </svg>
+                        <span className="text-sm font-semibold text-gray-700">Competências</span>
+                      </div>
+                      <p className="text-xs text-gray-400 mb-3">Avalie cada dimensão individualmente</p>
+                    </div>
                     {criterios.map((c) => (
                       <div key={c.id}>
                         <div className="text-xs text-gray-500 mb-2">{c.label}</div>
@@ -439,15 +417,38 @@ function FeedbackPanel({ groupId, onClose }: { groupId: number; onClose: () => v
                         />
                       </div>
                     ))}
-                    <div>
-                      <div className="text-xs text-gray-400 mb-1">Comentário (opcional)</div>
-                      <textarea
-                        value={comentarios[aluno.id]}
-                        onChange={(e: { target: { value: string } }) => setComentarios((prev: Record<number, string>) => ({ ...prev, [aluno.id]: e.target.value }))}
-                        placeholder="Escreva um comentário..."
-                        rows={2}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm resize-none focus:outline-none focus:border-[#0F766E] bg-white"
-                      />
+                    <div className="space-y-5">
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="2">
+                            <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
+                          </svg>
+                          <span className="text-sm font-semibold text-gray-700">Feedback para o aluno</span>
+                        </div>
+                        <p className="text-xs text-gray-400 mb-2">Visível para o aluno</p>
+                        <textarea
+                          placeholder="Descreva o que se destacou na apresentação deste aluno..."
+                          rows={2}
+                          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#0F766E] resize-none"
+                        />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <path d="M14 2v6h6M16 13H8M16 17H8" />
+                          </svg>
+                          <span className="text-sm font-semibold text-gray-700">Nota interna</span>
+                        </div>
+                        <p className="text-xs text-gray-400 mb-2">Visível só para você</p>
+                        <textarea
+                          value={comentarios[aluno.id]}
+                          onChange={(e: { target: { value: string } }) => setComentarios((prev: Record<number, string>) => ({ ...prev, [aluno.id]: e.target.value }))}
+                          placeholder="Algo que você quer lembrar sobre este aluno..."
+                          rows={2}
+                          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm resize-none focus:outline-none focus:border-[#0F766E] bg-white"
+                        />
+                      </div>
                     </div>
                   </div>
                 </motion.div>

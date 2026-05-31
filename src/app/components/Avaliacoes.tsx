@@ -117,17 +117,26 @@ function TabProfessor() {
 
       <div className="text-sm font-medium text-gray-900 mb-3">Evolução</div>
       <div className="border border-gray-200 rounded-xl p-4 mb-4">
-        <GraficoRadar />
+        <GraficoRadar entregaId={entregaId} entregaNome={entregaAtual.nome} />
       </div>
     </>
   );
 }
 
-function GraficoRadar() {
+const dadosRadarPorEntrega: Record<string, number[]> = {
+  e1:    [0.55, 0.50, 0.60, 0.65, 0.55],
+  e2:    [0.65, 0.60, 0.70, 0.70, 0.65],
+  e3:    [0.72, 0.68, 0.78, 0.75, 0.72],
+  e4:    [0.78, 0.75, 0.82, 0.80, 0.78],
+  e5:    [0.83, 0.79, 0.87, 0.83, 0.83],
+  banca: [0.88, 0.82, 0.90, 0.85, 0.87],
+};
+
+function GraficoRadar({ entregaId, entregaNome }: { entregaId: string; entregaNome: string }) {
   const cx = 140, cy = 128, r = 75;
   const eixos = ['Pontualidade', 'Proatividade', 'Comunicação', 'Compromisso', 'Execução'];
-  const inicio = [0.55, 0.50, 0.60, 0.65, 0.55];
-  const final  = [0.88, 0.82, 0.90, 0.85, 0.87];
+  const inicio = dadosRadarPorEntrega['e1'];
+  const atual  = dadosRadarPorEntrega[entregaId] ?? dadosRadarPorEntrega['banca'];
 
   const ang = (i: number) => (Math.PI * 2 * i) / eixos.length - Math.PI / 2;
   const pt  = (i: number, v: number) => ({ x: cx + r * v * Math.cos(ang(i)), y: cy + r * v * Math.sin(ang(i)) });
@@ -145,7 +154,7 @@ function GraficoRadar() {
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-4 h-0.5 bg-[#3B82F6]" />
-          <span className="text-xs text-gray-400">final</span>
+          <span className="text-xs text-gray-400 truncate max-w-[100px]">{entregaNome.split('—')[0].trim()}</span>
         </div>
       </div>
       <svg viewBox="0 0 280 265" className="w-full">
@@ -156,7 +165,7 @@ function GraficoRadar() {
         ))}
         {eixos.map((_, i) => { const p = pt(i, 1); return <line key={i} x1={cx} y1={cy} x2={p.x.toFixed(1)} y2={p.y.toFixed(1)} stroke="#E5E7EB" strokeWidth="1" />; })}
         <path d={poly(inicio)} fill="#34D399" fillOpacity="0.15" stroke="#34D399" strokeWidth="1.5" />
-        <path d={poly(final)}  fill="#3B82F6" fillOpacity="0.15" stroke="#3B82F6" strokeWidth="1.5" />
+        <path d={poly(atual)}  fill="#3B82F6" fillOpacity="0.15" stroke="#3B82F6" strokeWidth="1.5" />
         {eixos.map((nome, i) => { const p = lp(i); return (
           <text key={i} x={p.x.toFixed(1)} y={p.y.toFixed(1)} textAnchor="middle" dominantBaseline="middle" fontSize="9" fill="#6B7280">{nome}</text>
         );})}
@@ -166,77 +175,66 @@ function GraficoRadar() {
 }
 
 function TabEmpresa() {
-  const [parcaisAberto, setParcaisAberto] = useState(false);
-  const [finalAberto, setFinalAberto] = useState(false);
+  const [entregaId, setEntregaId] = useState('e1');
+  const [dropdownAberto, setDropdownAberto] = useState(false);
 
-  const parciais = [
-    { titulo: 'Entrega 1 — Análise Inicial', data: '14/04/2026', comentario: 'Boa compreensão do ambiente e dos riscos mapeados.' },
-    { titulo: 'Entrega 2 — Mapeamento de Riscos', data: '05/05/2026', comentario: 'Soluções práticas e bem aplicadas ao contexto.' },
+  const avaliacoes = [
+    { id: 'e1',    nome: 'Entrega 1 — Análise Inicial',       data: '14/04/2026', comentario: 'Boa compreensão do ambiente e dos riscos mapeados.' },
+    { id: 'e2',    nome: 'Entrega 2 — Mapeamento de Riscos',  data: '05/05/2026', comentario: 'Soluções práticas e bem aplicadas ao contexto.' },
+    { id: 'e3',    nome: 'Entrega 3 — Plano de Ação',         data: '26/05/2026', comentario: '' },
+    { id: 'e4',    nome: 'Entrega 4 — Implementação Parcial', data: '09/06/2026', comentario: '' },
+    { id: 'e5',    nome: 'Entrega 5 — Relatório Final',       data: '23/06/2026', comentario: '' },
+    { id: 'banca', nome: 'Banca Final',                       data: '14/06/2026', comentario: 'Destacamos a qualidade da matriz de riscos desenvolvida.' },
   ];
+
+  const entregaAtual = avaliacoes.find(e => e.id === entregaId)!;
 
   return (
     <>
-      <div className="mb-5 border border-gray-200 rounded-xl overflow-hidden">
-        <button
-          onClick={() => setParcaisAberto(v => !v)}
-          className="w-full flex items-center justify-between px-4 py-3 bg-white"
-        >
-          <span className="text-sm font-medium text-gray-900">Avaliações Parciais</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2"
-            className={`transition-transform ${parcaisAberto ? 'rotate-180' : ''}`}>
-            <path d="M6 9l6 6 6-6" />
-          </svg>
-        </button>
-        {parcaisAberto && (
-          <div className="border-t border-gray-100 divide-y divide-gray-100">
-            {parciais.map((p, i) => (
-              <div key={i} className="px-4 py-3">
-                <div className="text-sm font-medium text-gray-900">{p.titulo}</div>
-                <div className="text-xs text-[#0F766E] mt-0.5">{p.data}</div>
-                <div className="text-xs text-gray-500 mt-1">{p.comentario}</div>
-              </div>
-            ))}
-          </div>
-        )}
+      <div className="mb-5">
+        <p className="text-sm font-medium text-gray-900 mb-2">Selecione a entrega</p>
+        <div className="relative">
+          <button onClick={() => setDropdownAberto(!dropdownAberto)}
+            className="w-full p-3 border border-gray-200 rounded-xl flex items-center justify-between text-left">
+            <div>
+              <div className="text-sm font-semibold text-gray-900">{entregaAtual.nome}</div>
+              <div className="text-xs text-gray-500">{entregaAtual.data}</div>
+            </div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
+              {dropdownAberto ? <path d="M18 15l-6-6-6 6" /> : <path d="M6 9l6 6 6-6" />}
+            </svg>
+          </button>
+          {dropdownAberto && (
+            <div className="absolute top-full left-0 right-0 mt-1 border border-gray-200 rounded-xl bg-white shadow-md z-20 overflow-hidden">
+              {avaliacoes.map((e, i) => (
+                <button key={e.id}
+                  onClick={() => { setEntregaId(e.id); setDropdownAberto(false); }}
+                  className={`w-full p-3 text-left ${i < avaliacoes.length - 1 ? 'border-b border-gray-100' : ''} ${e.id === entregaId ? 'bg-gray-50' : ''}`}>
+                  <div className="text-sm font-semibold text-gray-900">{e.nome}</div>
+                  <div className="text-xs text-gray-500">{e.data}</div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
-      <div className="mb-5 border border-gray-200 rounded-xl overflow-hidden">
-        <button
-          onClick={() => setFinalAberto(v => !v)}
-          className="w-full flex items-center justify-between px-4 py-3 bg-white"
-        >
-          <span className="text-sm font-medium text-gray-900">Avaliação Final</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2"
-            className={`transition-transform ${finalAberto ? 'rotate-180' : ''}`}>
-            <path d="M6 9l6 6 6-6" />
-          </svg>
-        </button>
-        {finalAberto && (
-          <div className="border-t border-gray-100">
-            <div className="px-4 py-3">
-              <div className="text-sm font-medium text-gray-900">Nota final</div>
-              <div className="text-xs text-[#0F766E] mt-0.5">14/06/2026</div>
-              <div className="text-xs text-gray-500 mt-1">Destacamos a qualidade da matriz de riscos desenvolvida.</div>
+      {entregaAtual.comentario ? (
+        <div className="mb-5 p-4 border border-gray-200 rounded-xl">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 rounded-xl flex-shrink-0 overflow-hidden bg-gray-100 flex items-center justify-center">
+              <img src="/sabin.png" alt="Sabin" className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display='none'; }} />
+            </div>
+            <div>
+              <div className="text-sm font-medium text-gray-900">Laboratório Sabin</div>
+              <div className="text-xs text-gray-400">Empresa Parceira</div>
             </div>
           </div>
-        )}
-      </div>
-
-      <div className="text-sm font-medium text-gray-900 mb-3">Feedback da Empresa</div>
-      <div className="p-4 border border-gray-200 rounded-xl mb-4">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-xl flex-shrink-0 overflow-hidden">
-            <img src="/sabin.png" alt="Laboratório Sabin" className="w-full h-full object-cover" />
-          </div>
-          <div>
-            <div className="text-sm font-medium text-gray-900">Laboratório Sabin</div>
-            <div className="text-xs text-gray-400">Empresa Parceira</div>
-          </div>
+          <p className="text-sm text-[#0F766E] leading-relaxed">{entregaAtual.comentario}</p>
         </div>
-        <p className="text-sm text-[#0F766E] leading-relaxed">
-          Ana demonstrou excelente proatividade e comprometimento durante todo o projeto. Sua capacidade de comunicação e pontualidade foram diferenciais importantes para a equipe.
-        </p>
-      </div>
+      ) : (
+        <p className="text-sm text-gray-400 italic text-center py-4 mb-5">Sem avaliação registrada para esta entrega</p>
+      )}
     </>
   );
 }

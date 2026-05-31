@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 
 export default function AcompanhamentoEmpresa({ onNavigate }: { onNavigate: (view: string) => void }) {
   const [filesExpanded, setFilesExpanded] = useState(true);
@@ -10,7 +11,6 @@ export default function AcompanhamentoEmpresa({ onNavigate }: { onNavigate: (vie
         <PageHeader />
         <CompanyTimeline />
         <GroupProgressGrid />
-        <ValidationPanel />
         <SharedFilesSection expanded={filesExpanded} setExpanded={setFilesExpanded} />
       </div>
     </div>
@@ -19,7 +19,7 @@ export default function AcompanhamentoEmpresa({ onNavigate }: { onNavigate: (vie
 
 function Sidebar({ onNavigate }: { onNavigate: (view: string) => void }) {
   const navItems = [
-    { label: 'Empresa',  viewId: 'company', active: true  },
+    { label: 'Painel',   viewId: 'company', active: true  },
     { label: 'Talentos', viewId: 'talents', active: false },
     { label: 'Projetos', viewId: null,      active: false },
     { label: 'Perfil',   viewId: null,      active: false },
@@ -118,29 +118,42 @@ function CompanyTimeline() {
   );
 }
 
+const gruposMembros: Record<number, string[]> = {
+  1: ['Ana Silva', 'Bruno Costa', 'Carlos Lima', 'Diana Santos'],
+  2: ['Mariana Ferreira', 'Pedro Gomes', 'Rafael Henrique'],
+  3: ['Thiago Kühl', 'Valentina Lima', 'William Martins', 'Xênia Neves'],
+  4: ['Eduardo Alves', 'Fernanda Reis', 'Gabriel Nunes', 'Helena Campos'],
+  5: ['Igor Santos', 'Julia Moraes', 'Lucas Barros', 'Mariana Pinto'],
+  6: ['Ana Souza', 'Bruno Lima', 'Carlos Mendes', 'Diana Faria'],
+};
+
+const entregasWeb = [
+  { id: 'e1',    nome: 'Entrega 1 — Análise Inicial',      data: '14/04/2026' },
+  { id: 'e2',    nome: 'Entrega 2 — Mapeamento de Riscos', data: '05/05/2026' },
+  { id: 'e3',    nome: 'Entrega 3 — Plano de Ação',        data: '26/05/2026' },
+  { id: 'banca', nome: 'Banca Final',                      data: '28/05/2026' },
+];
+
 function GroupProgressGrid() {
+  const [feedbackGrupoId, setFeedbackGrupoId] = useState<number | null>(null);
+
   const groups = [
-    { id: 1, name: 'Grupo 1', members: 4, progress: { current: 2, total: 4 }, lastDocument: 'Relatorio_v2.pdf', date: '01/05/2026', status: 'on-track', starred: false },
-    { id: 2, name: 'Grupo 2', members: 4, progress: { current: 3, total: 4 }, lastDocument: 'Matriz_Riscos_Final.xlsx', date: '02/05/2026', status: 'on-track', starred: false },
-    { id: 3, name: 'Grupo 3', members: 4, progress: { current: 2, total: 4 }, lastDocument: 'Relatorio_v2.pdf', date: '02/05/2026', status: 'in-progress', starred: true },
-    { id: 4, name: 'Grupo 4', members: 4, progress: { current: 1, total: 4 }, lastDocument: 'Briefing_Analise.pdf', date: '25/04/2026', status: 'attention', starred: false },
-    { id: 5, name: 'Grupo 5', members: 4, progress: { current: 2, total: 4 }, lastDocument: 'Mapeamento_v1.pdf', date: '30/04/2026', status: 'in-progress', starred: false },
-    { id: 6, name: 'Grupo 6', members: 4, progress: { current: 3, total: 4 }, lastDocument: 'Proposta_Implementacao.pdf', date: '03/05/2026', status: 'on-track', starred: false }
+    { id: 1, name: 'Grupo 1', members: 4, progress: { current: 2, total: 4 }, lastDocument: 'Relatorio_v2.pdf', date: '01/05/2026', starred: false },
+    { id: 2, name: 'Grupo 2', members: 4, progress: { current: 3, total: 4 }, lastDocument: 'Matriz_Riscos_Final.xlsx', date: '02/05/2026', starred: false },
+    { id: 3, name: 'Grupo 3', members: 4, progress: { current: 2, total: 4 }, lastDocument: 'Relatorio_v2.pdf', date: '02/05/2026', starred: true },
+    { id: 4, name: 'Grupo 4', members: 4, progress: { current: 1, total: 4 }, lastDocument: 'Briefing_Analise.pdf', date: '25/04/2026', starred: false },
+    { id: 5, name: 'Grupo 5', members: 4, progress: { current: 2, total: 4 }, lastDocument: 'Mapeamento_v1.pdf', date: '30/04/2026', starred: false },
+    { id: 6, name: 'Grupo 6', members: 4, progress: { current: 3, total: 4 }, lastDocument: 'Proposta_Implementacao.pdf', date: '03/05/2026', starred: false },
   ];
 
-  const statusConfig = {
-    'on-track':    { label: 'No prazo',    className: 'bg-[#34D399]/20 text-[#0F766E] border border-[#34D399]/40' },
-    'in-progress': { label: 'Em andamento', className: 'bg-[#3B82F6]/10 text-[#3B82F6] border border-[#3B82F6]/20' },
-    'attention':   { label: 'Atenção',      className: 'bg-amber-100 text-amber-800 border border-amber-300' }
-  };
+  const grupoSelecionado = groups.find(g => g.id === feedbackGrupoId) ?? null;
 
   return (
-    <div className="px-6 pb-6">
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-        {groups.map((group) => {
-          const s = statusConfig[group.status as keyof typeof statusConfig];
-          return (
-            <div key={group.id} className="p-4 bg-white border border-gray-200 rounded-xl relative">
+    <>
+      <div className="px-6 pb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4">
+          {groups.map((group) => (
+            <div key={group.id} className="p-4 bg-white border border-gray-200 rounded-xl relative flex flex-col">
               {group.starred && (
                 <div className="absolute top-3 right-3 px-2 py-1 bg-[#34D399]/20 text-[#0F766E] border border-[#34D399]/40 rounded-lg text-xs flex items-center gap-1 font-medium">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
@@ -155,7 +168,7 @@ function GroupProgressGrid() {
               </div>
               <div className="flex gap-1 mb-4">
                 {Array.from({ length: group.members }).map((_, i) => (
-                  <div key={i} className="w-6 h-6 bg-gray-200 rounded-full" />
+                  <div key={i} className="w-10 h-10 bg-gray-200 rounded-full" />
                 ))}
               </div>
               <div className="mb-3">
@@ -164,102 +177,152 @@ function GroupProgressGrid() {
                   <span className="font-medium text-[#0F766E]">{Math.round((group.progress.current / group.progress.total) * 100)}%</span>
                 </div>
                 <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div className="h-full rounded-full" style={{
-                    width: `${(group.progress.current / group.progress.total) * 100}%`,
-                    background: 'linear-gradient(to right, #0F766E, #34D399)'
-                  }} />
+                  <div className="h-full rounded-full" style={{ width: `${(group.progress.current / group.progress.total) * 100}%`, background: 'linear-gradient(to right, #0F766E, #34D399)' }} />
                 </div>
               </div>
-              <div className="mb-3 p-2 bg-gray-50 border border-gray-100 rounded-lg text-xs">
+              <div className="mb-4 p-2 bg-gray-50 border border-gray-100 rounded-lg text-xs">
                 <div className="text-gray-400 mb-1">Último documento:</div>
                 <a href="#" className="text-[#3B82F6] hover:underline">{group.lastDocument}</a>
                 <div className="text-gray-400 mt-1">{group.date}</div>
               </div>
-              <div className="mb-3">
-                <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${s.className}`}>
-                  {s.label}
-                </span>
+              <div className="flex gap-2 mt-auto">
+                <button className="flex-1 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                  Ver entrega
+                </button>
+                <button
+                  onClick={() => setFeedbackGrupoId(group.id)}
+                  className="flex-1 py-2 bg-[#3B82F6] hover:bg-[#2563EB] text-white rounded-lg text-sm font-medium transition-colors">
+                  Dar feedback
+                </button>
               </div>
-              <button className="w-full py-2 bg-[#3B82F6] hover:bg-[#2563EB] text-white rounded-lg text-sm font-medium transition-colors">
-                Ver trabalho do grupo
-              </button>
             </div>
-          );
-        })}
+          ))}
+        </div>
       </div>
-    </div>
+
+      <AnimatePresence>
+        {grupoSelecionado && (
+          <>
+            <div className="fixed inset-0 z-40" onClick={() => setFeedbackGrupoId(null)} />
+            <GrupoFeedbackDrawer grupo={grupoSelecionado} onClose={() => setFeedbackGrupoId(null)} />
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
-function ValidationPanel() {
-  const groups = [
-    { id: 3, name: 'Grupo 3', proposal: 'Sistema de classificação de riscos com QR codes', status: 'approved', feedback: 'Proposta alinhada com nossas necessidades' },
-    { id: 5, name: 'Grupo 5', proposal: 'Protocolo de auditoria mensal de equipamentos', status: 'pending', feedback: null },
-    { id: 1, name: 'Grupo 1', proposal: 'App mobile para registro de incidentes', status: 'pending', feedback: null }
-  ];
+function GrupoFeedbackDrawer({ grupo, onClose }: { grupo: { id: number; name: string }; onClose: () => void }) {
+  const [entregaId, setEntregaId] = useState('e1');
+  const [dropdownAberto, setDropdownAberto] = useState(false);
+  const [comentario, setComentario] = useState('');
+  const [feedbackGrupo, setFeedbackGrupo] = useState('');
+
+  const entregaAtual = entregasWeb.find(e => e.id === entregaId)!;
+  const membros = gruposMembros[grupo.id] ?? [];
 
   return (
-    <div className="px-6 pb-6">
-      <div className="bg-[#3B82F6]/5 border border-[#3B82F6]/20 rounded-xl p-6">
-        <div className="flex items-center gap-3 mb-4">
-          <span className="px-3 py-1 bg-[#3B82F6]/10 text-[#3B82F6] border border-[#3B82F6]/20 rounded-full text-xs font-medium">
-            Ação necessária
-          </span>
-          <h3 className="text-gray-900">Validação Parcial · Semana 13</h3>
+    <motion.div
+      className="fixed top-0 right-0 h-screen w-[520px] bg-white border-l border-gray-200 shadow-xl flex flex-col z-50"
+      initial={{ x: '100%' }}
+      animate={{ x: 0 }}
+      exit={{ x: '100%' }}
+      transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+    >
+      <div className="sticky top-0 z-10 bg-white px-5 py-4 flex items-center gap-3 border-b border-gray-100">
+        <button onClick={onClose} className="w-6 h-6 flex items-center justify-center text-gray-600">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+        <h2 className="flex-1 text-base font-semibold text-gray-900">{grupo.name}</h2>
+        <span className="px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">Em andamento</span>
+      </div>
+
+      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5">
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-[#0F766E]" />
+          <span className="text-xs font-medium text-[#0F766E]">Etapa atual: Validação Parcial</span>
+          <span className="text-xs text-gray-400">· Semana 13</span>
         </div>
-        <p className="text-sm text-gray-600 mb-4">
-          Avalie cada grupo antes da banca final. Seu feedback orienta os ajustes.
-        </p>
-        <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-          <table className="w-full">
-            <thead>
-              <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Grupo</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Proposta resumida</th>
-                <th className="px-4 py-3 text-center text-sm font-medium text-gray-600">Status</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Seu feedback</th>
-                <th className="px-4 py-3 text-center text-sm font-medium text-gray-600">Ação</th>
-              </tr>
-            </thead>
-            <tbody>
-              {groups.map((group, index) => (
-                <tr key={group.id} className={index > 0 ? 'border-t border-gray-100' : ''}>
-                  <td className="px-4 py-3 text-sm font-medium text-gray-900">{group.name}</td>
-                  <td className="px-4 py-3 text-sm text-gray-600">{group.proposal}</td>
-                  <td className="px-4 py-3 text-center">
-                    {group.status === 'approved' ? (
-                      <span className="inline-flex items-center gap-1 text-[#0F766E] text-sm font-medium">
-                        Aprovado
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                          <path d="M20 6L9 17l-5-5" />
-                        </svg>
-                      </span>
-                    ) : (
-                      <span className="text-amber-500 text-sm">Pendente</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 text-sm text-gray-600">{group.feedback || '—'}</td>
-                  <td className="px-4 py-3">
-                    {group.status === 'pending' ? (
-                      <div className="flex gap-2 justify-center">
-                        <button className="px-3 py-1 bg-[#34D399]/20 text-[#0F766E] border border-[#34D399]/40 rounded-lg text-xs font-medium">
-                          Aprovar
-                        </button>
-                        <button className="px-3 py-1 bg-amber-100 text-amber-800 border border-amber-300 rounded-lg text-xs font-medium">
-                          Ajustes
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="text-center text-xs text-gray-400">—</div>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+
+        <div>
+          <p className="text-sm font-medium text-gray-900 mb-2">Selecione a entrega</p>
+          <div className="relative">
+            <button onClick={() => setDropdownAberto(!dropdownAberto)}
+              className="w-full p-3 border border-gray-200 rounded-xl flex items-center justify-between text-left">
+              <div>
+                <div className="text-sm font-semibold text-gray-900">{entregaAtual.nome}</div>
+                <div className="text-xs text-gray-500">{entregaAtual.data}</div>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
+                {dropdownAberto ? <path d="M18 15l-6-6-6 6" /> : <path d="M6 9l6 6 6-6" />}
+              </svg>
+            </button>
+            {dropdownAberto && (
+              <div className="absolute top-full left-0 right-0 mt-1 border border-gray-200 rounded-xl bg-white shadow-md z-20 overflow-hidden">
+                {entregasWeb.map((e, i) => (
+                  <button key={e.id}
+                    onClick={() => { setEntregaId(e.id); setDropdownAberto(false); }}
+                    className={`w-full p-3 text-left ${i < entregasWeb.length - 1 ? 'border-b border-gray-100' : ''} ${e.id === entregaId ? 'bg-gray-50' : ''}`}>
+                    <div className="text-sm font-semibold text-gray-900">{e.nome}</div>
+                    <div className="text-xs text-gray-500">{e.data}</div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div>
+          <div className="mb-1">
+            <span className="text-sm font-medium text-gray-900">Comentário sobre as entregas</span>
+            <div className="flex items-center gap-1 mt-0.5">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" />
+              </svg>
+              <span className="text-xs text-gray-400">Visível só para você</span>
+            </div>
+          </div>
+          <textarea value={comentario} onChange={e => setComentario(e.target.value)}
+            placeholder="O que chamou atenção nas entregas deste grupo?"
+            rows={3} className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-[#0F766E] resize-none" />
+        </div>
+
+        <div>
+          <div className="flex items-center gap-1.5 mb-1">
+            <span className="text-sm font-medium text-gray-900">Feedback para o grupo</span>
+          </div>
+          <p className="text-xs text-gray-400 mb-2">Visível para o grupo</p>
+          <textarea value={feedbackGrupo} onChange={e => setFeedbackGrupo(e.target.value)}
+            placeholder="O que este grupo pode melhorar ou manteve de positivo?"
+            rows={3} className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-[#0F766E] resize-none" />
+        </div>
+
+        <div>
+          <div className="text-sm font-medium text-gray-900 mb-3">Alunos do grupo</div>
+          <div className="space-y-2">
+            {membros.map((nome, i) => (
+              <div key={i} className="flex items-center p-3 border border-gray-200 rounded-xl">
+                <div className="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0 mr-3">
+                  <span className="text-xs font-semibold text-white">{nome.split(' ').map(p => p[0]).join('').slice(0,2)}</span>
+                </div>
+                <span className="flex-1 text-sm font-medium text-gray-900">{nome}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+
+      <div className="border-t border-gray-100 p-4 flex gap-3">
+        <button onClick={onClose} className="flex-1 py-3 border border-gray-200 rounded-xl text-sm font-medium text-gray-700">
+          Voltar
+        </button>
+        <button className="flex-1 py-3 bg-gray-900 text-white rounded-xl text-sm font-medium">
+          Salvar
+        </button>
+      </div>
+    </motion.div>
   );
 }
 

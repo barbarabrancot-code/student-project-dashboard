@@ -1,9 +1,10 @@
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 
 export default function BancoDeTalentos({ onNavigate }: { onNavigate: (view: string) => void }) {
   const [selectedStudents, setSelectedStudents] = useState<number[]>([5]);
   const [favoritedStudents, setFavoritedStudents] = useState<number[]>([3]);
-  const [selectedProfileId, setSelectedProfileId] = useState<number | null>(1);
+  const [selectedProfileId, setSelectedProfileId] = useState<number | null>(null);
   const [showContactForm, setShowContactForm] = useState(false);
 
   return (
@@ -21,21 +22,29 @@ export default function BancoDeTalentos({ onNavigate }: { onNavigate: (view: str
           setSelectedProfileId={setSelectedProfileId}
         />
       </div>
-      {selectedProfileId && (
-        <StudentProfilePanel
-          studentId={selectedProfileId}
-          onClose={() => setSelectedProfileId(null)}
-          showContactForm={showContactForm}
-          setShowContactForm={setShowContactForm}
-        />
-      )}
+      <AnimatePresence>
+        {selectedProfileId && (
+          <>
+            <div
+              className="fixed inset-0 z-40"
+              onClick={() => setSelectedProfileId(null)}
+            />
+            <StudentProfilePanel
+              studentId={selectedProfileId}
+              onClose={() => setSelectedProfileId(null)}
+              showContactForm={showContactForm}
+              setShowContactForm={setShowContactForm}
+            />
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
 
 function Sidebar({ onNavigate }: { onNavigate: (view: string) => void }) {
   const navItems = [
-    { label: 'Empresa',  viewId: 'company', active: false },
+    { label: 'Painel',   viewId: 'company', active: false },
     { label: 'Talentos', viewId: 'talents', active: true  },
     { label: 'Projetos', viewId: null,      active: false },
     { label: 'Perfil',   viewId: null,      active: false },
@@ -71,23 +80,12 @@ function Sidebar({ onNavigate }: { onNavigate: (view: string) => void }) {
   );
 }
 
-function PageHeader({ selectedCount }: { selectedCount: number }) {
+function PageHeader({ selectedCount: _ }: { selectedCount: number }) {
   return (
     <div className="bg-white border-b border-gray-200 px-6 py-4">
       <div className="text-xs text-gray-400 mb-2">Talentos &gt; SafeLab — Turma concluída</div>
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="mb-2 text-gray-900">Banco de Talentos</h1>
-          <div className="text-sm text-gray-500">
-            18 alunos concluíram o projeto SafeLab · Disponíveis para oportunidades
-          </div>
-        </div>
-        <button className={`px-6 py-3 rounded-xl text-sm font-medium transition-colors ${
-          selectedCount > 0 ? 'bg-[#3B82F6] hover:bg-[#2563EB] text-white' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-        }`} disabled={selectedCount === 0}>
-          Enviar oportunidade para selecionados
-        </button>
-      </div>
+      <h1 className="mb-1 text-gray-900">Banco de Talentos</h1>
+      <div className="text-sm text-gray-500">18 alunos concluíram o projeto SafeLab · Disponíveis para oportunidades</div>
     </div>
   );
 }
@@ -106,16 +104,10 @@ function FilterBar() {
             <option>Nota final: 8+</option><option>Nota final: 9+</option><option>Todas as notas</option>
           </select>
           <select className="px-3 py-1 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[#0F766E]">
-            <option>Certificação: Todas</option><option>NR-32</option><option>NR-09</option><option>RDC 222</option>
-          </select>
-          <select className="px-3 py-1 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[#0F766E]">
             <option>Perfil MBTI: Todos</option><option>Analista</option><option>Diplomata</option><option>Sentinela</option>
           </select>
-          <button className="px-3 py-1 bg-[#34D399]/20 text-[#0F766E] border border-[#34D399]/40 rounded-lg text-sm font-medium">
-            ✓ Disponíveis
-          </button>
         </div>
-        <button className="text-sm text-[#3B82F6]">3 filtros ativos · Limpar</button>
+        <button className="text-sm text-[#3B82F6]">2 filtros ativos · Limpar</button>
       </div>
     </div>
   );
@@ -126,7 +118,7 @@ function ResultsCount() {
     <div className="px-6 py-3 flex items-center justify-between">
       <div className="text-sm text-gray-500">Exibindo 12 de 18 alunos</div>
       <select className="px-3 py-1 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:border-[#0F766E]">
-        <option>Ordenar por: Melhor nota</option><option>Ordenar por: Nome</option><option>Ordenar por: Disponibilidade</option>
+        <option>Ordenar por: Melhor nota</option><option>Ordenar por: Nome</option>
       </select>
     </div>
   );
@@ -134,18 +126,18 @@ function ResultsCount() {
 
 function StudentGrid({ selectedStudents, setSelectedStudents, favoritedStudents, setFavoritedStudents, setSelectedProfileId }: any) {
   const students = [
-    { id: 1, name: 'Ana Silva', course: 'Técnico em Segurança do Trabalho', institution: 'SENAC SP', grade: 9.1, mbti: 'INTJ', certifications: ['NR-32', 'NR-09'], summary: 'Desenvolveu PPRB para unidades de alto volume', available: true },
-    { id: 2, name: 'Bruno Costa', course: 'Técnico em Segurança do Trabalho', institution: 'SENAC SP', grade: 8.8, mbti: 'ENFP', certifications: ['NR-32'], summary: 'Criou protocolo de auditoria mensal', available: true },
-    { id: 3, name: 'Carlos Lima', course: 'Técnico em Segurança do Trabalho', institution: 'SENAC SP', grade: 7.9, mbti: 'ISTJ', certifications: ['NR-09', 'RDC 222'], summary: 'Mapeou riscos biológicos do laboratório', available: false },
-    { id: 4, name: 'Diana Souza', course: 'Técnico em Segurança do Trabalho', institution: 'SENAC SP', grade: 9.3, mbti: 'ENFJ', certifications: ['NR-32', 'NR-09'], summary: 'Sistema de classificação com QR codes', available: true },
-    { id: 5, name: 'Eduardo Alves', course: 'Técnico em Segurança do Trabalho', institution: 'SENAC SP', grade: 8.5, mbti: 'INTP', certifications: ['NR-32'], summary: 'App mobile para registro de incidentes', available: true },
-    { id: 6, name: 'Fernanda Reis', course: 'Técnico em Segurança do Trabalho', institution: 'SENAC SP', grade: 9.0, mbti: 'ESFJ', certifications: ['NR-09', 'RDC 222'], summary: 'Programa de treinamento continuado', available: true },
-    { id: 7, name: 'Gabriel Nunes', course: 'Técnico em Segurança do Trabalho', institution: 'SENAC SP', grade: 8.2, mbti: 'ISTP', certifications: ['NR-32'], summary: 'Dashboard de indicadores de segurança', available: true },
-    { id: 8, name: 'Helena Campos', course: 'Técnico em Segurança do Trabalho', institution: 'SENAC SP', grade: 8.9, mbti: 'INFJ', certifications: ['NR-09'], summary: 'Matriz de riscos digitalizada', available: false },
-    { id: 9, name: 'Igor Santos', course: 'Técnico em Segurança do Trabalho', institution: 'SENAC SP', grade: 7.8, mbti: 'ESTP', certifications: ['NR-32', 'RDC 222'], summary: 'Checklist de conformidade regulatória', available: true },
-    { id: 10, name: 'Julia Moraes', course: 'Técnico em Segurança do Trabalho', institution: 'SENAC SP', grade: 9.2, mbti: 'INFP', certifications: ['NR-32', 'NR-09'], summary: 'Protocolo de emergência biológica', available: true },
-    { id: 11, name: 'Lucas Barros', course: 'Técnico em Segurança do Trabalho', institution: 'SENAC SP', grade: 8.4, mbti: 'ENTJ', certifications: ['NR-09'], summary: 'Sistema de gestão de EPIs', available: true },
-    { id: 12, name: 'Mariana Pinto', course: 'Técnico em Segurança do Trabalho', institution: 'SENAC SP', grade: 8.7, mbti: 'ISFP', certifications: ['NR-32', 'RDC 222'], summary: 'Plano de resposta a incidentes', available: true }
+    { id: 1, name: 'Ana Silva', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 9.1, mbti: 'INTJ', certifications: ['NR-32', 'NR-09'], summary: 'Desenvolveu PPRB para unidades de alto volume', available: true },
+    { id: 2, name: 'Bruno Costa', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 8.8, mbti: 'ENFP', certifications: ['NR-32'], summary: 'Criou protocolo de auditoria mensal', available: true },
+    { id: 3, name: 'Carlos Lima', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 7.9, mbti: 'ISTJ', certifications: ['NR-09', 'RDC 222'], summary: 'Mapeou riscos biológicos do laboratório', available: false },
+    { id: 4, name: 'Diana Souza', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 9.3, mbti: 'ENFJ', certifications: ['NR-32', 'NR-09'], summary: 'Sistema de classificação com QR codes', available: true },
+    { id: 5, name: 'Eduardo Alves', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 8.5, mbti: 'INTP', certifications: ['NR-32'], summary: 'App mobile para registro de incidentes', available: true },
+    { id: 6, name: 'Fernanda Reis', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 9.0, mbti: 'ESFJ', certifications: ['NR-09', 'RDC 222'], summary: 'Programa de treinamento continuado', available: true },
+    { id: 7, name: 'Gabriel Nunes', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 8.2, mbti: 'ISTP', certifications: ['NR-32'], summary: 'Dashboard de indicadores de segurança', available: true },
+    { id: 8, name: 'Helena Campos', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 8.9, mbti: 'INFJ', certifications: ['NR-09'], summary: 'Matriz de riscos digitalizada', available: false },
+    { id: 9, name: 'Igor Santos', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 7.8, mbti: 'ESTP', certifications: ['NR-32', 'RDC 222'], summary: 'Checklist de conformidade regulatória', available: true },
+    { id: 10, name: 'Julia Moraes', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 9.2, mbti: 'INFP', certifications: ['NR-32', 'NR-09'], summary: 'Protocolo de emergência biológica', available: true },
+    { id: 11, name: 'Lucas Barros', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 8.4, mbti: 'ENTJ', certifications: ['NR-09'], summary: 'Sistema de gestão de EPIs', available: true },
+    { id: 12, name: 'Mariana Pinto', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 8.7, mbti: 'ISFP', certifications: ['NR-32', 'RDC 222'], summary: 'Plano de resposta a incidentes', available: true }
   ];
 
   const toggleSelection = (id: number) => {
@@ -162,59 +154,37 @@ function StudentGrid({ selectedStudents, setSelectedStudents, favoritedStudents,
 
   return (
     <div className="px-6 pb-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 min-[1920px]:grid-cols-4 gap-4">
         {students.map((student) => {
           const isSelected = selectedStudents.includes(student.id);
           const isFavorited = favoritedStudents.includes(student.id);
           return (
-            <div key={student.id} className={`p-4 bg-white rounded-xl border-2 relative transition-colors ${
-              isSelected ? 'border-[#0F766E]' : 'border-gray-200'
-            }`}>
-              <div className="absolute top-3 left-3">
-                <input type="checkbox" checked={isSelected} onChange={() => toggleSelection(student.id)}
-                  className="w-5 h-5 rounded accent-[#0F766E]" />
-              </div>
-              <div className="flex flex-col items-center mb-3 pt-2">
-                <div className="w-16 h-16 bg-gray-200 rounded-full mb-2 relative">
-                  {student.available && (
-                    <div className="absolute bottom-0 right-0 w-4 h-4 bg-[#34D399] rounded-full border-2 border-white" />
-                  )}
-                </div>
+            <div key={student.id}
+              onClick={() => setSelectedProfileId(student.id)}
+              className="p-4 bg-white rounded-xl border border-gray-200 relative cursor-pointer hover:border-[#0F766E]/40 transition-colors">
+              <button
+                onClick={e => { e.stopPropagation(); toggleFavorite(student.id); }}
+                className="absolute top-3 right-3">
+                <svg width="26" height="26" viewBox="0 0 24 24"
+                  fill={isFavorited ? '#F59E0B' : 'none'}
+                  stroke={isFavorited ? '#F59E0B' : '#D1D5DB'} strokeWidth="2">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+              </button>
+              <div className="flex flex-col items-center pt-2 pb-3">
+                <div className="w-16 h-16 bg-gray-200 rounded-full mb-3" />
                 <h3 className="text-center mb-1 text-gray-900">{student.name}</h3>
-                <div className="text-xs text-gray-400 text-center mb-2">
-                  {student.course} · {student.institution}
+                <div className="text-xs text-[#0F766E] text-center mb-3">
+                  {student.course} — {student.institution}
                 </div>
-              </div>
-              <div className="flex items-center justify-center gap-2 mb-3">
-                <span className="px-3 py-1 bg-[#0F766E]/10 text-[#0F766E] border border-[#0F766E]/20 rounded-lg text-sm font-medium">
-                  Nota: {student.grade.toFixed(1)}
-                </span>
-                <span className="px-2 py-1 bg-[#3B82F6]/10 text-[#3B82F6] rounded-lg text-xs font-medium">
-                  {student.mbti}
-                </span>
-              </div>
-              <div className="flex gap-1 justify-center mb-3 flex-wrap">
-                {student.certifications.map((cert, idx) => (
-                  <span key={idx} className="px-2 py-1 bg-gray-100 text-gray-600 rounded-lg text-xs">
-                    {cert}
+                <div className="flex items-center gap-2">
+                  <span className="px-3 py-1 bg-[#0F766E]/10 text-[#0F766E] border border-[#0F766E]/20 rounded-lg text-sm font-medium">
+                    Nota: {student.grade.toFixed(1)}
                   </span>
-                ))}
-              </div>
-              <p className="text-sm text-gray-600 text-center mb-4">{student.summary}</p>
-              <div className="flex gap-2">
-                <button onClick={() => setSelectedProfileId(student.id)}
-                  className="flex-1 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-50 transition-colors">
-                  Ver perfil
-                </button>
-                <button onClick={() => toggleFavorite(student.id)}
-                  className={`w-10 h-10 flex items-center justify-center border rounded-lg transition-colors ${
-                    isFavorited ? 'border-[#0F766E] bg-[#0F766E]/10 text-[#0F766E]' : 'border-gray-200 text-gray-400 hover:border-[#0F766E]/30'
-                  }`}>
-                  <svg width="18" height="18" viewBox="0 0 24 24"
-                    fill={isFavorited ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                  </svg>
-                </button>
+                  <span className="px-2 py-1 bg-[#3B82F6]/10 text-[#3B82F6] rounded-lg text-xs font-medium">
+                    {student.mbti}
+                  </span>
+                </div>
               </div>
             </div>
           );
@@ -240,7 +210,7 @@ const avaliacoesAluno = [
 ];
 
 function StudentProfilePanel({ studentId, onClose, showContactForm, setShowContactForm }: any) {
-  const [activeTab, setActiveTab] = useState<'portfolio' | 'cv' | 'reviews'>('portfolio');
+  const [activeTab, setActiveTab] = useState<'portfolio' | 'reviews'>('portfolio');
   const [entregaId, setEntregaId] = useState('banca');
   const [dropdownAberto, setDropdownAberto] = useState(false);
   const entregaAtual = avaliacoesAluno.find(e => e.id === entregaId)!;
@@ -254,25 +224,24 @@ function StudentProfilePanel({ studentId, onClose, showContactForm, setShowConta
 
   const tabs = [
     { id: 'portfolio', label: 'Portfólio' },
-    { id: 'cv', label: 'Currículo' },
-    { id: 'reviews', label: 'Avaliações' }
+    { id: 'reviews',   label: 'Avaliações' },
   ] as const;
 
   return (
-    <div className="fixed top-0 right-0 h-screen w-[420px] bg-white border-l border-gray-200 shadow-xl flex flex-col overflow-hidden z-50">
+    <motion.div
+      className="fixed top-0 right-0 h-screen w-[546px] bg-white border-l border-gray-200 shadow-xl flex flex-col overflow-hidden z-50"
+      initial={{ x: '100%' }}
+      animate={{ x: 0 }}
+      exit={{ x: '100%' }}
+      transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+    >
       <div className="p-4 border-b border-gray-200 bg-[#3B82F6]">
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
-            <div className="relative">
-              <div className="w-12 h-12 bg-white/30 rounded-full" />
-              <div className="absolute bottom-0 right-0 w-3 h-3 bg-[#34D399] rounded-full border-2 border-white" />
-            </div>
+            <div className="w-24 h-24 bg-white/30 rounded-full flex-shrink-0" />
             <div>
               <h3 className="text-white">Ana Silva</h3>
-              <div className="text-xs text-white/70">Técnico em Segurança · SENAC SP</div>
-              <span className="inline-block px-2 py-0.5 bg-white/20 text-white rounded-lg text-xs mt-1">
-                Disponível
-              </span>
+              <div className="text-xs text-white/70">Segurança no trabalho — Escola Técnica Geração</div>
             </div>
           </div>
           <button onClick={onClose} className="w-6 h-6 text-white/80 hover:text-white">
@@ -281,7 +250,7 @@ function StudentProfilePanel({ studentId, onClose, showContactForm, setShowConta
             </svg>
           </button>
         </div>
-        <div className="flex gap-1">
+        <div className="flex gap-1 mt-8">
           {tabs.map((tab) => (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
               className={`px-4 py-2 text-sm rounded-t-lg transition-colors ${
@@ -434,7 +403,7 @@ function StudentProfilePanel({ studentId, onClose, showContactForm, setShowConta
 
             <div className="text-sm font-medium text-gray-900 mb-2">Evolução</div>
             <div className="border border-gray-200 rounded-xl p-3">
-              <RadarChart />
+              <RadarChart entregaId={entregaId} entregaNome={entregaAtual.nome} />
             </div>
           </>
         )}
@@ -464,15 +433,24 @@ function StudentProfilePanel({ studentId, onClose, showContactForm, setShowConta
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
-function RadarChart() {
+const dadosRadar: Record<string, number[]> = {
+  e1:    [0.55, 0.50, 0.60, 0.65, 0.55],
+  e2:    [0.65, 0.60, 0.70, 0.70, 0.65],
+  e3:    [0.72, 0.68, 0.78, 0.75, 0.72],
+  e4:    [0.78, 0.75, 0.82, 0.80, 0.78],
+  e5:    [0.83, 0.79, 0.87, 0.83, 0.83],
+  banca: [0.88, 0.82, 0.90, 0.85, 0.87],
+};
+
+function RadarChart({ entregaId, entregaNome }: { entregaId: string; entregaNome: string }) {
   const cx = 130, cy = 118, r = 70;
   const eixos = ['Pontualidade', 'Proatividade', 'Comunicação', 'Compromisso', 'Execução'];
-  const inicio = [0.55, 0.50, 0.60, 0.65, 0.55];
-  const final  = [0.88, 0.82, 0.90, 0.85, 0.87];
+  const inicio = dadosRadar['e1'];
+  const atual  = dadosRadar[entregaId] ?? dadosRadar['banca'];
 
   const ang = (i: number) => (Math.PI * 2 * i) / eixos.length - Math.PI / 2;
   const pt  = (i: number, v: number) => ({ x: cx + r * v * Math.cos(ang(i)), y: cy + r * v * Math.sin(ang(i)) });
@@ -489,7 +467,7 @@ function RadarChart() {
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-4 h-0.5 bg-[#3B82F6]" />
-          <span className="text-xs text-gray-400">final</span>
+          <span className="text-xs text-gray-400 truncate max-w-[90px]">{entregaNome.split('—')[0].trim()}</span>
         </div>
       </div>
       <svg viewBox="0 0 260 245" className="w-full">
@@ -500,7 +478,7 @@ function RadarChart() {
         ))}
         {eixos.map((_, i) => { const p = pt(i, 1); return <line key={i} x1={cx} y1={cy} x2={p.x.toFixed(1)} y2={p.y.toFixed(1)} stroke="#E5E7EB" strokeWidth="1" />; })}
         <path d={poly(inicio)} fill="#34D399" fillOpacity="0.15" stroke="#34D399" strokeWidth="1.5" />
-        <path d={poly(final)}  fill="#3B82F6" fillOpacity="0.15" stroke="#3B82F6" strokeWidth="1.5" />
+        <path d={poly(atual)}  fill="#3B82F6" fillOpacity="0.15" stroke="#3B82F6" strokeWidth="1.5" />
         {eixos.map((nome, i) => { const p = lp(i); return (
           <text key={i} x={p.x.toFixed(1)} y={p.y.toFixed(1)} textAnchor="middle" dominantBaseline="middle" fontSize="9" fill="#6B7280">{nome}</text>
         );})}
