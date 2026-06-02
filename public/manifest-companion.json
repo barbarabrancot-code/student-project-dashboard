@@ -1,8 +1,8 @@
 {
-  "name": "Labora",
-  "short_name": "Labora",
-  "description": "Plataforma de projetos acadêmicos",
-  "start_url": "/student-project-dashboard/?mobile=true",
+  "name": "Labora Companion",
+  "short_name": "Labora Companion",
+  "description": "Companion app para empresas parceiras",
+  "start_url": "/student-project-dashboard/?app=empresa",
   "scope": "/student-project-dashboard/",
   "display": "standalone",
   "orientation": "portrait",
