@@ -6,7 +6,6 @@ export default function Avaliacoes({ onNavigate, isMobile }: { onNavigate: (view
   return (
     <div className={isMobile ? 'w-full h-full flex flex-col' : 'flex items-center justify-center min-h-full'}>
       <div className={`bg-white relative flex flex-col ${isMobile ? 'w-full h-full' : 'w-[375px] h-[812px]'}`}>
-        <Header />
         <div className="flex-1 overflow-y-auto">
           <div className="px-4 pt-4 pb-20">
             <p className="text-xs text-gray-400 mb-4">SafeLab — Semestre 2026/1</p>
@@ -248,7 +247,7 @@ function BottomNav({ onNavigate, isMobile }: { onNavigate: (view: string) => voi
   ];
 
   return (
-    <div className={`bg-white border-t border-gray-100 px-4 pt-2 flex justify-around ${isMobile ? 'fixed bottom-0 left-0 right-0 z-50' : ''}`} style={isMobile ? { paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' } : {}}>
+    <div className={`bg-white border-t border-gray-100 px-4 pt-2 flex justify-around flex-shrink-0 ${isMobile ? 'fixed bottom-0 left-0 right-0 z-50' : 'sticky bottom-0'}`} style={isMobile ? { paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' } : {}}>
       {navItems.map((item, index) => (
         <button
           key={index}

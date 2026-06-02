@@ -28,7 +28,7 @@ function Sidebar({ onNavigate }: { onNavigate: (view: string) => void }) {
   return (
     <div className="w-[220px] bg-[#0F766E] text-white flex flex-col flex-shrink-0">
       <div className="p-4 border-b border-white/20">
-        <div className="w-12 h-12 bg-white/20 rounded" />
+        <img src="/student-project-dashboard/laboralogobranco.svg" alt="Labora" className="h-10 object-contain" />
       </div>
       <nav className="flex-1 p-4 space-y-1">
         {navItems.map((item, index) => (
@@ -74,7 +74,7 @@ function PageHeader() {
 
 function CompanyTimeline() {
   const milestones = [
-    { label: 'Visita Técnica', week: 4, status: 'completed', note: 'Semana 4' },
+    { label: 'Validação Inicial', week: 4, status: 'completed', note: 'Semana 4' },
     { label: 'Validação Parcial', week: 13, status: 'upcoming', note: 'em 5 semanas' },
     { label: 'Banca Final', week: 16, status: 'future', note: 'Semana 16' }
   ];
@@ -128,10 +128,9 @@ const gruposMembros: Record<number, string[]> = {
 };
 
 const entregasWeb = [
-  { id: 'e1',    nome: 'Entrega 1 — Análise Inicial',      data: '14/04/2026' },
-  { id: 'e2',    nome: 'Entrega 2 — Mapeamento de Riscos', data: '05/05/2026' },
-  { id: 'e3',    nome: 'Entrega 3 — Plano de Ação',        data: '26/05/2026' },
-  { id: 'banca', nome: 'Banca Final',                      data: '28/05/2026' },
+  { id: 'v1',    nome: 'Validação Inicial',  data: 'Semana 4'  },
+  { id: 'v2',    nome: 'Validação Parcial',  data: 'Semana 13' },
+  { id: 'banca', nome: 'Banca Final',        data: 'Semana 16' },
 ];
 
 function GroupProgressGrid() {
@@ -154,14 +153,6 @@ function GroupProgressGrid() {
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4">
           {groups.map((group) => (
             <div key={group.id} className="p-4 bg-white border border-gray-200 rounded-xl relative flex flex-col">
-              {group.starred && (
-                <div className="absolute top-3 right-3 px-2 py-1 bg-[#34D399]/20 text-[#0F766E] border border-[#34D399]/40 rounded-lg text-xs flex items-center gap-1 font-medium">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                  </svg>
-                  Potencial de implementação
-                </div>
-              )}
               <div className="mb-3">
                 <h3 className="mb-1 text-gray-900">{group.name}</h3>
                 <div className="text-xs text-gray-400">{group.members} membros</div>
@@ -179,11 +170,6 @@ function GroupProgressGrid() {
                 <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                   <div className="h-full rounded-full" style={{ width: `${(group.progress.current / group.progress.total) * 100}%`, background: 'linear-gradient(to right, #0F766E, #34D399)' }} />
                 </div>
-              </div>
-              <div className="mb-4 p-2 bg-gray-50 border border-gray-100 rounded-lg text-xs">
-                <div className="text-gray-400 mb-1">Último documento:</div>
-                <a href="#" className="text-[#3B82F6] hover:underline">{group.lastDocument}</a>
-                <div className="text-gray-400 mt-1">{group.date}</div>
               </div>
               <div className="flex gap-2 mt-auto">
                 <button className="flex-1 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
@@ -213,10 +199,11 @@ function GroupProgressGrid() {
 }
 
 function GrupoFeedbackDrawer({ grupo, onClose }: { grupo: { id: number; name: string }; onClose: () => void }) {
-  const [entregaId, setEntregaId] = useState('e1');
+  const [entregaId, setEntregaId] = useState('v1');
   const [dropdownAberto, setDropdownAberto] = useState(false);
   const [comentario, setComentario] = useState('');
   const [feedbackGrupo, setFeedbackGrupo] = useState('');
+  const [alunoSelecionado, setAlunoSelecionado] = useState<string | null>(null);
 
   const entregaAtual = entregasWeb.find(e => e.id === entregaId)!;
   const membros = gruposMembros[grupo.id] ?? [];
@@ -230,92 +217,111 @@ function GrupoFeedbackDrawer({ grupo, onClose }: { grupo: { id: number; name: st
       transition={{ type: 'spring', damping: 30, stiffness: 300 }}
     >
       <div className="sticky top-0 z-10 bg-white px-5 py-4 flex items-center gap-3 border-b border-gray-100">
-        <button onClick={onClose} className="w-6 h-6 flex items-center justify-center text-gray-600">
+        <button
+          onClick={alunoSelecionado ? () => setAlunoSelecionado(null) : onClose}
+          className="w-6 h-6 flex items-center justify-center text-gray-600">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M18 6L6 18M6 6l12 12" />
+            {alunoSelecionado
+              ? <path d="M15 18l-6-6 6-6" />
+              : <><path d="M18 6L6 18" /><path d="M6 6l12 12" /></>}
           </svg>
         </button>
-        <h2 className="flex-1 text-base font-semibold text-gray-900">{grupo.name}</h2>
-        <span className="px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">Em andamento</span>
+        <h2 className="flex-1 text-base font-semibold text-gray-900">
+          {alunoSelecionado ?? grupo.name}
+        </h2>
+        {!alunoSelecionado && (
+          <span className="px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">Em andamento</span>
+        )}
       </div>
 
-      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5">
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-[#0F766E]" />
-          <span className="text-xs font-medium text-[#0F766E]">Etapa atual: Validação Parcial</span>
-          <span className="text-xs text-gray-400">· Semana 13</span>
-        </div>
-
-        <div>
-          <p className="text-sm font-medium text-gray-900 mb-2">Selecione a entrega</p>
-          <div className="relative">
-            <button onClick={() => setDropdownAberto(!dropdownAberto)}
-              className="w-full p-3 border border-gray-200 rounded-xl flex items-center justify-between text-left">
-              <div>
-                <div className="text-sm font-semibold text-gray-900">{entregaAtual.nome}</div>
-                <div className="text-xs text-gray-500">{entregaAtual.data}</div>
+      <div className="flex-1 overflow-y-auto px-5 py-4">
+        {alunoSelecionado ? (
+          <AlunoDrawerView nome={alunoSelecionado} onVoltar={() => setAlunoSelecionado(null)} />
+        ) : (
+          <div className="space-y-5">
+            {entregaId === 'v2' && (
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-[#0F766E]" />
+                <span className="text-xs font-medium text-[#0F766E]">Etapa atual: Validação Parcial</span>
+                <span className="text-xs text-gray-400">· Semana 13</span>
               </div>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
-                {dropdownAberto ? <path d="M18 15l-6-6-6 6" /> : <path d="M6 9l6 6 6-6" />}
-              </svg>
-            </button>
-            {dropdownAberto && (
-              <div className="absolute top-full left-0 right-0 mt-1 border border-gray-200 rounded-xl bg-white shadow-md z-20 overflow-hidden">
-                {entregasWeb.map((e, i) => (
-                  <button key={e.id}
-                    onClick={() => { setEntregaId(e.id); setDropdownAberto(false); }}
-                    className={`w-full p-3 text-left ${i < entregasWeb.length - 1 ? 'border-b border-gray-100' : ''} ${e.id === entregaId ? 'bg-gray-50' : ''}`}>
-                    <div className="text-sm font-semibold text-gray-900">{e.nome}</div>
-                    <div className="text-xs text-gray-500">{e.data}</div>
+            )}
+
+            <div>
+              <p className="text-sm font-medium text-gray-900 mb-2">Selecione a etapa</p>
+              <div className="relative">
+                <button onClick={() => setDropdownAberto(!dropdownAberto)}
+                  className="w-full p-3 border border-gray-200 rounded-xl flex items-center justify-between text-left">
+                  <div>
+                    <div className="text-sm font-semibold text-gray-900">{entregaAtual.nome}</div>
+                    <div className="text-xs text-gray-500">{entregaAtual.data}</div>
+                  </div>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
+                    {dropdownAberto ? <path d="M18 15l-6-6-6 6" /> : <path d="M6 9l6 6 6-6" />}
+                  </svg>
+                </button>
+                {dropdownAberto && (
+                  <div className="absolute top-full left-0 right-0 mt-1 border border-gray-200 rounded-xl bg-white shadow-md z-20 overflow-hidden">
+                    {entregasWeb.map((e, i) => (
+                      <button key={e.id}
+                        onClick={() => { setEntregaId(e.id); setDropdownAberto(false); }}
+                        className={`w-full p-3 text-left ${i < entregasWeb.length - 1 ? 'border-b border-gray-100' : ''} ${e.id === entregaId ? 'bg-gray-50' : ''}`}>
+                        <div className="text-sm font-semibold text-gray-900">{e.nome}</div>
+                        <div className="text-xs text-gray-500">{e.data}</div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <div className="mb-1">
+                <span className="text-sm font-medium text-gray-900">Comentário sobre as etapas</span>
+                <div className="flex items-center gap-1 mt-0.5">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" />
+                  </svg>
+                  <span className="text-xs text-gray-400">Visível só para você</span>
+                </div>
+              </div>
+              <textarea value={comentario} onChange={e => setComentario(e.target.value)}
+                placeholder="O que chamou atenção nesta etapa deste grupo?"
+                rows={3} className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-[#0F766E] resize-none" />
+            </div>
+
+            <div>
+              <span className="text-sm font-medium text-gray-900">Feedback para o grupo</span>
+              <p className="text-xs text-gray-400 mb-2 mt-0.5">Visível para o grupo</p>
+              <textarea value={feedbackGrupo} onChange={e => setFeedbackGrupo(e.target.value)}
+                placeholder="O que este grupo pode melhorar ou manteve de positivo?"
+                rows={3} className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-[#0F766E] resize-none" />
+            </div>
+
+            <div>
+              <div className="text-sm font-medium text-gray-900 mb-3">Alunos do grupo</div>
+              <div className="space-y-2">
+                {membros.map((nome, i) => (
+                  <button key={i} onClick={() => setAlunoSelecionado(nome)}
+                    className="w-full flex items-center p-3 border border-gray-200 rounded-xl text-left hover:bg-gray-50 transition-colors">
+                    <div className="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0 mr-3">
+                      <span className="text-xs font-semibold text-white">{nome.split(' ').map((p: string) => p[0]).join('').slice(0,2)}</span>
+                    </div>
+                    <span className="flex-1 text-sm font-medium text-gray-900">{nome}</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
+                      <path d="M9 18l6-6-6-6" />
+                    </svg>
                   </button>
                 ))}
               </div>
-            )}
-          </div>
-        </div>
-
-        <div>
-          <div className="mb-1">
-            <span className="text-sm font-medium text-gray-900">Comentário sobre as entregas</span>
-            <div className="flex items-center gap-1 mt-0.5">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" />
-              </svg>
-              <span className="text-xs text-gray-400">Visível só para você</span>
             </div>
           </div>
-          <textarea value={comentario} onChange={e => setComentario(e.target.value)}
-            placeholder="O que chamou atenção nas entregas deste grupo?"
-            rows={3} className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-[#0F766E] resize-none" />
-        </div>
-
-        <div>
-          <div className="flex items-center gap-1.5 mb-1">
-            <span className="text-sm font-medium text-gray-900">Feedback para o grupo</span>
-          </div>
-          <p className="text-xs text-gray-400 mb-2">Visível para o grupo</p>
-          <textarea value={feedbackGrupo} onChange={e => setFeedbackGrupo(e.target.value)}
-            placeholder="O que este grupo pode melhorar ou manteve de positivo?"
-            rows={3} className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-[#0F766E] resize-none" />
-        </div>
-
-        <div>
-          <div className="text-sm font-medium text-gray-900 mb-3">Alunos do grupo</div>
-          <div className="space-y-2">
-            {membros.map((nome, i) => (
-              <div key={i} className="flex items-center p-3 border border-gray-200 rounded-xl">
-                <div className="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0 mr-3">
-                  <span className="text-xs font-semibold text-white">{nome.split(' ').map(p => p[0]).join('').slice(0,2)}</span>
-                </div>
-                <span className="flex-1 text-sm font-medium text-gray-900">{nome}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        )}
       </div>
 
       <div className="border-t border-gray-100 p-4 flex gap-3">
-        <button onClick={onClose} className="flex-1 py-3 border border-gray-200 rounded-xl text-sm font-medium text-gray-700">
+        <button onClick={alunoSelecionado ? () => setAlunoSelecionado(null) : onClose}
+          className="flex-1 py-3 border border-gray-200 rounded-xl text-sm font-medium text-gray-700">
           Voltar
         </button>
         <button className="flex-1 py-3 bg-gray-900 text-white rounded-xl text-sm font-medium">
@@ -323,6 +329,87 @@ function GrupoFeedbackDrawer({ grupo, onClose }: { grupo: { id: number; name: st
         </button>
       </div>
     </motion.div>
+  );
+}
+
+function AlunoDrawerView({ nome }: { nome: string; onVoltar: () => void }) {
+  const iniciais = nome.split(' ').map((p: string) => p[0]).join('').slice(0, 2);
+  const [avaliacao, setAvaliacao] = useState<number | null>(null);
+  const [feedback, setFeedback] = useState('');
+  const [notaInterna, setNotaInterna] = useState('');
+
+  return (
+    <div className="space-y-5">
+      <div className="flex items-center gap-2">
+        <div className="w-2 h-2 rounded-full bg-[#0F766E]" />
+        <span className="text-xs font-medium text-[#0F766E]">Etapa atual: Validação Parcial</span>
+        <span className="text-xs text-gray-400">· Semana 13</span>
+      </div>
+
+      <div className="flex items-center gap-3 pb-4 border-b border-gray-100">
+        <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0">
+          <span className="text-sm font-semibold text-white">{iniciais}</span>
+        </div>
+        <div>
+          <div className="text-base font-semibold text-gray-900">{nome}</div>
+          <div className="text-xs text-gray-400">Segurança no trabalho</div>
+        </div>
+      </div>
+
+      <div>
+        <div className="flex items-center gap-2 mb-1">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="2">
+            <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
+          </svg>
+          <span className="text-sm font-semibold text-gray-700">Feedback para o aluno</span>
+        </div>
+        <p className="text-xs text-gray-400 mb-2">Visível para o aluno</p>
+        <textarea value={feedback} onChange={e => setFeedback(e.target.value)}
+          placeholder="Descreva o que se destacou na apresentação deste aluno..."
+          rows={3} className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#0F766E] resize-none" />
+      </div>
+
+      <div>
+        <div className="flex items-center gap-2 mb-1">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <path d="M14 2v6h6M16 13H8M16 17H8" />
+          </svg>
+          <span className="text-sm font-semibold text-gray-700">Nota interna</span>
+        </div>
+        <p className="text-xs text-gray-400 mb-2">Visível só para você no dashboard</p>
+        <textarea value={notaInterna} onChange={e => setNotaInterna(e.target.value)}
+          placeholder="Algo que você quer lembrar sobre este aluno mais tarde..."
+          rows={3} className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#0F766E] resize-none" />
+      </div>
+
+      <div>
+        <div className="text-sm font-medium text-gray-900 mb-1">Avaliação (opcional)</div>
+        <p className="text-xs text-gray-400 mb-3">Avaliação geral do aluno</p>
+        <div className="flex items-center gap-2">
+          {[1,2,3,4,5].map(n => {
+            const filled = avaliacao !== null && n <= avaliacao;
+            return (
+              <div key={n} className="flex-1 flex flex-col items-center gap-1">
+                {n > 1 && (
+                  <div className="absolute" />
+                )}
+                <button onClick={() => setAvaliacao(n)}
+                  className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-colors ${
+                    filled ? 'bg-[#0F766E] border-[#0F766E]' : 'bg-white border-gray-300'
+                  }`} />
+              </div>
+            );
+          })}
+        </div>
+        <div className="relative mt-1">
+          <div className="flex justify-between text-xs text-gray-400 mt-2">
+            <span>Abaixo do esperado</span>
+            <span>Superou expectativas</span>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

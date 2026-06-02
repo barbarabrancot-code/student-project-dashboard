@@ -77,7 +77,7 @@ function Sidebar({ onNavigate }: { onNavigate: (view: string) => void }) {
   return (
     <div className="w-[220px] bg-[#0F766E] text-white flex flex-col flex-shrink-0">
       <div className="p-4 border-b border-white/20">
-        <div className="w-12 h-12 bg-white/20 rounded" />
+        <img src="/student-project-dashboard/laboralogobranco.svg" alt="Labora" className="h-10 object-contain" />
       </div>
 
       <nav className="flex-1 p-4 space-y-1">

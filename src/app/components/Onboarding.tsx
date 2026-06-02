@@ -98,11 +98,8 @@ function Cadastro({ onNext, onPular }: { onNext: () => void; onPular: () => void
     <>
       <div className="flex flex-col items-center justify-center pt-14 pb-10 px-6"
         style={{ background: 'linear-gradient(135deg, #0F766E, #3B82F6)' }}>
-        <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-4">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-            <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
-            <path d="M6 12v5c3 3 9 3 12 0v-5" />
-          </svg>
+        <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mb-4 p-2">
+          <img src="/student-project-dashboard/laboralogo.svg" alt="Labora" className="w-full h-full object-contain" />
         </div>
         <h1 className="text-white text-xl font-semibold mb-1">Bem-vindo(a)!</h1>
         <p className="text-white/80 text-sm text-center">Sua plataforma de projetos acadêmicos</p>

@@ -4,7 +4,23 @@
 
 * {
   scrollbar-width: none;
+  -webkit-tap-highlight-color: transparent;
 }
 *::-webkit-scrollbar {
   display: none;
+}
+
+/* Impede zoom automático do iOS Safari ao focar inputs */
+input, textarea, select {
+  font-size: 16px !important;
+}
+
+/* Previne bounce scroll e comportamentos indesejados no iOS */
+html {
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation;
+}
+
+body {
+  overscroll-behavior: none;
 }

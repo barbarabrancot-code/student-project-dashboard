@@ -111,7 +111,7 @@ function HomeEmpresa({ onGrupo }: { onGrupo: (g: Grupo) => void }) {
   ];
 
   return (
-    <div className="flex-1 overflow-y-auto px-5 pt-8 pb-24">
+    <div className="flex-1 overflow-y-auto px-5 pt-8">
       <h1 className="text-xl font-semibold text-gray-900 mb-3 leading-snug">
         SafeLab — Mapeamento de Riscos Ocupacionais
       </h1>
@@ -203,7 +203,7 @@ function GrupoDetalhe({ grupo, onVoltar, onAluno }: {
         <span className="px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">{grupo.status}</span>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 pt-4 pb-24">
+      <div className="flex-1 overflow-y-auto px-4 pt-4">
         <div className="flex items-center gap-2 mb-4 px-1">
           <div className="w-2 h-2 rounded-full bg-[#0F766E]" />
           <span className="text-xs font-medium text-[#0F766E]">Etapa atual: Validação Parcial</span>
@@ -264,7 +264,7 @@ function GrupoDetalhe({ grupo, onVoltar, onAluno }: {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 flex gap-3">
+      <div className="sticky bottom-0 bg-white border-t border-gray-100 p-4 flex gap-3 flex-shrink-0">
         <button onClick={onVoltar} className="flex-1 py-3 border border-gray-200 rounded-xl text-sm font-medium text-gray-700">
           Voltar
         </button>
@@ -308,7 +308,7 @@ function AlunoDetalhe({ aluno, onVoltar, onDestaque }: {
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto pb-24">
+      <div className="flex-1 overflow-y-auto">
         <div className="flex items-center gap-2 px-4 pt-3 pb-2">
           <div className="w-2 h-2 rounded-full bg-[#0F766E]" />
           <span className="text-xs font-medium text-[#0F766E]">Etapa atual: Validação Parcial</span>
@@ -393,7 +393,7 @@ function AlunoDetalhe({ aluno, onVoltar, onDestaque }: {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 flex gap-3">
+      <div className="sticky bottom-0 bg-white border-t border-gray-100 p-4 flex gap-3 flex-shrink-0">
         <button onClick={onVoltar} className="flex-1 py-3 border border-gray-200 rounded-xl text-sm font-medium text-gray-700">
           Voltar
         </button>
@@ -469,7 +469,7 @@ function NavbarEmpresa({ ativa, onChange }: {
   onChange: (v: 'home' | 'alunos') => void;
 }) {
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 flex">
+    <div className="sticky bottom-0 bg-white border-t border-gray-100 flex flex-shrink-0">
       <button onClick={() => onChange('home')}
         className={`flex-1 py-3 flex flex-col items-center gap-1 ${ativa === 'home' ? 'text-[#0F766E]' : 'text-gray-400'}`}>
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -565,7 +565,7 @@ function TelaAlunos({ onAluno, onGrupo }: { onAluno: (a: Aluno) => void; onGrupo
   ];
 
   return (
-    <div className="flex-1 overflow-y-auto pb-24">
+    <div className="flex-1 overflow-y-auto">
       <div className="sticky top-0 z-10 bg-white px-4 pt-5 pb-3 border-b border-gray-100">
         <p className="text-xs text-gray-500 mb-3">SafeLab · Segurança do Trabalho · 2025.1</p>
         <div className="flex border-b border-gray-200 mb-3">
@@ -717,7 +717,7 @@ function GrupoVisualizacao({ grupo, onVoltar, onEditar, onAluno }: {
         <span className="px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">{grupo.status}</span>
       </div>
 
-      <div className="flex-1 overflow-y-auto pb-24 px-4">
+      <div className="flex-1 overflow-y-auto px-4">
         <div className="flex items-center gap-2 pt-3 pb-4">
           <div className="w-2 h-2 rounded-full bg-[#0F766E]" />
           <span className="text-xs font-medium text-[#0F766E]">Etapa atual: Validação Parcial</span>
@@ -797,7 +797,7 @@ function GrupoVisualizacao({ grupo, onVoltar, onEditar, onAluno }: {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 flex gap-3">
+      <div className="sticky bottom-0 bg-white border-t border-gray-100 p-4 flex gap-3 flex-shrink-0">
         <button onClick={onVoltar} className="flex-1 py-3 border border-gray-200 rounded-xl text-sm font-medium text-gray-700">
           Voltar
         </button>
@@ -833,7 +833,7 @@ function AlunoVisualizacao({ aluno, onVoltar, onEditar }: {
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto pb-24">
+      <div className="flex-1 overflow-y-auto">
         <div className="flex flex-col items-center px-4 pt-6 pb-5">
           <div className="w-20 h-20 rounded-full bg-gray-600 flex items-center justify-center mb-3">
             <span className="text-lg font-semibold text-white">{aluno.iniciais}</span>
@@ -958,7 +958,7 @@ function AlunoVisualizacao({ aluno, onVoltar, onEditar }: {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 flex gap-3">
+      <div className="sticky bottom-0 bg-white border-t border-gray-100 p-4 flex gap-3 flex-shrink-0">
         <button onClick={onVoltar}
           className="flex-1 py-3 border border-gray-200 rounded-xl text-sm font-medium text-gray-700">
           Voltar
