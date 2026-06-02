@@ -469,7 +469,7 @@ function NavbarEmpresa({ ativa, onChange }: {
   onChange: (v: 'home' | 'alunos') => void;
 }) {
   return (
-    <div className="sticky bottom-0 bg-white border-t border-gray-100 flex flex-shrink-0">
+    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 flex flex-shrink-0 z-50">
       <button onClick={() => onChange('home')}
         className={`flex-1 py-3 flex flex-col items-center gap-1 ${ativa === 'home' ? 'text-[#0F766E]' : 'text-gray-400'}`}>
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

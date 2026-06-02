@@ -8,15 +8,17 @@ import BancoDeTalentos from './components/BancoDeTalentos';
 import Onboarding from './components/Onboarding';
 import Perfil from './components/Perfil';
 import Avaliacoes from './components/Avaliacoes';
+import LandingPage from './components/LandingPage';
 
-type ViewId = 't1' | 't2' | 'teacher' | 'grading' | 'company' | 'talents' | 'onboarding' | 'perfil' | 'avaliacoes' | 'empresa-app';
+type ViewId = 't1' | 't2' | 'teacher' | 'grading' | 'company' | 'talents' | 'onboarding' | 'perfil' | 'avaliacoes' | 'empresa-app' | 'lp';
 
 const navItems: { id: ViewId; short: string; label: string; views: ViewId[] }[] = [
   { id: 'onboarding',  short: 'EN', label: 'Entrada',          views: ['onboarding']                          },
   { id: 't1',          short: 'AL', label: 'Aluno',            views: ['t1', 't2', 'perfil', 'avaliacoes']    },
   { id: 'teacher',     short: 'PR', label: 'Professor',        views: ['teacher', 'grading']                  },
   { id: 'company',     short: 'EM', label: 'Empresa',          views: ['company', 'talents']                  },
-  { id: 'empresa-app', short: 'CA', label: 'Companion App',   views: ['empresa-app']                         },
+  { id: 'empresa-app', short: 'CA', label: 'Companion App',    views: ['empresa-app']                         },
+  { id: 'lp',          short: 'LP', label: 'Landing Page',     views: ['lp']                                  },
 ];
 
 export default function App() {
@@ -24,12 +26,21 @@ export default function App() {
   const appParam = new URLSearchParams(window.location.search).get('app');
   const isMobile = appParam === 'aluno' || new URLSearchParams(window.location.search).get('mobile') === 'true' || isStandalone;
   const isEmpresa = appParam === 'empresa';
+  const isLP = appParam === 'lp';
   const [currentView, setCurrentView] = useState<ViewId>(isMobile ? 'onboarding' : 't1');
 
   if (isEmpresa) {
     return (
       <div className="w-screen bg-white overflow-hidden" style={{ height: '100dvh' }}>
         <EmpresaApp />
+      </div>
+    );
+  }
+
+  if (isLP) {
+    return (
+      <div className="w-screen overflow-y-auto" style={{ height: '100dvh' }}>
+        <LandingPage />
       </div>
     );
   }
@@ -77,6 +88,12 @@ export default function App() {
         <AcompanhamentoEmpresa onNavigate={(v: string) => setCurrentView(v as ViewId)} />
       ) : currentView === 'talents' ? (
         <BancoDeTalentos onNavigate={(v: string) => setCurrentView(v as ViewId)} />
+      ) : currentView === 'lp' ? (
+        <div className="flex items-start justify-center min-h-full">
+          <div className="w-[375px] bg-white shadow-xl border border-gray-200 rounded-2xl overflow-y-auto" style={{ minHeight: '812px' }}>
+            <LandingPage />
+          </div>
+        </div>
       ) : currentView === 'empresa-app' ? (
         <div className="flex items-center justify-center min-h-full">
           <div className="w-[375px] h-[812px] bg-white relative flex flex-col overflow-hidden rounded-2xl shadow-xl border border-gray-200"
