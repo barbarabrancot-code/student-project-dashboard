@@ -239,9 +239,9 @@ function NextDeliveryCard() {
 function GroupStatus() {
   const members = [
     { name: 'Ana',    activity: 'Ativo hoje',       foto: '/student-project-dashboard/aluna.png' },
-    { name: 'Bruno',  activity: 'Ativo hoje',       foto: '/student-project-dashboard/brunocosta-convertido-de-jpg.webp' },
-    { name: 'Carlos', activity: 'Ativo há 2 dias',  foto: '/student-project-dashboard/carloslima-convertido-de-jpg.webp' },
-    { name: 'Diana',  activity: 'Ativo há 2 dias',  foto: '/student-project-dashboard/dianasouza-convertido-de-jpg.webp' },
+    { name: 'Bruno',  activity: 'Ativo hoje',       foto: '/student-project-dashboard/brunocosta-convertido-de-jpg_1_11zon.webp' },
+    { name: 'Carlos', activity: 'Ativo há 2 dias',  foto: '/student-project-dashboard/carloslima-convertido-de-jpg_17_11zon.webp' },
+    { name: 'Diana',  activity: 'Ativo há 2 dias',  foto: '/student-project-dashboard/dianasouza-convertido-de-jpg_18_11zon.webp' },
   ];
 
   return (
