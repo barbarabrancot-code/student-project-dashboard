@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 
 type Criterios = {
-  pontualidade: number;
   proatividade: number;
-  comunicacao: number;
-  compromisso: number;
-  execucao: number;
+  resiliencia: number;
+  curiosidade: number;
+  lideranca: number;
+  colaboracao: number;
 };
 
 function LikertScale({ value, onChange }: { value: number; onChange: (v: number) => void }) {
@@ -166,6 +166,11 @@ function SemesterTimeline() {
                   {milestone.status === 'upcoming' && (
                     <div className="w-4 h-4 bg-[#0F766E] rounded-full" />
                   )}
+                  {milestone.status === 'future' && (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" strokeWidth="1.5">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                  )}
                 </div>
                 <div className="mt-3 text-center">
                   <div className="text-sm text-gray-800 font-medium">{milestone.label}</div>
@@ -232,14 +237,43 @@ function FilterBar({ activeFilter, setActiveFilter }: { activeFilter: string; se
   );
 }
 
+const fotosPorNome: Record<string, string> = {
+  'Ana Silva':        '/student-project-dashboard/aluna.png',
+  'Bruno Costa':      '/student-project-dashboard/brunocosta-convertido-de-jpg.webp',
+  'Carlos Lima':      '/student-project-dashboard/carloslima-convertido-de-jpg.webp',
+  'Diana Santos':     '/student-project-dashboard/dianasouza-convertido-de-jpg.webp',
+  'Eduardo Alves':    '/student-project-dashboard/eduardoalves-convertido-de-jpg.webp',
+  'Fernanda Reis':    '/student-project-dashboard/fernandareis.webp',
+  'Gabriel Nunes':    '/student-project-dashboard/gabrielnunes-convertido-de-jpg.webp',
+  'Helena Campos':    '/student-project-dashboard/helenacampos.webp',
+  'Igor Santos':      '/student-project-dashboard/igorsantos-convertido-de-jpg.webp',
+  'Julia Moraes':     '/student-project-dashboard/juliamoraes.webp',
+  'Lucas Barros':     '/student-project-dashboard/lucasbarros-convertido-de-jpg.webp',
+  'Mariana Ferreira': '/student-project-dashboard/marinaferreira.webp',
+  'Mariana Pinto':    '/student-project-dashboard/marianapinto.webp',
+  'Pedro Gomes':      '/student-project-dashboard/pedrogomes.webp',
+  'Rafael Henrique':  '/student-project-dashboard/rafaelhenrique.webp',
+  'Thiago Kühl':      '/student-project-dashboard/thiagokuhl.webp',
+  'Valentina Lima':   '/student-project-dashboard/valentinalima.webp',
+  'William Martins':  '/student-project-dashboard/williammartins.webp',
+  'Xênia Neves':      '/student-project-dashboard/xenianeves.webp',
+};
+
+const gruposMembros: Record<number, string[]> = {
+  1: ['Ana Silva', 'Bruno Costa', 'Carlos Lima', 'Diana Santos'],
+  2: ['Mariana Ferreira', 'Pedro Gomes', 'Rafael Henrique'],
+  3: ['Thiago Kühl', 'Valentina Lima', 'William Martins', 'Xênia Neves'],
+  4: ['Eduardo Alves', 'Fernanda Reis', 'Gabriel Nunes', 'Helena Campos'],
+  5: ['Igor Santos', 'Julia Moraes', 'Lucas Barros', 'Mariana Pinto'],
+};
+
 function GroupCardsGrid({ setSelectedGroup }: { setSelectedGroup: (id: number) => void }) {
   const groups = [
     { id: 1, name: 'Grupo 1', members: 4, progress: { current: 2, total: 4 }, lastActivity: 'hoje às 14h', status: 'in-progress', warning: false },
-    { id: 2, name: 'Grupo 2', members: 4, progress: { current: 2, total: 4 }, lastActivity: 'hoje às 10h', status: 'submitted', warning: false },
+    { id: 2, name: 'Grupo 2', members: 3, progress: { current: 2, total: 4 }, lastActivity: 'hoje às 10h', status: 'submitted', warning: false },
     { id: 3, name: 'Grupo 3', members: 4, progress: { current: 2, total: 4 }, lastActivity: 'hoje às 16h', status: 'in-progress', warning: false },
     { id: 4, name: 'Grupo 4', members: 4, progress: { current: 1, total: 4 }, lastActivity: 'há 8 dias', status: 'late', warning: true },
     { id: 5, name: 'Grupo 5', members: 4, progress: { current: 2, total: 4 }, lastActivity: 'ontem às 18h', status: 'in-progress', warning: false },
-    { id: 6, name: 'Grupo 6', members: 4, progress: { current: 3, total: 4 }, lastActivity: 'hoje às 9h', status: 'submitted', warning: false }
   ];
 
   const statusConfig = {
@@ -278,8 +312,10 @@ function GroupCardsGrid({ setSelectedGroup }: { setSelectedGroup: (id: number) =
               </div>
 
               <div className="flex gap-2 mb-3">
-                {Array.from({ length: group.members }).map((_, i) => (
-                  <div key={i} className="w-8 h-8 bg-gray-200 rounded-full" />
+                {(gruposMembros[group.id] ?? []).map((nome, i) => (
+                  fotosPorNome[nome]
+                    ? <div key={i} className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0"><img src={fotosPorNome[nome]} alt={nome} className="w-full h-full object-cover" /></div>
+                    : <div key={i} className="w-8 h-8 bg-gray-200 rounded-full" />
                 ))}
               </div>
 
@@ -331,16 +367,16 @@ function FeedbackPanel({ groupId, onClose }: { groupId: number; onClose: () => v
   ];
 
   const criterios: { id: keyof Criterios; label: string }[] = [
-    { id: 'pontualidade', label: 'Pontualidade' },
     { id: 'proatividade', label: 'Proatividade' },
-    { id: 'comunicacao',  label: 'Comunicação'  },
-    { id: 'compromisso',  label: 'Compromisso'  },
-    { id: 'execucao',     label: 'Execução'     },
+    { id: 'resiliencia',  label: 'Resiliência'  },
+    { id: 'curiosidade',  label: 'Curiosidade'  },
+    { id: 'lideranca',    label: 'Liderança'    },
+    { id: 'colaboracao',  label: 'Colaboração'  },
   ];
 
   const [expandedId, setExpandedId] = useState<number>(0);
   const [avaliacoes, setAvaliacoes] = useState<Record<number, Criterios>>(
-    Object.fromEntries(alunos.map(a => [a.id, { pontualidade: 0, proatividade: 0, comunicacao: 0, compromisso: 0, execucao: 0 }]))
+    Object.fromEntries(alunos.map(a => [a.id, { proatividade: 0, resiliencia: 0, curiosidade: 0, lideranca: 0, colaboracao: 0 }]))
   );
   const [comentarios, setComentarios] = useState<Record<number, string>>(
     Object.fromEntries(alunos.map(a => [a.id, '']))

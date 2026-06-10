@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 export default function Avaliacoes({ onNavigate, isMobile }: { onNavigate: (view: string) => void; isMobile?: boolean }) {
-  const [aba, setAba] = useState<'professor' | 'empresa'>('professor');
+  const [aba, setAba] = useState<'professor' | 'empresa' | 'plataforma'>('professor');
 
   return (
     <div className={isMobile ? 'w-full h-full flex flex-col' : 'flex items-center justify-center min-h-full'}>
@@ -9,8 +9,9 @@ export default function Avaliacoes({ onNavigate, isMobile }: { onNavigate: (view
         <div className="flex-1 overflow-y-auto">
           <div className="px-4 pt-4 pb-20">
             <p className="text-xs text-gray-400 mb-4">SafeLab — Semestre 2026/1</p>
+            <CardNotaFinal />
             <Tabs aba={aba} onAba={setAba} />
-            {aba === 'professor' ? <TabProfessor /> : <TabEmpresa />}
+            {aba === 'professor' ? <TabProfessor /> : aba === 'empresa' ? <TabEmpresa /> : <TabPlataforma />}
           </div>
         </div>
         <BottomNav onNavigate={onNavigate} isMobile={isMobile} />
@@ -26,10 +27,10 @@ function Header() {
   );
 }
 
-function Tabs({ aba, onAba }: { aba: string; onAba: (a: 'professor' | 'empresa') => void }) {
+function Tabs({ aba, onAba }: { aba: string; onAba: (a: 'professor' | 'empresa' | 'plataforma') => void }) {
   return (
     <div className="flex border-b border-gray-200 mb-5">
-      {(['professor', 'empresa'] as const).map(a => (
+      {(['professor', 'empresa', 'plataforma'] as const).map(a => (
         <button
           key={a}
           onClick={() => onAba(a)}
@@ -39,10 +40,72 @@ function Tabs({ aba, onAba }: { aba: string; onAba: (a: 'professor' | 'empresa')
               : 'text-gray-400'
           }`}
         >
-          {a === 'professor' ? 'Professor' : 'Empresa'}
+          {a === 'professor' ? 'Professor' : a === 'empresa' ? 'Empresa' : 'Labora'}
         </button>
       ))}
     </div>
+  );
+}
+
+const notaTriangulada = {
+  nota: '8,7',
+  fontes: [
+    { label: 'Prof. Carla', valor: '8,5', cor: '#0F766E' },
+    { label: 'Sabin',       valor: '8,5', cor: '#3B82F6' },
+    { label: 'Labora',  valor: '9,2', cor: '#34D399' },
+  ],
+};
+
+function CardNotaFinal() {
+  return (
+    <div className="mb-5 border border-gray-200 rounded-xl p-4">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-baseline gap-1">
+          <span className="text-3xl font-bold text-gray-900">{notaTriangulada.nota}</span>
+          <span className="text-sm text-gray-400">/10</span>
+        </div>
+        <span className="px-3 py-1 bg-[#34D399]/10 text-[#0F766E] rounded-full text-xs font-semibold">Aprovado</span>
+      </div>
+      <div className="flex flex-wrap gap-2 mb-3">
+        {notaTriangulada.fontes.map((f) => (
+          <div key={f.label} className="flex items-center gap-1.5 px-2.5 py-1 bg-gray-50 border border-gray-100 rounded-full">
+            <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: f.cor }} />
+            <span className="text-xs text-gray-700">{f.label} {f.valor}</span>
+          </div>
+        ))}
+      </div>
+      <p className="text-xs text-gray-400">Nota composta por 3 fontes independentes</p>
+    </div>
+  );
+}
+
+const metricasPlataforma = [
+  { label: 'Pontualidade nas entregas', valor: '10,0', detalhe: '5 de 5 entregas no prazo' },
+  { label: 'Frequência de registros',   valor: '9,5',  detalhe: 'Atividade média do grupo no workspace' },
+  { label: 'Contribuição individual',   valor: '8,0',  detalhe: 'Tarefas concluídas e registros por membro' },
+];
+
+function TabPlataforma() {
+  return (
+    <>
+      <div className="mb-5 flex items-start gap-2 p-3 bg-gray-50 border border-gray-100 rounded-xl">
+        <img src="/student-project-dashboard/favicon.svg" alt="Labora" className="w-6 h-6 object-contain flex-shrink-0 mt-0.5" />
+        <p className="text-xs text-gray-600">Calculado automaticamente a partir da atividade na plataforma</p>
+      </div>
+
+      <div className="border border-gray-200 rounded-xl mb-5 overflow-hidden">
+        {metricasPlataforma.map((m, i) => (
+          <div key={m.label} className={`flex items-center gap-3 p-3 ${i < metricasPlataforma.length - 1 ? 'border-b border-gray-100' : ''}`}>
+            <div className="flex-1">
+              <div className="text-sm font-medium text-gray-900">{m.label}</div>
+              <div className="text-xs text-gray-400 mt-0.5">{m.detalhe}</div>
+            </div>
+            <span className="text-base font-semibold text-gray-900 flex-shrink-0">{m.valor}</span>
+          </div>
+        ))}
+      </div>
+
+    </>
   );
 }
 
@@ -133,7 +196,7 @@ const dadosRadarPorEntrega: Record<string, number[]> = {
 
 function GraficoRadar({ entregaId, entregaNome }: { entregaId: string; entregaNome: string }) {
   const cx = 140, cy = 128, r = 75;
-  const eixos = ['Pontualidade', 'Proatividade', 'Comunicação', 'Compromisso', 'Execução'];
+  const eixos = ['Proatividade', 'Resiliência', 'Curiosidade', 'Liderança', 'Colaboração'];
   const inicio = dadosRadarPorEntrega['e1'];
   const atual  = dadosRadarPorEntrega[entregaId] ?? dadosRadarPorEntrega['banca'];
 
@@ -234,6 +297,7 @@ function TabEmpresa() {
       ) : (
         <p className="text-sm text-gray-400 italic text-center py-4 mb-5">Sem avaliação registrada para esta entrega</p>
       )}
+
     </>
   );
 }

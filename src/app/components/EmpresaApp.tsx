@@ -5,6 +5,7 @@ interface Aluno {
   iniciais: string;
   nome: string;
   cargo: string;
+  foto?: string;
 }
 
 interface Grupo {
@@ -18,27 +19,27 @@ const grupos: Grupo[] = [
   {
     id: 1, nome: 'Grupo 1', status: 'Em andamento',
     membros: [
-      { iniciais: 'AS', nome: 'Ana Silva',    cargo: 'Técnico em Segurança do Trabalho' },
-      { iniciais: 'BC', nome: 'Bruno Costa',  cargo: 'Técnico em Segurança do Trabalho' },
-      { iniciais: 'CL', nome: 'Carlos Lima',  cargo: 'Técnico em Segurança do Trabalho' },
-      { iniciais: 'DS', nome: 'Diana Santos', cargo: 'Técnico em Segurança do Trabalho' },
+      { iniciais: 'AS', nome: 'Ana Silva',    cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/aluna.png' },
+      { iniciais: 'BC', nome: 'Bruno Costa',  cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/brunocosta-convertido-de-jpg.webp' },
+      { iniciais: 'CL', nome: 'Carlos Lima',  cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/carloslima-convertido-de-jpg.webp' },
+      { iniciais: 'DS', nome: 'Diana Santos', cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/dianasouza-convertido-de-jpg.webp' },
     ],
   },
   {
     id: 2, nome: 'Grupo 2', status: 'Em andamento',
     membros: [
-      { iniciais: 'MF', nome: 'Mariana Ferreira', cargo: 'Técnico em Segurança do Trabalho' },
-      { iniciais: 'PG', nome: 'Pedro Gomes',      cargo: 'Técnico em Segurança do Trabalho' },
-      { iniciais: 'RH', nome: 'Rafael Henrique',  cargo: 'Técnico em Segurança do Trabalho' },
+      { iniciais: 'MF', nome: 'Mariana Ferreira', cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/marinaferreira.webp' },
+      { iniciais: 'PG', nome: 'Pedro Gomes',      cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/pedrogomes.webp' },
+      { iniciais: 'RH', nome: 'Rafael Henrique',  cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/rafaelhenrique.webp' },
     ],
   },
   {
     id: 3, nome: 'Grupo 3', status: 'Em andamento',
     membros: [
-      { iniciais: 'TK', nome: 'Thiago Kühl',      cargo: 'Técnico em Segurança do Trabalho' },
-      { iniciais: 'VL', nome: 'Valentina Lima',   cargo: 'Técnico em Segurança do Trabalho' },
-      { iniciais: 'WM', nome: 'William Martins',  cargo: 'Técnico em Segurança do Trabalho' },
-      { iniciais: 'XN', nome: 'Xênia Neves',      cargo: 'Técnico em Segurança do Trabalho' },
+      { iniciais: 'TK', nome: 'Thiago Kühl',      cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/thiagokuhl.webp' },
+      { iniciais: 'VL', nome: 'Valentina Lima',   cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/valentinalima.webp' },
+      { iniciais: 'WM', nome: 'William Martins',  cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/williammartins.webp' },
+      { iniciais: 'XN', nome: 'Xênia Neves',      cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/xenianeves.webp' },
       { iniciais: 'YO', nome: 'Yasmin Oliveira',  cargo: 'Técnico em Segurança do Trabalho' },
       { iniciais: 'ZP', nome: 'Zara Pereira',     cargo: 'Técnico em Segurança do Trabalho' },
     ],
@@ -252,9 +253,10 @@ function GrupoDetalhe({ grupo, onVoltar, onAluno }: {
           {grupo.membros.map((aluno, i) => (
             <button key={i} onClick={() => onAluno(aluno)}
               className="w-full flex items-center p-3 border border-gray-200 rounded-xl text-left">
-              <div className="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0 mr-3">
-                <span className="text-xs font-semibold text-white">{aluno.iniciais}</span>
-              </div>
+              {aluno.foto
+                ? <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 mr-3"><img src={aluno.foto} alt={aluno.nome} className="w-full h-full object-cover" /></div>
+                : <div className="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0 mr-3"><span className="text-xs font-semibold text-white">{aluno.iniciais}</span></div>
+              }
               <span className="flex-1 text-sm font-medium text-gray-900">{aluno.nome}</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
                 <path d="M9 18l6-6-6-6" />
@@ -315,9 +317,10 @@ function AlunoDetalhe({ aluno, onVoltar, onDestaque }: {
           <span className="text-xs text-gray-400">· Semana 13</span>
         </div>
         <div className="flex items-center gap-3 px-4 py-4 border-b border-gray-100">
-          <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0">
-            <span className="text-sm font-semibold text-white">{aluno.iniciais}</span>
-          </div>
+          {aluno.foto
+            ? <div className="w-12 h-12 rounded-full flex-shrink-0 overflow-hidden"><img src={aluno.foto} alt={aluno.nome} className="w-full h-full object-cover" /></div>
+            : <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0"><span className="text-sm font-semibold text-white">{aluno.iniciais}</span></div>
+          }
           <div>
             <div className="text-base font-semibold text-gray-900">{aluno.nome}</div>
             <div className="text-xs text-gray-500">{aluno.cargo}</div>
@@ -640,9 +643,10 @@ function TelaAlunos({ onAluno, onGrupo }: { onAluno: (a: Aluno) => void; onGrupo
                   <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                 </svg>
               </button>
-              <div className="w-14 h-14 rounded-full bg-gray-300 flex items-center justify-center mb-2 mt-1">
-                <span className="text-sm font-semibold text-gray-600">{aluno.iniciais}</span>
-              </div>
+              {aluno.foto
+                ? <div className="w-14 h-14 rounded-full overflow-hidden mb-2 mt-1 flex-shrink-0"><img src={aluno.foto} alt={aluno.nome} className="w-full h-full object-cover" /></div>
+                : <div className="w-14 h-14 rounded-full bg-gray-300 flex items-center justify-center mb-2 mt-1"><span className="text-sm font-semibold text-gray-600">{aluno.iniciais}</span></div>
+              }
               <div className="text-sm font-semibold text-gray-900 text-center mb-0.5">{aluno.nome}</div>
               <div className="text-xs text-[#0F766E] mb-2 text-center">Seg. do Trabalho</div>
               {av !== null ? (
@@ -785,9 +789,10 @@ function GrupoVisualizacao({ grupo, onVoltar, onEditar, onAluno }: {
           {grupo.membros.map((aluno, i) => (
             <button key={i} onClick={() => onAluno(aluno)}
               className="w-full flex items-center p-3 border border-gray-200 rounded-xl text-left">
-              <div className="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0 mr-3">
-                <span className="text-xs font-semibold text-white">{aluno.iniciais}</span>
-              </div>
+              {aluno.foto
+                ? <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 mr-3"><img src={aluno.foto} alt={aluno.nome} className="w-full h-full object-cover" /></div>
+                : <div className="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0 mr-3"><span className="text-xs font-semibold text-white">{aluno.iniciais}</span></div>
+              }
               <span className="flex-1 text-sm font-medium text-gray-900">{aluno.nome}</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
                 <path d="M9 18l6-6-6-6" />
@@ -835,9 +840,10 @@ function AlunoVisualizacao({ aluno, onVoltar, onEditar }: {
 
       <div className="flex-1 overflow-y-auto">
         <div className="flex flex-col items-center px-4 pt-6 pb-5">
-          <div className="w-20 h-20 rounded-full bg-gray-600 flex items-center justify-center mb-3">
-            <span className="text-lg font-semibold text-white">{aluno.iniciais}</span>
-          </div>
+          {aluno.foto
+            ? <div className="w-20 h-20 rounded-full overflow-hidden mb-3 flex-shrink-0"><img src={aluno.foto} alt={aluno.nome} className="w-full h-full object-cover" /></div>
+            : <div className="w-20 h-20 rounded-full bg-gray-600 flex items-center justify-center mb-3"><span className="text-lg font-semibold text-white">{aluno.iniciais}</span></div>
+          }
           <div className="flex items-center gap-2 mb-2">
             {eDestacado && (
               <svg width="18" height="18" viewBox="0 0 24 24" fill="#F59E0B" stroke="#F59E0B" strokeWidth="1.5">

@@ -140,7 +140,7 @@ function ProjectCard() {
       <img src="/student-project-dashboard/laboralogo.svg" alt="Labora" className="mb-4" style={{ width: '40%' }} />
       <h2 className="mb-2 text-gray-900">SafeLab — Mapeamento de Riscos Ocupacionais</h2>
       <div className="flex items-center gap-2 mb-3">
-        <div className="w-6 h-6 bg-gray-200 rounded" />
+        <img src="/student-project-dashboard/sabin%20(2).png" alt="Sabin" className="w-6 h-6 rounded object-cover" />
         <span className="text-sm text-gray-500">Laboratório Sabin</span>
       </div>
       <div className="flex gap-2 mb-3">
@@ -194,6 +194,11 @@ function Timeline() {
                   </svg>
                 )}
                 {m.status === 'current' && <div className="w-3 h-3 bg-[#0F766E] rounded-full" />}
+                {m.status === 'future' && (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" strokeWidth="1.5">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                  </svg>
+                )}
               </div>
               <div className="mt-2 text-center">
                 <div className={`text-xs whitespace-nowrap ${m.status === 'current' ? 'font-semibold text-gray-900' : 'font-medium text-gray-700'}`}>
@@ -233,10 +238,10 @@ function NextDeliveryCard() {
 
 function GroupStatus() {
   const members = [
-    { name: 'Ana', activity: 'Ativo hoje' },
-    { name: 'Bruno', activity: 'Ativo hoje' },
-    { name: 'Carlos', activity: 'Ativo há 2 dias' },
-    { name: 'Diana', activity: 'Ativo há 2 dias' }
+    { name: 'Ana',    activity: 'Ativo hoje',       foto: '/student-project-dashboard/aluna.png' },
+    { name: 'Bruno',  activity: 'Ativo hoje',       foto: '/student-project-dashboard/brunocosta-convertido-de-jpg.webp' },
+    { name: 'Carlos', activity: 'Ativo há 2 dias',  foto: '/student-project-dashboard/carloslima-convertido-de-jpg.webp' },
+    { name: 'Diana',  activity: 'Ativo há 2 dias',  foto: '/student-project-dashboard/dianasouza-convertido-de-jpg.webp' },
   ];
 
   return (
@@ -245,7 +250,9 @@ function GroupStatus() {
       <div className="flex gap-4 mb-3">
         {members.map((member, index) => (
           <div key={index} className="flex flex-col items-center">
-            <div className="w-12 h-12 rounded-full bg-gray-200 mb-1" />
+            <div className="w-12 h-12 rounded-full overflow-hidden mb-1 flex-shrink-0">
+              <img src={member.foto} alt={member.name} className="w-full h-full object-cover" />
+            </div>
             <div className="text-xs text-gray-800 font-medium">{member.name}</div>
             <div className="text-xs text-gray-400">{member.activity}</div>
           </div>

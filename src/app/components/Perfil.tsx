@@ -25,11 +25,12 @@ function Header() {
 function PerfilInfo() {
   return (
     <div className="px-4 py-6 flex flex-col items-center border-b border-gray-100">
-      <div className="w-20 h-20 bg-gray-200 rounded-full mb-3" />
+      <div className="w-20 h-20 rounded-full mb-3 overflow-hidden flex-shrink-0">
+        <img src="/student-project-dashboard/aluna.png" alt="Ana Silva" className="w-full h-full object-cover" />
+      </div>
       <h2 className="text-lg font-semibold text-gray-900 mb-1">Ana Silva</h2>
       <p className="text-sm text-[#0F766E] mb-3">Técnico em Segurança do Trabalho</p>
       <div className="flex gap-2">
-        <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">SENAC SP</span>
         <span className="px-3 py-1 bg-[#0F766E]/10 text-[#0F766E] rounded-full text-xs font-medium">MBTI: INTJ</span>
       </div>
     </div>
@@ -50,10 +51,7 @@ function ProjetoAtual() {
           </span>
         </div>
         <p className="text-xs text-gray-500 mb-3">Laboratório Sabin</p>
-        <div className="flex items-center justify-between">
-          <span className="text-xs text-[#0F766E] font-medium">Líder de Projeto</span>
-          <span className="text-xs text-gray-400">Mar — Jun 2026</span>
-        </div>
+        <span className="text-xs text-gray-400">Mar — Jun 2026</span>
       </div>
     </div>
   );
@@ -61,8 +59,8 @@ function ProjetoAtual() {
 
 function Certificacoes() {
   const certs = [
-    { nome: 'NR-32', subtitulo: 'Segurança em Serviços de Saúde', data: 'Mar 2026' },
-    { nome: 'NR-09', subtitulo: 'Programa de Prevenção de Riscos', data: 'Fev 2026' },
+    { nome: 'Segurança em Serviços de Saúde', subtitulo: 'NR-32', data: 'Mar 2026' },
+    { nome: 'Programa de Prevenção de Riscos', subtitulo: 'NR-09', data: 'Fev 2026' },
     { nome: 'Primeiros Socorros', subtitulo: 'Cruz Vermelha', data: 'Jan 2026' },
   ];
 
@@ -79,7 +77,6 @@ function Certificacoes() {
             </div>
             <div>
               <div className="text-sm font-medium text-[#0F766E]">{cert.nome}</div>
-              <div className="text-xs text-gray-500">{cert.subtitulo}</div>
               <div className="text-xs text-gray-400">Emitido em {cert.data}</div>
             </div>
           </div>

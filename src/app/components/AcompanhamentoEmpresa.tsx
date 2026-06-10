@@ -48,7 +48,7 @@ function Sidebar({ onNavigate }: { onNavigate: (view: string) => void }) {
         ))}
       </nav>
       <div className="p-4 border-t border-white/20">
-        <div className="w-16 h-16 bg-white/20 rounded mb-2" />
+        <img src="/student-project-dashboard/sabin%20(2).png" alt="Sabin" className="w-16 h-16 rounded object-cover mb-2" />
         <div className="text-xs text-white/70">Laboratório Sabin</div>
       </div>
     </div>
@@ -118,13 +118,34 @@ function CompanyTimeline() {
   );
 }
 
+const fotosPorNome: Record<string, string> = {
+  'Ana Silva':        '/student-project-dashboard/aluna.png',
+  'Bruno Costa':      '/student-project-dashboard/brunocosta-convertido-de-jpg.webp',
+  'Carlos Lima':      '/student-project-dashboard/carloslima-convertido-de-jpg.webp',
+  'Diana Santos':     '/student-project-dashboard/dianasouza-convertido-de-jpg.webp',
+  'Eduardo Alves':    '/student-project-dashboard/eduardoalves-convertido-de-jpg.webp',
+  'Fernanda Reis':    '/student-project-dashboard/fernandareis.webp',
+  'Gabriel Nunes':    '/student-project-dashboard/gabrielnunes-convertido-de-jpg.webp',
+  'Helena Campos':    '/student-project-dashboard/helenacampos.webp',
+  'Igor Santos':      '/student-project-dashboard/igorsantos-convertido-de-jpg.webp',
+  'Julia Moraes':     '/student-project-dashboard/juliamoraes.webp',
+  'Lucas Barros':     '/student-project-dashboard/lucasbarros-convertido-de-jpg.webp',
+  'Mariana Ferreira': '/student-project-dashboard/marinaferreira.webp',
+  'Mariana Pinto':    '/student-project-dashboard/marianapinto.webp',
+  'Pedro Gomes':      '/student-project-dashboard/pedrogomes.webp',
+  'Rafael Henrique':  '/student-project-dashboard/rafaelhenrique.webp',
+  'Thiago Kühl':      '/student-project-dashboard/thiagokuhl.webp',
+  'Valentina Lima':   '/student-project-dashboard/valentinalima.webp',
+  'William Martins':  '/student-project-dashboard/williammartins.webp',
+  'Xênia Neves':      '/student-project-dashboard/xenianeves.webp',
+};
+
 const gruposMembros: Record<number, string[]> = {
   1: ['Ana Silva', 'Bruno Costa', 'Carlos Lima', 'Diana Santos'],
   2: ['Mariana Ferreira', 'Pedro Gomes', 'Rafael Henrique'],
   3: ['Thiago Kühl', 'Valentina Lima', 'William Martins', 'Xênia Neves'],
   4: ['Eduardo Alves', 'Fernanda Reis', 'Gabriel Nunes', 'Helena Campos'],
   5: ['Igor Santos', 'Julia Moraes', 'Lucas Barros', 'Mariana Pinto'],
-  6: ['Ana Souza', 'Bruno Lima', 'Carlos Mendes', 'Diana Faria'],
 };
 
 const entregasWeb = [
@@ -142,7 +163,6 @@ function GroupProgressGrid() {
     { id: 3, name: 'Grupo 3', members: 4, progress: { current: 2, total: 4 }, lastDocument: 'Relatorio_v2.pdf', date: '02/05/2026', starred: true },
     { id: 4, name: 'Grupo 4', members: 4, progress: { current: 1, total: 4 }, lastDocument: 'Briefing_Analise.pdf', date: '25/04/2026', starred: false },
     { id: 5, name: 'Grupo 5', members: 4, progress: { current: 2, total: 4 }, lastDocument: 'Mapeamento_v1.pdf', date: '30/04/2026', starred: false },
-    { id: 6, name: 'Grupo 6', members: 4, progress: { current: 3, total: 4 }, lastDocument: 'Proposta_Implementacao.pdf', date: '03/05/2026', starred: false },
   ];
 
   const grupoSelecionado = groups.find(g => g.id === feedbackGrupoId) ?? null;
@@ -158,8 +178,10 @@ function GroupProgressGrid() {
                 <div className="text-xs text-gray-400">{group.members} membros</div>
               </div>
               <div className="flex gap-1 mb-4">
-                {Array.from({ length: group.members }).map((_, i) => (
-                  <div key={i} className="w-10 h-10 bg-gray-200 rounded-full" />
+                {(gruposMembros[group.id] ?? Array.from({ length: group.members }, (_, i) => String(i))).map((nome, i) => (
+                  fotosPorNome[nome]
+                    ? <div key={i} className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0"><img src={fotosPorNome[nome]} alt={nome} className="w-full h-full object-cover" /></div>
+                    : <div key={i} className="w-10 h-10 bg-gray-200 rounded-full" />
                 ))}
               </div>
               <div className="mb-3">
@@ -304,9 +326,10 @@ function GrupoFeedbackDrawer({ grupo, onClose }: { grupo: { id: number; name: st
                 {membros.map((nome, i) => (
                   <button key={i} onClick={() => setAlunoSelecionado(nome)}
                     className="w-full flex items-center p-3 border border-gray-200 rounded-xl text-left hover:bg-gray-50 transition-colors">
-                    <div className="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0 mr-3">
-                      <span className="text-xs font-semibold text-white">{nome.split(' ').map((p: string) => p[0]).join('').slice(0,2)}</span>
-                    </div>
+                    {fotosPorNome[nome]
+                      ? <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 mr-3"><img src={fotosPorNome[nome]} alt={nome} className="w-full h-full object-cover" /></div>
+                      : <div className="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0 mr-3"><span className="text-xs font-semibold text-white">{nome.split(' ').map((p: string) => p[0]).join('').slice(0,2)}</span></div>
+                    }
                     <span className="flex-1 text-sm font-medium text-gray-900">{nome}</span>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
                       <path d="M9 18l6-6-6-6" />
@@ -347,9 +370,10 @@ function AlunoDrawerView({ nome }: { nome: string; onVoltar: () => void }) {
       </div>
 
       <div className="flex items-center gap-3 pb-4 border-b border-gray-100">
-        <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0">
-          <span className="text-sm font-semibold text-white">{iniciais}</span>
-        </div>
+        {fotosPorNome[nome]
+          ? <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0"><img src={fotosPorNome[nome]} alt={nome} className="w-full h-full object-cover" /></div>
+          : <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0"><span className="text-sm font-semibold text-white">{iniciais}</span></div>
+        }
         <div>
           <div className="text-base font-semibold text-gray-900">{nome}</div>
           <div className="text-xs text-gray-400">Segurança no trabalho</div>

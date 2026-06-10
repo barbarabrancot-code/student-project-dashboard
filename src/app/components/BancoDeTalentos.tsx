@@ -73,7 +73,7 @@ function Sidebar({ onNavigate }: { onNavigate: (view: string) => void }) {
         ))}
       </nav>
       <div className="p-4 border-t border-white/20">
-        <div className="w-16 h-16 bg-white/20 rounded mb-2" />
+        <img src="/student-project-dashboard/sabin%20(2).png" alt="Sabin" className="w-16 h-16 rounded object-cover mb-2" />
         <div className="text-xs text-white/70">Laboratório Sabin</div>
       </div>
     </div>
@@ -126,18 +126,18 @@ function ResultsCount() {
 
 function StudentGrid({ selectedStudents, setSelectedStudents, favoritedStudents, setFavoritedStudents, setSelectedProfileId }: any) {
   const students = [
-    { id: 1, name: 'Ana Silva', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 9.1, mbti: 'INTJ', certifications: ['NR-32', 'NR-09'], summary: 'Desenvolveu PPRB para unidades de alto volume', available: true },
-    { id: 2, name: 'Bruno Costa', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 8.8, mbti: 'ENFP', certifications: ['NR-32'], summary: 'Criou protocolo de auditoria mensal', available: true },
-    { id: 3, name: 'Carlos Lima', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 7.9, mbti: 'ISTJ', certifications: ['NR-09', 'RDC 222'], summary: 'Mapeou riscos biológicos do laboratório', available: false },
-    { id: 4, name: 'Diana Souza', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 9.3, mbti: 'ENFJ', certifications: ['NR-32', 'NR-09'], summary: 'Sistema de classificação com QR codes', available: true },
-    { id: 5, name: 'Eduardo Alves', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 8.5, mbti: 'INTP', certifications: ['NR-32'], summary: 'App mobile para registro de incidentes', available: true },
-    { id: 6, name: 'Fernanda Reis', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 9.0, mbti: 'ESFJ', certifications: ['NR-09', 'RDC 222'], summary: 'Programa de treinamento continuado', available: true },
-    { id: 7, name: 'Gabriel Nunes', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 8.2, mbti: 'ISTP', certifications: ['NR-32'], summary: 'Dashboard de indicadores de segurança', available: true },
-    { id: 8, name: 'Helena Campos', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 8.9, mbti: 'INFJ', certifications: ['NR-09'], summary: 'Matriz de riscos digitalizada', available: false },
-    { id: 9, name: 'Igor Santos', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 7.8, mbti: 'ESTP', certifications: ['NR-32', 'RDC 222'], summary: 'Checklist de conformidade regulatória', available: true },
-    { id: 10, name: 'Julia Moraes', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 9.2, mbti: 'INFP', certifications: ['NR-32', 'NR-09'], summary: 'Protocolo de emergência biológica', available: true },
-    { id: 11, name: 'Lucas Barros', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 8.4, mbti: 'ENTJ', certifications: ['NR-09'], summary: 'Sistema de gestão de EPIs', available: true },
-    { id: 12, name: 'Mariana Pinto', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 8.7, mbti: 'ISFP', certifications: ['NR-32', 'RDC 222'], summary: 'Plano de resposta a incidentes', available: true }
+    { id: 1, name: 'Ana Silva', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 9.1, mbti: 'INTJ', certifications: ['NR-32', 'NR-09'], summary: 'Desenvolveu PPRB para unidades de alto volume', available: true, foto: '/student-project-dashboard/aluna.png' },
+    { id: 2,  name: 'Bruno Costa',   course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 8.8, mbti: 'ENFP', certifications: ['NR-32'],           summary: 'Criou protocolo de auditoria mensal',          available: true,  foto: '/student-project-dashboard/brunocosta-convertido-de-jpg.webp'  },
+    { id: 3,  name: 'Carlos Lima',   course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 7.9, mbti: 'ISTJ', certifications: ['NR-09', 'RDC 222'], summary: 'Mapeou riscos biológicos do laboratório',       available: false, foto: '/student-project-dashboard/carloslima-convertido-de-jpg.webp'  },
+    { id: 4,  name: 'Diana Souza',   course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 9.3, mbti: 'ENFJ', certifications: ['NR-32', 'NR-09'],   summary: 'Sistema de classificação com QR codes',        available: true,  foto: '/student-project-dashboard/dianasouza-convertido-de-jpg.webp'  },
+    { id: 5,  name: 'Eduardo Alves', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 8.5, mbti: 'INTP', certifications: ['NR-32'],           summary: 'App mobile para registro de incidentes',      available: true,  foto: '/student-project-dashboard/eduardoalves-convertido-de-jpg.webp' },
+    { id: 6,  name: 'Fernanda Reis', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 9.0, mbti: 'ESFJ', certifications: ['NR-09', 'RDC 222'], summary: 'Programa de treinamento continuado',            available: true,  foto: '/student-project-dashboard/fernandareis.webp' },
+    { id: 7,  name: 'Gabriel Nunes', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 8.2, mbti: 'ISTP', certifications: ['NR-32'],           summary: 'Dashboard de indicadores de segurança',       available: true,  foto: '/student-project-dashboard/gabrielnunes-convertido-de-jpg.webp' },
+    { id: 8,  name: 'Helena Campos', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 8.9, mbti: 'INFJ', certifications: ['NR-09'],           summary: 'Matriz de riscos digitalizada',               available: false, foto: '/student-project-dashboard/helenacampos.webp' },
+    { id: 9,  name: 'Igor Santos',   course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 7.8, mbti: 'ESTP', certifications: ['NR-32', 'RDC 222'], summary: 'Checklist de conformidade regulatória',         available: true,  foto: '/student-project-dashboard/igorsantos-convertido-de-jpg.webp'  },
+    { id: 10, name: 'Julia Moraes',  course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 9.2, mbti: 'INFP', certifications: ['NR-32', 'NR-09'],   summary: 'Protocolo de emergência biológica',            available: true,  foto: '/student-project-dashboard/juliamoraes.webp' },
+    { id: 11, name: 'Lucas Barros',  course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 8.4, mbti: 'ENTJ', certifications: ['NR-09'],           summary: 'Sistema de gestão de EPIs',                   available: true,  foto: '/student-project-dashboard/lucasbarros-convertido-de-jpg.webp' },
+    { id: 12, name: 'Mariana Pinto', course: 'Segurança no trabalho', institution: 'Escola Técnica Geração', grade: 8.7, mbti: 'ISFP', certifications: ['NR-32', 'RDC 222'], summary: 'Plano de resposta a incidentes',               available: true,  foto: '/student-project-dashboard/marianapinto.webp' }
   ];
 
   const toggleSelection = (id: number) => {
@@ -172,7 +172,10 @@ function StudentGrid({ selectedStudents, setSelectedStudents, favoritedStudents,
                 </svg>
               </button>
               <div className="flex flex-col items-center pt-2 pb-3">
-                <div className="w-16 h-16 bg-gray-200 rounded-full mb-3" />
+                {(student as any).foto
+                  ? <div className="w-16 h-16 rounded-full overflow-hidden mb-3 flex-shrink-0"><img src={(student as any).foto} alt={student.name} className="w-full h-full object-cover" /></div>
+                  : <div className="w-16 h-16 bg-gray-200 rounded-full mb-3" />
+                }
                 <h3 className="text-center mb-1 text-gray-900">{student.name}</h3>
                 <div className="text-xs text-[#0F766E] text-center mb-3">
                   {student.course} — {student.institution}
@@ -189,6 +192,23 @@ function StudentGrid({ selectedStudents, setSelectedStudents, favoritedStudents,
             </div>
           );
         })}
+      </div>
+
+      <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200">
+        <span className="text-sm text-gray-500">Exibindo 1–12 de 18 alunos</span>
+        <div className="flex items-center gap-1">
+          <button className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-400 cursor-default">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6" /></svg>
+          </button>
+          {[1, 2].map(p => (
+            <button key={p} className={`w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium ${p === 1 ? 'bg-[#0F766E] text-white' : 'border border-gray-200 text-gray-600'}`}>
+              {p}
+            </button>
+          ))}
+          <button className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-600">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6" /></svg>
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -238,7 +258,9 @@ function StudentProfilePanel({ studentId, onClose, showContactForm, setShowConta
       <div className="p-4 border-b border-gray-200 bg-[#3B82F6]">
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
-            <div className="w-24 h-24 bg-white/30 rounded-full flex-shrink-0" />
+            <div className="w-24 h-24 rounded-full flex-shrink-0 overflow-hidden">
+              <img src="/student-project-dashboard/aluna.png" alt="Ana Silva" className="w-full h-full object-cover" />
+            </div>
             <div>
               <h3 className="text-white">Ana Silva</h3>
               <div className="text-xs text-white/70">Segurança no trabalho — Escola Técnica Geração</div>
@@ -340,10 +362,7 @@ function StudentProfilePanel({ studentId, onClose, showContactForm, setShowConta
                         <path d="M20 6L9 17l-5-5" />
                       </svg>
                     </div>
-                    <div>
-                      <div className="text-sm font-medium text-gray-900">{cert.code}</div>
-                      <div className="text-xs text-gray-400">{cert.name}</div>
-                    </div>
+                    <div className="text-sm font-medium text-gray-900">{cert.name}</div>
                   </div>
                 ))}
               </div>
@@ -401,6 +420,28 @@ function StudentProfilePanel({ studentId, onClose, showContactForm, setShowConta
               </div>
             )}
 
+            <div className="p-3 border border-gray-200 rounded-xl mb-4">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-8 h-8 rounded-lg bg-[#0F766E]/10 flex items-center justify-center flex-shrink-0">
+                  <img src="/student-project-dashboard/favicon.svg" alt="Labora" className="w-[30px] h-[30px] object-contain" />
+                </div>
+                <div>
+                  <div className="text-sm font-medium text-gray-900">Labora</div>
+                  <div className="text-xs text-gray-400">Comportamentos observados</div>
+                </div>
+              </div>
+              {metricasPlataformaBT.map((m, i) => (
+                <div key={m.label} className={`flex items-center gap-3 py-2 ${i < metricasPlataformaBT.length - 1 ? 'border-b border-gray-100' : ''}`}>
+                  <div className="flex-1">
+                    <div className="text-xs font-medium text-gray-700">{m.label}</div>
+                    <div className="text-xs text-gray-400 mt-0.5">{m.detalhe}</div>
+                  </div>
+                  <span className="text-sm font-semibold text-gray-900">{m.valor}</span>
+                </div>
+              ))}
+              <p className="text-xs text-gray-400 mt-3 pt-2 border-t border-gray-100">Gerado automaticamente · não editável</p>
+            </div>
+
             <div className="text-sm font-medium text-gray-900 mb-2">Evolução</div>
             <div className="border border-gray-200 rounded-xl p-3">
               <RadarChart entregaId={entregaId} entregaNome={entregaAtual.nome} />
@@ -437,6 +478,12 @@ function StudentProfilePanel({ studentId, onClose, showContactForm, setShowConta
   );
 }
 
+const metricasPlataformaBT = [
+  { label: 'Pontualidade nas entregas', valor: '10,0', detalhe: '5 de 5 entregas no prazo' },
+  { label: 'Frequência de registros',   valor: '9,5',  detalhe: 'Atividade média do grupo no workspace' },
+  { label: 'Contribuição individual',   valor: '8,0',  detalhe: 'Tarefas concluídas e registros por membro' },
+];
+
 const dadosRadar: Record<string, number[]> = {
   e1:    [0.55, 0.50, 0.60, 0.65, 0.55],
   e2:    [0.65, 0.60, 0.70, 0.70, 0.65],
@@ -448,7 +495,7 @@ const dadosRadar: Record<string, number[]> = {
 
 function RadarChart({ entregaId, entregaNome }: { entregaId: string; entregaNome: string }) {
   const cx = 130, cy = 118, r = 70;
-  const eixos = ['Pontualidade', 'Proatividade', 'Comunicação', 'Compromisso', 'Execução'];
+  const eixos = ['Proatividade', 'Resiliência', 'Curiosidade', 'Liderança', 'Colaboração'];
   const inicio = dadosRadar['e1'];
   const atual  = dadosRadar[entregaId] ?? dadosRadar['banca'];
 

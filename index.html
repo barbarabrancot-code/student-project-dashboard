@@ -17,6 +17,7 @@
         if (new URLSearchParams(location.search).get('app') === 'empresa') {
           document.getElementById('app-title').content = 'Labora Companion';
           document.getElementById('manifest-link').href = '/student-project-dashboard/manifest-companion.json';
+          document.querySelector('link[rel="apple-touch-icon"]').href = '/student-project-dashboard/companionfav.png';
         }
       </script>
       <style>

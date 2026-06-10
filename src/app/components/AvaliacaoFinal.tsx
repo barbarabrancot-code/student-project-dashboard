@@ -188,7 +188,10 @@ function GroupAccordionList({ expandedGroup, setExpandedGroup, grades, setGrades
 
           {expandedGroup === group.id && group.id === 3 && (
             <div className="border-t border-gray-100 p-6 space-y-6">
-              <CompanyFeedback />
+              <div className="grid grid-cols-2 gap-4">
+                <CompanyFeedback />
+                <LaboraAIFeedback />
+              </div>
               <ProfessorGradingForm grades={grades} setGrades={setGrades} bancaCompany={bancaCompany} />
               <CalculatedGrade notaFinal={notaFinal} grades={grades} bancaFinal={bancaFinal} />
               <IndividualGradesTable groupGrade={notaFinal} />
@@ -211,6 +214,37 @@ function CompanyFeedback() {
         A análise foi completa e as recomendações são aplicáveis ao nosso contexto.
         Destacamos a qualidade da matriz de riscos apresentada.
       </div>
+    </div>
+  );
+}
+
+function LaboraAIFeedback() {
+  const metricas = [
+    { label: 'Pontualidade nas entregas', valor: '10,0', detalhe: '5 de 5 entregas no prazo' },
+    { label: 'Frequência de registros',   valor: '9,5',  detalhe: 'Atividade média acima do esperado' },
+    { label: 'Contribuição individual',   valor: '8,0',  detalhe: 'Tarefas concluídas por membro' },
+  ];
+
+  return (
+    <div className="p-4 bg-gray-50 border border-gray-200 rounded-xl">
+      <div className="flex items-center gap-2 mb-3">
+        <div className="w-6 h-6 rounded flex items-center justify-center flex-shrink-0">
+          <img src="/student-project-dashboard/favicon.svg" alt="Labora" className="w-6 h-6 object-contain" />
+        </div>
+        <div className="text-sm font-medium text-gray-900">Avaliação da IA — Labora</div>
+      </div>
+      <div className="space-y-2">
+        {metricas.map((m, i) => (
+          <div key={i} className="flex items-center justify-between py-2 border-b border-gray-200 last:border-0">
+            <div>
+              <div className="text-xs font-medium text-gray-700">{m.label}</div>
+              <div className="text-xs text-gray-400 mt-0.5">{m.detalhe}</div>
+            </div>
+            <span className="text-sm font-semibold text-gray-900 ml-4">{m.valor}</span>
+          </div>
+        ))}
+      </div>
+      <p className="text-xs text-gray-400 mt-3 pt-2 border-t border-gray-200">Gerado automaticamente · não editável</p>
     </div>
   );
 }

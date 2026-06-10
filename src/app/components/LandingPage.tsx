@@ -15,7 +15,7 @@ export default function LandingPage() {
   );
 }
 
-const VIDEO_URL = '';
+const VIDEO_URL = 'https://www.youtube.com/embed/69AnLTdCSfY?si=7QskdVHIrsbJexmV&controls=0';
 
 // ─── Ícones reutilizáveis ────────────────────────────────────────────────────
 
@@ -78,7 +78,7 @@ function VideoSection() {
     <section className="px-5 pb-14">
       <div className="relative w-full rounded-2xl overflow-hidden bg-gray-100 border border-gray-200" style={{ aspectRatio: '16/9' }}>
         {VIDEO_URL ? (
-          <iframe src={VIDEO_URL} className="absolute inset-0 w-full h-full" allow="autoplay; fullscreen" allowFullScreen />
+          <iframe src={VIDEO_URL} className="absolute inset-0 w-full h-full" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="w-14 h-14 rounded-full bg-[#0F766E]/10 border border-[#0F766E]/20 flex items-center justify-center">
