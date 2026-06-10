@@ -23,7 +23,7 @@ export default function AvaliacaoFinal({ onNavigate }: { onNavigate: (view: stri
       <div className="flex-1 overflow-y-auto">
         <PageHeader
           evaluatedCount={2}
-          totalGroups={4}
+          totalGroups={5}
           entregaId={entregaId}
           setEntregaId={setEntregaId}
           entregaAtual={entregaAtual}
@@ -140,7 +140,11 @@ const fotosPorNome: Record<string, string> = {
   'Fernanda Reis':    '/student-project-dashboard/fernandareis_3_11zon.webp',
   'Gabriel Nunes':    '/student-project-dashboard/gabrielnunes-convertido-de-jpg_16_11zon.webp',
   'Helena Campos':    '/student-project-dashboard/helenacampos_11_11zon.webp',
+  'Igor Santos':      '/student-project-dashboard/igorsantos-convertido-de-jpg_14_11zon.webp',
+  'Julia Moraes':     '/student-project-dashboard/juliamoraes_4_11zon.webp',
+  'Lucas Barros':     '/student-project-dashboard/lucasbarros-convertido-de-jpg_13_11zon.webp',
   'Mariana Ferreira': '/student-project-dashboard/marinaferreira_10_11zon.webp',
+  'Mariana Pinto':    '/student-project-dashboard/marianapinto_2_11zon.webp',
   'Pedro Gomes':      '/student-project-dashboard/pedrogomes_7_11zon.webp',
   'Rafael Henrique':  '/student-project-dashboard/rafaelhenrique_6_11zon.webp',
   'Thiago Kühl':      '/student-project-dashboard/thiagokuhl_12_11zon.webp',
@@ -154,6 +158,7 @@ const gruposMembros: Record<number, string[]> = {
   2: ['Mariana Ferreira', 'Pedro Gomes', 'Rafael Henrique'],
   3: ['Thiago Kühl', 'Valentina Lima', 'William Martins', 'Xênia Neves'],
   4: ['Eduardo Alves', 'Fernanda Reis', 'Gabriel Nunes', 'Helena Campos'],
+  5: ['Igor Santos', 'Julia Moraes', 'Lucas Barros', 'Mariana Pinto'],
 };
 
 function GroupAccordionList({ expandedGroup, setExpandedGroup, grades, setGrades, bancaCompany, bancaFinal, notaFinal }: any) {
@@ -161,7 +166,8 @@ function GroupAccordionList({ expandedGroup, setExpandedGroup, grades, setGrades
     { id: 1, name: 'Grupo 1', members: 4, finalGrade: 7.8, companyFeedback: 'received' },
     { id: 2, name: 'Grupo 2', members: 4, finalGrade: 9.1, companyFeedback: 'received' },
     { id: 3, name: 'Grupo 3', members: 4, finalGrade: null, companyFeedback: 'received' },
-    { id: 4, name: 'Grupo 4', members: 4, finalGrade: null, companyFeedback: 'pending' }
+    { id: 4, name: 'Grupo 4', members: 4, finalGrade: null, companyFeedback: 'pending' },
+    { id: 5, name: 'Grupo 5', members: 4, finalGrade: null, companyFeedback: 'received' }
   ];
 
   return (

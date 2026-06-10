@@ -51,6 +51,15 @@ const grupos: Grupo[] = [
       { iniciais: 'HC', nome: 'Helena Campos',  cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/helenacampos_11_11zon.webp' },
     ],
   },
+  {
+    id: 5, nome: 'Grupo 5', status: 'Em andamento',
+    membros: [
+      { iniciais: 'IS', nome: 'Igor Santos',   cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/igorsantos-convertido-de-jpg_14_11zon.webp' },
+      { iniciais: 'JM', nome: 'Julia Moraes',  cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/juliamoraes_4_11zon.webp' },
+      { iniciais: 'LB', nome: 'Lucas Barros',  cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/lucasbarros-convertido-de-jpg_13_11zon.webp' },
+      { iniciais: 'MP', nome: 'Mariana Pinto', cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/marianapinto_2_11zon.webp' },
+    ],
+  },
 ];
 
 type Tela = 'home' | 'alunos' | 'aluno-visualizacao' | 'grupo' | 'grupo-visualizacao' | 'aluno';
@@ -119,7 +128,7 @@ function HomeEmpresa({ onGrupo }: { onGrupo: (g: Grupo) => void }) {
   ];
 
   return (
-    <div className="flex-1 overflow-y-auto px-5 pt-8">
+    <div className="flex-1 overflow-y-auto px-5 pt-8 pb-24">
       <h1 className="text-xl font-semibold text-gray-900 mb-3 leading-snug">
         SafeLab — Mapeamento de Riscos Ocupacionais
       </h1>
@@ -904,6 +913,29 @@ function AlunoVisualizacao({ aluno, onVoltar, onEditar }: {
                   ))}
                 </div>
               )}
+            </div>
+          </div>
+
+          <div className="border border-gray-200 rounded-xl overflow-hidden">
+            <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100">
+              <img src="/student-project-dashboard/favicon.svg" alt="Labora" className="w-4 h-4" />
+              <span className="text-sm font-semibold text-gray-900">Avaliação da IA — Labora</span>
+            </div>
+            {[
+              { label: 'Pontualidade nas entregas', sub: '5 de 5 entregas no prazo',          nota: '10,0' },
+              { label: 'Frequência de registros',   sub: 'Atividade média acima do esperado', nota: '9,5'  },
+              { label: 'Contribuição individual',   sub: 'Tarefas concluídas por membro',     nota: '8,0'  },
+            ].map(({ label, sub, nota }, i, arr) => (
+              <div key={label} className={`flex items-center justify-between px-4 py-3 ${i < arr.length - 1 ? 'border-b border-gray-100' : ''}`}>
+                <div>
+                  <div className="text-sm font-medium text-gray-900">{label}</div>
+                  <div className="text-xs text-gray-400">{sub}</div>
+                </div>
+                <span className="text-sm font-semibold text-gray-900">{nota}</span>
+              </div>
+            ))}
+            <div className="px-4 py-2 border-t border-gray-100">
+              <span className="text-xs text-gray-400">Gerado automaticamente · não editável</span>
             </div>
           </div>
 

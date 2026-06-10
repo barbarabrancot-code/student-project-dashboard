@@ -246,7 +246,11 @@ const fotosPorNome: Record<string, string> = {
   'Fernanda Reis':    '/student-project-dashboard/fernandareis_3_11zon.webp',
   'Gabriel Nunes':    '/student-project-dashboard/gabrielnunes-convertido-de-jpg_16_11zon.webp',
   'Helena Campos':    '/student-project-dashboard/helenacampos_11_11zon.webp',
+  'Igor Santos':      '/student-project-dashboard/igorsantos-convertido-de-jpg_14_11zon.webp',
+  'Julia Moraes':     '/student-project-dashboard/juliamoraes_4_11zon.webp',
+  'Lucas Barros':     '/student-project-dashboard/lucasbarros-convertido-de-jpg_13_11zon.webp',
   'Mariana Ferreira': '/student-project-dashboard/marinaferreira_10_11zon.webp',
+  'Mariana Pinto':    '/student-project-dashboard/marianapinto_2_11zon.webp',
   'Pedro Gomes':      '/student-project-dashboard/pedrogomes_7_11zon.webp',
   'Rafael Henrique':  '/student-project-dashboard/rafaelhenrique_6_11zon.webp',
   'Thiago Kühl':      '/student-project-dashboard/thiagokuhl_12_11zon.webp',
@@ -260,6 +264,7 @@ const gruposMembros: Record<number, string[]> = {
   2: ['Mariana Ferreira', 'Pedro Gomes', 'Rafael Henrique'],
   3: ['Thiago Kühl', 'Valentina Lima', 'William Martins', 'Xênia Neves'],
   4: ['Eduardo Alves', 'Fernanda Reis', 'Gabriel Nunes', 'Helena Campos'],
+  5: ['Igor Santos', 'Julia Moraes', 'Lucas Barros', 'Mariana Pinto'],
 };
 
 function GroupCardsGrid({ setSelectedGroup }: { setSelectedGroup: (id: number) => void }) {
@@ -268,6 +273,7 @@ function GroupCardsGrid({ setSelectedGroup }: { setSelectedGroup: (id: number) =
     { id: 2, name: 'Grupo 2', members: 3, progress: { current: 2, total: 4 }, lastActivity: 'hoje às 10h', status: 'submitted', warning: false },
     { id: 3, name: 'Grupo 3', members: 4, progress: { current: 2, total: 4 }, lastActivity: 'hoje às 16h', status: 'in-progress', warning: false },
     { id: 4, name: 'Grupo 4', members: 4, progress: { current: 1, total: 4 }, lastActivity: 'há 8 dias', status: 'late', warning: true },
+    { id: 5, name: 'Grupo 5', members: 4, progress: { current: 2, total: 4 }, lastActivity: 'ontem às 18h', status: 'in-progress', warning: false },
   ];
 
   const statusConfig = {
