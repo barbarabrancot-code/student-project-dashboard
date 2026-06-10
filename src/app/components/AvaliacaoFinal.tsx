@@ -131,6 +131,31 @@ function PageHeader({ evaluatedCount, totalGroups, entregaId, setEntregaId, entr
   );
 }
 
+const fotosPorNome: Record<string, string> = {
+  'Ana Silva':        '/student-project-dashboard/aluna.png',
+  'Bruno Costa':      '/student-project-dashboard/brunocosta-convertido-de-jpg.webp',
+  'Carlos Lima':      '/student-project-dashboard/carloslima-convertido-de-jpg.webp',
+  'Diana Santos':     '/student-project-dashboard/dianasouza-convertido-de-jpg.webp',
+  'Eduardo Alves':    '/student-project-dashboard/eduardoalves-convertido-de-jpg.webp',
+  'Fernanda Reis':    '/student-project-dashboard/fernandareis.webp',
+  'Gabriel Nunes':    '/student-project-dashboard/gabrielnunes-convertido-de-jpg.webp',
+  'Helena Campos':    '/student-project-dashboard/helenacampos.webp',
+  'Mariana Ferreira': '/student-project-dashboard/marinaferreira.webp',
+  'Pedro Gomes':      '/student-project-dashboard/pedrogomes.webp',
+  'Rafael Henrique':  '/student-project-dashboard/rafaelhenrique.webp',
+  'Thiago Kühl':      '/student-project-dashboard/thiagokuhl.webp',
+  'Valentina Lima':   '/student-project-dashboard/valentinalima.webp',
+  'William Martins':  '/student-project-dashboard/williammartins.webp',
+  'Xênia Neves':      '/student-project-dashboard/xenianeves.webp',
+};
+
+const gruposMembros: Record<number, string[]> = {
+  1: ['Ana Silva', 'Bruno Costa', 'Carlos Lima', 'Diana Santos'],
+  2: ['Mariana Ferreira', 'Pedro Gomes', 'Rafael Henrique'],
+  3: ['Thiago Kühl', 'Valentina Lima', 'William Martins', 'Xênia Neves'],
+  4: ['Eduardo Alves', 'Fernanda Reis', 'Gabriel Nunes', 'Helena Campos'],
+};
+
 function GroupAccordionList({ expandedGroup, setExpandedGroup, grades, setGrades, bancaCompany, bancaFinal, notaFinal }: any) {
   const groups = [
     { id: 1, name: 'Grupo 1', members: 4, finalGrade: 7.8, companyFeedback: 'received' },
@@ -152,8 +177,10 @@ function GroupAccordionList({ expandedGroup, setExpandedGroup, grades, setGrades
             <div className="flex items-center gap-4">
               <h3 className="text-gray-900">{group.name}</h3>
               <div className="flex gap-1">
-                {Array.from({ length: group.members }).map((_, i) => (
-                  <div key={i} className="w-6 h-6 bg-gray-200 rounded-full" />
+                {(gruposMembros[group.id] ?? []).map((nome, i) => (
+                  fotosPorNome[nome]
+                    ? <div key={i} className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0"><img src={fotosPorNome[nome]} alt={nome} className="w-full h-full object-cover" /></div>
+                    : <div key={i} className="w-6 h-6 bg-gray-200 rounded-full" />
                 ))}
               </div>
             </div>

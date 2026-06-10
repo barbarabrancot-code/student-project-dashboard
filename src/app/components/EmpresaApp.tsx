@@ -36,12 +36,19 @@ const grupos: Grupo[] = [
   {
     id: 3, nome: 'Grupo 3', status: 'Em andamento',
     membros: [
-      { iniciais: 'TK', nome: 'Thiago Kühl',      cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/thiagokuhl.webp' },
-      { iniciais: 'VL', nome: 'Valentina Lima',   cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/valentinalima.webp' },
-      { iniciais: 'WM', nome: 'William Martins',  cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/williammartins.webp' },
-      { iniciais: 'XN', nome: 'Xênia Neves',      cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/xenianeves.webp' },
-      { iniciais: 'YO', nome: 'Yasmin Oliveira',  cargo: 'Técnico em Segurança do Trabalho' },
-      { iniciais: 'ZP', nome: 'Zara Pereira',     cargo: 'Técnico em Segurança do Trabalho' },
+      { iniciais: 'TK', nome: 'Thiago Kühl',     cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/thiagokuhl.webp' },
+      { iniciais: 'VL', nome: 'Valentina Lima',  cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/valentinalima.webp' },
+      { iniciais: 'WM', nome: 'William Martins', cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/williammartins.webp' },
+      { iniciais: 'XN', nome: 'Xênia Neves',     cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/xenianeves.webp' },
+    ],
+  },
+  {
+    id: 4, nome: 'Grupo 4', status: 'Em andamento',
+    membros: [
+      { iniciais: 'EA', nome: 'Eduardo Alves',  cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/eduardoalves-convertido-de-jpg.webp' },
+      { iniciais: 'FR', nome: 'Fernanda Reis',  cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/fernandareis.webp' },
+      { iniciais: 'GN', nome: 'Gabriel Nunes',  cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/gabrielnunes-convertido-de-jpg.webp' },
+      { iniciais: 'HC', nome: 'Helena Campos',  cargo: 'Técnico em Segurança do Trabalho', foto: '/student-project-dashboard/helenacampos.webp' },
     ],
   },
 ];
@@ -602,9 +609,9 @@ function TelaAlunos({ onAluno, onGrupo }: { onAluno: (a: Aluno) => void; onGrupo
                 <div className="text-sm font-semibold text-gray-900 mb-2">{g.nome}</div>
                 <div className="flex gap-2">
                   {g.membros.slice(0, 4).map((m, i) => (
-                    <div key={i} className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center">
-                      <span className="text-xs font-medium text-gray-600">{m.iniciais}</span>
-                    </div>
+                    m.foto
+                      ? <div key={i} className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0"><img src={m.foto} alt={m.nome} className="w-full h-full object-cover" /></div>
+                      : <div key={i} className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center"><span className="text-xs font-medium text-gray-600">{m.iniciais}</span></div>
                   ))}
                   {g.membros.length > 4 && (
                     <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center">
