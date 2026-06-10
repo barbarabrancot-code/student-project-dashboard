@@ -129,6 +129,7 @@ function HomeEmpresa({ onGrupo }: { onGrupo: (g: Grupo) => void }) {
 
   return (
     <div className="flex-1 overflow-y-auto px-5 pt-8 pb-24">
+      <img src="/student-project-dashboard/laboralogo.svg" alt="Labora" className="h-7 mb-5" />
       <h1 className="text-xl font-semibold text-gray-900 mb-3 leading-snug">
         SafeLab — Mapeamento de Riscos Ocupacionais
       </h1>
