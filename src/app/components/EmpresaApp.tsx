@@ -180,9 +180,9 @@ function HomeEmpresa({ onGrupo }: { onGrupo: (g: Grupo) => void }) {
               <div className="text-sm font-semibold text-gray-900 mb-2">{g.nome}</div>
               <div className="flex gap-2">
                 {g.membros.slice(0, 4).map((m, i) => (
-                  <div key={i} className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center">
-                    <span className="text-xs font-medium text-gray-600">{m.iniciais}</span>
-                  </div>
+                  m.foto
+                    ? <div key={i} className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0"><img src={m.foto} alt={m.nome} className="w-full h-full object-cover" /></div>
+                    : <div key={i} className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0"><span className="text-xs font-medium text-gray-600">{m.iniciais}</span></div>
                 ))}
                 {g.membros.length > 4 && (
                   <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center">

@@ -80,12 +80,15 @@ export default function Onboarding({ onNavigate, isMobile }: { onNavigate: (view
             ))}
           </div>
         )}
-        <div className="flex-1 overflow-y-auto">
-          {passo === 'cadastro' && <Cadastro onNext={() => setPasso('perfil')} onPular={() => onNavigate('t1')} />}
-          {passo === 'perfil' && <CriarPerfil onNext={() => setPasso('mbti')} />}
-          {passo === 'mbti' && <TesteMBTI respostas={respostas} onResposta={handleResposta} onNext={avancarMBTI} onPular={() => onNavigate('t1')} />}
-          {passo === 'resultado' && <ResultadoMBTI tipo={tipo} onNavigate={onNavigate} onReiniciar={reiniciar} />}
-        </div>
+        {passo === 'mbti' ? (
+          <TesteMBTI respostas={respostas} onResposta={handleResposta} onNext={avancarMBTI} onPular={() => onNavigate('t1')} />
+        ) : (
+          <div className="flex-1 overflow-y-auto">
+            {passo === 'cadastro' && <Cadastro onNext={() => setPasso('perfil')} onPular={() => onNavigate('t1')} />}
+            {passo === 'perfil' && <CriarPerfil onNext={() => setPasso('mbti')} />}
+            {passo === 'resultado' && <ResultadoMBTI tipo={tipo} onNavigate={onNavigate} onReiniciar={reiniciar} />}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -213,11 +216,11 @@ function TesteMBTI({ respostas, onResposta, onNext, onPular }: {
   const todasRespondidas = respondidas === perguntas.length;
 
   return (
-    <>
-      <div className="sticky top-0 z-10 h-12 flex-shrink-0"
+    <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="h-12 flex-shrink-0"
         style={{ background: 'linear-gradient(to right, #0F766E, #3B82F6)' }} />
 
-      <div className="px-4 pt-4 pb-40">
+      <div className="flex-1 overflow-y-auto px-4 pt-4 pb-4">
         <p className="text-sm text-gray-500 mb-1 text-center">
           Responda com sinceridade — não há respostas certas ou erradas
         </p>
@@ -249,7 +252,7 @@ function TesteMBTI({ respostas, onResposta, onNext, onPular }: {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 px-4 pt-4 bg-white border-t border-gray-100 flex gap-3 z-50" style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
+      <div className="px-4 pt-4 pb-4 bg-white border-t border-gray-100 flex gap-3 flex-shrink-0">
         <button
           onClick={onPular}
           className="flex-1 py-3 bg-white border border-gray-200 text-gray-700 rounded-xl font-medium text-sm"
@@ -266,7 +269,7 @@ function TesteMBTI({ respostas, onResposta, onNext, onPular }: {
           Ver meu resultado
         </button>
       </div>
-    </>
+    </div>
   );
 }
 
