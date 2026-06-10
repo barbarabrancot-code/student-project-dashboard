@@ -22,8 +22,8 @@ export default function AvaliacaoFinal({ onNavigate }: { onNavigate: (view: stri
       <Sidebar onNavigate={onNavigate} />
       <div className="flex-1 overflow-y-auto">
         <PageHeader
-          evaluatedCount={3}
-          totalGroups={6}
+          evaluatedCount={2}
+          totalGroups={4}
           entregaId={entregaId}
           setEntregaId={setEntregaId}
           entregaAtual={entregaAtual}
@@ -136,9 +136,7 @@ function GroupAccordionList({ expandedGroup, setExpandedGroup, grades, setGrades
     { id: 1, name: 'Grupo 1', members: 4, finalGrade: 7.8, companyFeedback: 'received' },
     { id: 2, name: 'Grupo 2', members: 4, finalGrade: 9.1, companyFeedback: 'received' },
     { id: 3, name: 'Grupo 3', members: 4, finalGrade: null, companyFeedback: 'received' },
-    { id: 4, name: 'Grupo 4', members: 4, finalGrade: null, companyFeedback: 'pending' },
-    { id: 5, name: 'Grupo 5', members: 4, finalGrade: null, companyFeedback: 'received' },
-    { id: 6, name: 'Grupo 6', members: 4, finalGrade: null, companyFeedback: 'pending' }
+    { id: 4, name: 'Grupo 4', members: 4, finalGrade: null, companyFeedback: 'pending' }
   ];
 
   return (
