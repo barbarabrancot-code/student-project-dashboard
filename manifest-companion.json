@@ -1,0 +1,37 @@
+{
+  "name": "Labora Companion",
+  "short_name": "Labora Companion",
+  "description": "Companion app para empresas parceiras",
+  "start_url": "/student-project-dashboard/?app=empresa",
+  "scope": "/student-project-dashboard/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#0F766E",
+  "icons": [
+    {
+      "src": "/student-project-dashboard/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/student-project-dashboard/companionfav.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/student-project-dashboard/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/student-project-dashboard/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

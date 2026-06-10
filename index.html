@@ -1,0 +1,45 @@
+
+  <!DOCTYPE html>
+  <html lang="pt-BR">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
+      <link rel="icon" type="image/svg+xml" href="/student-project-dashboard/favicon.svg" />
+      <link rel="apple-touch-icon" href="/student-project-dashboard/favicon2.png" />
+      <title>Student Dashboard</title>
+      <link rel="manifest" id="manifest-link" href="/student-project-dashboard/manifest.json" />
+      <meta name="theme-color" content="#0F766E" />
+      <meta name="mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+      <meta name="apple-mobile-web-app-title" id="app-title" content="Labora" />
+      <script>
+        if (new URLSearchParams(location.search).get('app') === 'empresa') {
+          document.getElementById('app-title').content = 'Labora Companion';
+          document.getElementById('manifest-link').href = '/student-project-dashboard/manifest-companion.json';
+          document.querySelector('link[rel="apple-touch-icon"]').href = '/student-project-dashboard/companionfav.png';
+        }
+      </script>
+      <style>
+        html, body { height: 100%; margin: 0; }
+        #root { height: 100%; }
+      </style>
+      <script type="module" crossorigin src="/student-project-dashboard/assets/index-oIVADaMj.js"></script>
+      <link rel="stylesheet" crossorigin href="/student-project-dashboard/assets/index-DDaG4Hbs.css">
+    </head>
+
+    <body>
+      <div id="root"></div>
+      <script>
+        window.installPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+          e.preventDefault();
+          window.installPrompt = e;
+        });
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/student-project-dashboard/sw.js', { scope: '/student-project-dashboard/' });
+        }
+      </script>
+    </body>
+  </html>
+  

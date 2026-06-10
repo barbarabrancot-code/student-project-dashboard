@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir \"C:\\\\Users\\\\barba\\\\projetos\\\\Student Project Dashboard Wireframe\\\\.claude\\\\skills\" 2>nul || echo \"sem skills\")",
+      "Bash(pnpm dev *)",
+      "Bash(ping -n 3 127.0.0.1)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173/)",
+      "Bash(git remote *)",
+      "Bash(node create-icons.mjs)",
+      "Bash(npx tsc *)",
+      "Bash(pnpm exec *)",
+      "Bash(pnpm vite *)",
+      "Bash(gh run *)",
+      "Bash(pnpm build *)",
+      "Bash(grep -n \"Enviar$\\\\|Cancelar\\\\|</div>$\" \"c:\\\\Users\\\\barba\\\\projetos\\\\Student Project Dashboard Wireframe\\\\src\\\\app\\\\components\\\\BancoDeTalentos.tsx\")"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\barba\\projetos\\Student Project Dashboard Wireframe"
+    ]
+  }
+}
