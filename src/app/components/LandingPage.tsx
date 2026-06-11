@@ -5,8 +5,8 @@ export default function LandingPage() {
       <VideoSection />
       <ComoFunciona />
       <OQueVoceGanha />
-      <DentroDaSalaDeAula />
       <DesafioIdeal />
+      <DentroDaSalaDeAula />
       <OQueEsperamos />
       <ExemploReal />
       <FormularioDesafio />
@@ -284,38 +284,75 @@ function ExemploReal() {
         <div className="h-0.5 w-6 rounded-full bg-[#34D399]"/>
         <span className="text-xs font-medium text-[#0F766E]">Caso real</span>
       </div>
-      <h2 className="text-2xl font-bold text-gray-900 mb-6 leading-snug">Veja um exemplo de como funciona</h2>
-      <div className="bg-white border border-gray-200 rounded-xl p-5">
-        <div className="flex items-center gap-3 mb-4 pb-4 border-b border-gray-100">
-          <div className="w-10 h-10 rounded-xl bg-[#0F766E]/10 flex items-center justify-center flex-shrink-0">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F766E" strokeWidth="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>
-          </div>
-          <div>
-            <div className="font-semibold text-gray-900 text-sm">SafeLab — Laboratório Sabin</div>
-            <div className="text-xs text-gray-400">Segurança do Trabalho · 2024.2</div>
-          </div>
-        </div>
-        <div className="space-y-4 mb-4">
-          {[
-            { label: 'DESAFIO PROPOSTO', text: 'Mapear e mitigar riscos ocupacionais no processo de coleta de material biológico em unidades de alto volume.' },
-            { label: 'O QUE A EMPRESA FORNECEU', text: 'Relatório de inspeção interna, fichas de EPI, planta baixa das unidades e 2h de reunião inicial com o professor.' },
-            { label: 'O QUE OS ALUNOS ENTREGARAM', text: 'Programa de Prevenção de Riscos Biológicos (PPRB) completo, com checklist NR-32 e fluxograma de resposta a acidentes.' },
-          ].map((item, i) => (
-            <div key={i}>
-              <div className="text-xs font-semibold text-gray-400 tracking-wide mb-1">{item.label}</div>
-              <p className="text-xs text-gray-700 leading-relaxed">{item.text}</p>
+      <h2 className="text-2xl font-bold text-gray-900 mb-6 leading-snug">Veja exemplos de como funciona</h2>
+      <div className="flex gap-4 overflow-x-auto pb-2" style={{ scrollbarWidth: 'none' }}>
+        {[
+          {
+            icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F766E" strokeWidth="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>,
+            titulo: 'SafeLab — Laboratório Sabin',
+            sub: 'Segurança do Trabalho · 2024.2',
+            cor: '#0F766E',
+            itens: [
+              { label: 'DESAFIO PROPOSTO', text: 'Mapear e mitigar riscos ocupacionais no processo de coleta de material biológico em unidades de alto volume.' },
+              { label: 'O QUE A EMPRESA FORNECEU', text: 'Relatório de inspeção interna, fichas de EPI, planta baixa das unidades e 2h de reunião inicial com o professor.' },
+              { label: 'O QUE OS ALUNOS ENTREGARAM', text: 'Programa de Prevenção de Riscos Biológicos (PPRB) completo, com checklist NR-32 e fluxograma de resposta a acidentes.' },
+            ],
+            resultados: ['2 grupos tiveram propostas aprovadas para implementação piloto.', '1 aluno recebeu contato para estágio pela empresa parceira.'],
+          },
+          {
+            icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" strokeWidth="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
+            titulo: 'Casa Viva — Arquitetura e Interiores',
+            sub: 'Design de Interiores · 2024.1',
+            cor: '#3B82F6',
+            itens: [
+              { label: 'DESAFIO PROPOSTO', text: 'Propor um projeto de requalificação de espaços comerciais para melhorar a experiência do cliente em lojas de varejo.' },
+              { label: 'O QUE A EMPRESA FORNECEU', text: 'Plantas baixas das unidades, briefing de identidade visual da marca e visita guiada a 2 lojas com o gestor.' },
+              { label: 'O QUE OS ALUNOS ENTREGARAM', text: 'Projeto de interiores com moodboard, paleta de materiais, perspectivas 3D e memorial descritivo completo.' },
+            ],
+            resultados: ['Projeto de 1 grupo aprovado para execução em loja piloto.', '2 alunas receberam convite para portfólio colaborativo da empresa.'],
+          },
+          {
+            icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>,
+            titulo: 'Imagem Clínica — Rede de Diagnóstico',
+            sub: 'Radiologia · 2024.2',
+            cor: '#7C3AED',
+            itens: [
+              { label: 'DESAFIO PROPOSTO', text: 'Desenvolver um protocolo de orientação ao paciente para reduzir retrabalho em exames de imagem por preparo inadequado.' },
+              { label: 'O QUE A EMPRESA FORNECEU', text: 'Dados de taxa de rejeição de exames, fluxo de atendimento atual e acesso à equipe técnica para entrevistas.' },
+              { label: 'O QUE OS ALUNOS ENTREGARAM', text: 'Protocolo de orientação com material educativo ilustrado, checklist pré-exame e guia de treinamento para recepcionistas.' },
+            ],
+            resultados: ['Taxa de rejeição de exames caiu 28% nas unidades teste.', '1 aluno foi contratado como estagiário técnico após apresentação na banca.'],
+          },
+        ].map((card, idx) => (
+          <div key={idx} className="bg-white border border-gray-200 rounded-xl p-5 flex-shrink-0 w-[300px]">
+            <div className="flex items-center gap-3 mb-4 pb-4 border-b border-gray-100">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: `${card.cor}18` }}>
+                {card.icon}
+              </div>
+              <div>
+                <div className="font-semibold text-gray-900 text-sm">{card.titulo}</div>
+                <div className="text-xs text-gray-400">{card.sub}</div>
+              </div>
             </div>
-          ))}
-        </div>
-        <div className="border-t border-gray-100 pt-4">
-          <div className="text-xs font-semibold text-gray-400 tracking-wide mb-3">RESULTADO</div>
-          {['2 grupos tiveram propostas aprovadas para implementação piloto.','1 aluno recebeu contato para estágio pela empresa parceira.'].map((r, i) => (
-            <div key={i} className="flex items-start gap-2 mb-2">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0F766E" strokeWidth="2.5" className="flex-shrink-0 mt-0.5"><path d="M20 6L9 17l-5-5"/></svg>
-              <span className="text-xs text-gray-700 leading-relaxed">{r}</span>
+            <div className="space-y-4 mb-4">
+              {card.itens.map((item, i) => (
+                <div key={i}>
+                  <div className="text-xs font-semibold text-gray-400 tracking-wide mb-1">{item.label}</div>
+                  <p className="text-xs text-gray-700 leading-relaxed">{item.text}</p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+            <div className="border-t border-gray-100 pt-4">
+              <div className="text-xs font-semibold text-gray-400 tracking-wide mb-3">RESULTADO</div>
+              {card.resultados.map((r, i) => (
+                <div key={i} className="flex items-start gap-2 mb-2">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={card.cor} strokeWidth="2.5" className="flex-shrink-0 mt-0.5"><path d="M20 6L9 17l-5-5"/></svg>
+                  <span className="text-xs text-gray-700 leading-relaxed">{r}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );

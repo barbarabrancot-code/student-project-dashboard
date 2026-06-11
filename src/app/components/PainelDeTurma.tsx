@@ -359,12 +359,7 @@ function GroupCardsGrid({ setSelectedGroup }: { setSelectedGroup: (id: number) =
 }
 
 function FeedbackPanel({ groupId, onClose }: { groupId: number; onClose: () => void }) {
-  const alunos = [
-    { id: 1, nome: 'Ana Beatriz' },
-    { id: 2, nome: 'Juliana' },
-    { id: 3, nome: 'Mateus' },
-    { id: 4, nome: 'Carlos' },
-  ];
+  const alunos = (gruposMembros[groupId] ?? []).map((nome, i) => ({ id: i + 1, nome }));
 
   const criterios: { id: keyof Criterios; label: string }[] = [
     { id: 'proatividade', label: 'Proatividade' },
@@ -414,7 +409,10 @@ function FeedbackPanel({ groupId, onClose }: { groupId: number; onClose: () => v
               onClick={() => setExpandedId(expandedId === aluno.id ? 0 : aluno.id)}
               className="w-full px-4 py-3 flex items-center gap-3 hover:bg-gray-50 transition-colors"
             >
-              <div className="w-10 h-10 bg-gray-200 rounded-full flex-shrink-0" />
+              {fotosPorNome[aluno.nome]
+                ? <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0"><img src={fotosPorNome[aluno.nome]} alt={aluno.nome} className="w-full h-full object-cover" /></div>
+                : <div className="w-10 h-10 bg-gray-200 rounded-full flex-shrink-0" />
+              }
               <span className="flex-1 text-left text-sm font-medium text-gray-900">{aluno.nome}</span>
               <svg
                 width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
