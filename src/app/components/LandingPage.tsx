@@ -708,7 +708,7 @@ export function ChatBot({ posicao = 'absolute' }: { posicao?: 'absolute' | 'fixe
                       onChange={e => setInputTexto(e.target.value)}
                       onKeyDown={e => e.key === 'Enter' && enviarInput()}
                       placeholder="Digite aqui..."
-                      className="flex-1 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#0F766E] bg-white"
+                      className="flex-1 min-w-0 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#0F766E] bg-white"
                     />
                     <button onClick={enviarInput} className="px-3 py-2 rounded-xl text-white text-sm" style={{ background: 'linear-gradient(135deg, #0F766E, #3B82F6)' }}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
