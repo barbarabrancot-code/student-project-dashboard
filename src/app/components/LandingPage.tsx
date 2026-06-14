@@ -399,6 +399,7 @@ function FormularioDesafio() {
         <div className="flex flex-col justify-between"
           style={{ background: 'linear-gradient(135deg, #0F766E, #3B82F6)' }}>
           <div className="px-10 pt-16 pb-8">
+            <img src="/student-project-dashboard/laboralogobranco.svg" alt="Labora" className="h-8 mb-8" />
             <h2 className="text-2xl font-bold text-white leading-snug mb-4">
               Sua empresa tem um problema que a sala de aula pode resolver.
             </h2>
