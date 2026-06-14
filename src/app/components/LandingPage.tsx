@@ -693,7 +693,7 @@ export function ChatBot({ posicao = 'absolute' }: { posicao?: 'absolute' | 'fixe
                       <button
                         key={op}
                         onClick={() => op === 'Preencher o formulário' ? irParaFormulario() : responder(op)}
-                        disabled={etapa > fluxo.indexOf(fluxo.find(f => f.opcoes?.includes(op))!) || finalizado && op !== 'Preencher o formulário'}
+                        disabled={op !== 'Preencher o formulário' && (etapa > fluxo.indexOf(fluxo.find(f => f.opcoes?.includes(op))!) || finalizado)}
                         className={`pointer-events-auto text-left px-3 py-2 rounded-xl text-sm transition-colors disabled:opacity-40 disabled:cursor-default ${
                           op === 'Preencher o formulário'
                             ? 'bg-[#0F766E] text-white font-medium hover:bg-[#0D6560] flex items-center gap-2'
