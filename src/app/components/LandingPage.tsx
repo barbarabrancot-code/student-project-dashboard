@@ -677,7 +677,7 @@ export function ChatBot({ posicao = 'absolute' }: { posicao?: 'absolute' | 'fixe
           </div>
 
           {/* Mensagens */}
-          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-gray-50">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 py-4 space-y-3 bg-gray-50">
             {msgs.map(msg => (
               <div key={msg.id} className={`flex flex-col ${msg.autor === 'usuario' ? 'items-end' : 'items-start'}`}>
                 <div className={`max-w-[80%] px-3 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-line ${
@@ -688,7 +688,7 @@ export function ChatBot({ posicao = 'absolute' }: { posicao?: 'absolute' | 'fixe
                   {msg.texto}
                 </div>
                 {msg.opcoes && (
-                  <div className="flex flex-col gap-1.5 mt-2 w-full">
+                  <div className="flex flex-col gap-1.5 mt-2 w-full min-w-0">
                     {msg.opcoes.map(op => (
                       <button
                         key={op}
@@ -702,7 +702,7 @@ export function ChatBot({ posicao = 'absolute' }: { posicao?: 'absolute' | 'fixe
                   </div>
                 )}
                 {msg.input && etapa === fluxo.indexOf(fluxo.find(f => f.input)!) && (
-                  <div className="flex gap-2 mt-2 w-full pointer-events-auto">
+                  <div className="flex gap-2 mt-2 w-full min-w-0 pointer-events-auto">
                     <input
                       value={inputTexto}
                       onChange={e => setInputTexto(e.target.value)}
