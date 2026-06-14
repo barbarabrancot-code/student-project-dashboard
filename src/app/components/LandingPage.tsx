@@ -392,11 +392,11 @@ function ExemploReal() {
 function FormularioDesafio() {
   const areas = ['Segurança do Trabalho','Saúde','Tecnologia','Logística','Administração','Meio Ambiente','Outro'];
   return (
-    <section id="formulario" className="@container @[640px]:h-screen">
-      <div className="@[640px]:grid @[640px]:grid-cols-2 @[640px]:h-full">
+    <section id="formulario" className="@container">
+      <div className="@[640px]:grid @[640px]:grid-cols-2">
 
         {/* Coluna esquerda — texto com fundo verde */}
-        <div className="flex flex-col justify-between"
+        <div className="flex flex-col"
           style={{ background: 'linear-gradient(135deg, #0F766E, #3B82F6)' }}>
           <div className="px-10 pt-16 pb-8">
             <img src="/student-project-dashboard/laboralogobranco.svg" alt="Labora" className="h-8 mb-8" />
@@ -410,11 +410,11 @@ function FormularioDesafio() {
               Não precisa ter tudo definido. Um parágrafo já é suficiente para começarmos.
             </p>
           </div>
-          <img src="/student-project-dashboard/fotolp.jpg" alt="" className="w-full object-cover object-top flex-shrink-0" style={{ maxHeight: '380px' }} />
+          <img src="/student-project-dashboard/fotolp.jpg" alt="" className="w-full flex-1 object-cover object-top" />
         </div>
 
         {/* Coluna direita — formulário */}
-        <div className="px-5 @[640px]:px-10 pt-10 pb-6 bg-white overflow-y-auto">
+        <div className="px-5 @[640px]:px-10 pt-10 pb-10 bg-white">
           <div className="text-xs font-bold tracking-widest mb-5 text-[#0F766E]">PROPOSTA INICIAL DE DESAFIO</div>
           <div className="space-y-4">
             {/* 2 colunas × 2 linhas */}
