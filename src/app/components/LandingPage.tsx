@@ -1,13 +1,19 @@
+import { useState, useEffect, useRef } from 'react';
+
 export default function LandingPage() {
   return (
-    <div className="w-full min-h-screen bg-white font-['Poppins',sans-serif]">
+    <div className="@container w-full bg-white font-['Poppins',sans-serif]">
       <Hero />
       <VideoSection />
       <ComoFunciona />
       <OQueVoceGanha />
       <DesafioIdeal />
-      <DentroDaSalaDeAula />
-      <OQueEsperamos />
+      <div className="@container">
+        <div className="@[640px]:grid @[640px]:grid-cols-2 @[640px]:divide-x @[640px]:divide-gray-100">
+          <DentroDaSalaDeAula />
+          <OQueEsperamos />
+        </div>
+      </div>
       <ExemploReal />
       <FormularioDesafio />
       <Footer />
@@ -40,14 +46,11 @@ const iconTarget = (
 
 function Hero() {
   return (
-    <section className="flex flex-col items-center text-center px-5 pt-8 pb-12">
+    <section className="flex flex-col items-center text-center px-5 @[640px]:px-24 pt-24 pb-24">
       <div className="flex items-center gap-3 mb-6">
         <img src="/student-project-dashboard/logolaboracolorido.svg" alt="Labora" className="h-8" />
         <span className="text-gray-300 text-xl font-light">+</span>
         <img src="/student-project-dashboard/etglogo.png" alt="ETG" className="h-8 object-contain" />
-      </div>
-      <div className="w-full rounded-2xl overflow-hidden mb-8">
-        <img src="/student-project-dashboard/fotolp.jpg" alt="" className="w-full object-cover" />
       </div>
       <div className="inline-flex items-center px-4 py-1.5 border border-[#0F766E]/40 rounded-full text-xs text-[#0F766E] mb-8">
         Plataforma de Desafios Reais
@@ -58,7 +61,7 @@ function Hero() {
       <h2 className="text-3xl font-bold italic text-[#0F766E] leading-snug mb-6">
         Nossos alunos têm o semestre inteiro para resolvê-lo.
       </h2>
-      <p className="text-sm text-gray-500 leading-relaxed mb-8">
+      <p className="text-sm text-gray-500 leading-relaxed mb-8 max-w-xl">
         A Labora conecta empresas a turmas de ensino técnico. Você propõe um desafio, um professor orienta, e grupos de alunos entregam uma solução — dentro da sala de aula, sem custo operacional para você.
       </p>
       <button onClick={() => document.getElementById('formulario')?.scrollIntoView({ behavior: 'smooth' })}
@@ -75,8 +78,8 @@ function Hero() {
 
 function VideoSection() {
   return (
-    <section className="px-5 pb-14">
-      <div className="relative w-full rounded-2xl overflow-hidden bg-gray-100 border border-gray-200" style={{ aspectRatio: '16/9' }}>
+    <section className="px-5 @[640px]:px-24 pb-24 flex justify-center">
+      <div className="relative rounded-2xl overflow-hidden bg-gray-100 border border-gray-200" style={{ aspectRatio: '16/9', width: '80%' }}>
         {VIDEO_URL ? (
           <iframe src={VIDEO_URL} className="absolute inset-0 w-full h-full" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
         ) : (
@@ -105,7 +108,7 @@ function ComoFunciona() {
       icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F766E" strokeWidth="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> },
   ];
   return (
-    <section className="px-5 pb-14">
+    <section className="@container px-5 @[640px]:px-24 pb-20">
       <div className="mb-2 flex items-center gap-1.5">
         <div className="h-0.5 w-6 rounded-full bg-[#34D399]"/>
         <span className="text-xs font-medium text-[#0F766E]">Como funciona</span>
@@ -114,17 +117,43 @@ function ComoFunciona() {
       <p className="text-sm text-gray-500 mb-6">
         <span className="text-[#0F766E]">Simples para você.</span> Estruturado para eles.
       </p>
-      <div className="space-y-3">
-        {passos.map(p => (
-          <div key={p.num} className="bg-white border border-gray-200 rounded-xl p-4">
-            <div className="flex items-center gap-2 mb-2">
+
+      {/* Desktop: horizontal (container >= 640px) */}
+      <div className="relative hidden @[640px]:flex items-start">
+        <div className="absolute top-5 left-5 right-0 h-0.5 bg-gradient-to-r from-[#0F766E] to-[#34D399]" />
+        {passos.map((p) => (
+          <div key={p.num} className="relative flex flex-col items-start flex-1 pr-4">
+            <div className="relative z-10 w-10 h-10 rounded-full bg-white border-2 border-[#0F766E] flex items-center justify-center shadow-sm mb-3 flex-shrink-0">
               {p.icon}
-              <span className="text-xs font-semibold text-[#0F766E]">{p.num}</span>
             </div>
-            <div className="font-semibold text-gray-900 text-sm mb-1">{p.titulo}</div>
-            <div className="text-xs text-gray-500 leading-relaxed">{p.desc}</div>
+            <span className="text-xs font-bold text-[#0F766E] px-2 py-0.5 rounded-full mb-2 inline-block" style={{ background: 'rgba(15,118,110,0.08)' }}>
+              Passo {p.num}
+            </span>
+            <div className="font-semibold text-gray-900 text-sm mb-1 text-left">{p.titulo}</div>
+            <div className="text-xs text-gray-500 leading-relaxed text-left">{p.desc}</div>
           </div>
         ))}
+      </div>
+
+      {/* Mobile: vertical (container < 640px) */}
+      <div className="relative @[640px]:hidden">
+        <div className="absolute left-[19px] top-5 bottom-5 w-0.5 bg-gradient-to-b from-[#0F766E] to-[#34D399]" />
+        <div className="space-y-0">
+          {passos.map((p) => (
+            <div key={p.num} className="relative flex gap-5 pb-8 last:pb-0">
+              <div className="relative z-10 flex-shrink-0 w-10 h-10 rounded-full bg-white border-2 border-[#0F766E] flex items-center justify-center shadow-sm">
+                {p.icon}
+              </div>
+              <div className="flex-1 pt-1.5">
+                <span className="text-xs font-bold text-[#0F766E] px-2 py-0.5 rounded-full mb-1 inline-block" style={{ background: 'rgba(15,118,110,0.08)' }}>
+                  Passo {p.num}
+                </span>
+                <div className="font-semibold text-gray-900 text-sm mb-1">{p.titulo}</div>
+                <div className="text-xs text-gray-500 leading-relaxed">{p.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -142,15 +171,15 @@ function OQueVoceGanha() {
       icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> },
   ];
   return (
-    <section className="px-5 pb-14" style={{ background: 'linear-gradient(135deg, #0F766E, #3B82F6)' }}>
-      <div className="pt-10 mb-6">
+    <section className="px-5 @[640px]:px-24 pb-14" style={{ background: 'linear-gradient(135deg, #0F766E, #3B82F6)' }}>
+      <div className="pt-24 mb-6">
         <div className="mb-2 flex items-center gap-1.5">
           <div className="h-0.5 w-6 rounded-full bg-[#34D399]"/>
           <span className="text-xs font-medium text-white/80">Benefícios</span>
         </div>
         <h2 className="text-2xl font-bold text-white leading-snug">O que você ganha — além da solução</h2>
       </div>
-      <div className="space-y-3 mb-8">
+      <div className="grid grid-cols-2 gap-3 mb-8">
         {itens.map((item, i) => (
           <div key={i} className="bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl p-4">
             <div className="mb-3">{item.icon}</div>
@@ -176,7 +205,7 @@ function DentroDaSalaDeAula() {
       icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0F766E" strokeWidth="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg> },
   ];
   return (
-    <section className="px-5 pb-14 pt-10">
+    <section className="px-5 @[640px]:px-24 pb-24 pt-24">
       <div className="mb-2 flex items-center gap-1.5">
         <div className="h-0.5 w-6 rounded-full bg-[#34D399]"/>
         <span className="text-xs font-medium text-[#0F766E]">Dentro da sala de aula</span>
@@ -205,42 +234,44 @@ function DesafioIdeal() {
   const bom = ['Tem um problema claro e bem delimitado','Pode ser desenvolvido em 12 a 16 semanas','É adequado ao nível técnico dos alunos','Conta com dados ou contexto que você pode compartilhar','Tem uma entrega específica e verificável (relatório, protótipo, plano, checklist, proposta)'];
   const nao = ['Depende de acesso a sistemas críticos ou informações altamente sensíveis','É urgente para a operação da empresa','Exige conhecimento especializado fora do escopo do curso','Não tem critério claro de sucesso','Requer envolvimento intenso da equipe da empresa'];
   return (
-    <section className="px-5 pb-14 bg-gray-50 pt-10">
+    <section className="px-5 @[640px]:px-24 pb-14 bg-gray-50 pt-10">
       <div className="mb-2 flex items-center gap-1.5">
         <div className="h-0.5 w-6 rounded-full bg-[#34D399]"/>
         <span className="text-xs font-medium text-[#0F766E]">Critérios</span>
       </div>
       <h2 className="text-2xl font-bold text-gray-900 mb-1 leading-snug">O que é um desafio ideal?</h2>
       <p className="text-sm text-gray-500 mb-6 leading-relaxed">Para garantir que os alunos possam entregar algo com valor real, trabalhamos com desafios que respeitam esses critérios.</p>
-      <div className="bg-white border border-gray-200 rounded-xl p-4 mb-4">
-        <div className="flex items-center gap-2 mb-4">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0F766E" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          <span className="font-semibold text-gray-900 text-sm">Um bom desafio:</span>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="bg-white border border-gray-200 rounded-xl p-4">
+          <div className="flex items-center gap-2 mb-4">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0F766E" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span className="font-semibold text-gray-900 text-sm">Um bom desafio:</span>
+          </div>
+          <div className="space-y-2.5">
+            {bom.map((item, i) => (
+              <div key={i} className="flex items-start gap-2">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0F766E" strokeWidth="2" className="flex-shrink-0 mt-0.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <span className="text-xs text-gray-600 leading-relaxed">{item}</span>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="space-y-2.5">
-          {bom.map((item, i) => (
-            <div key={i} className="flex items-start gap-2">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0F766E" strokeWidth="2" className="flex-shrink-0 mt-0.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-              <span className="text-xs text-gray-600 leading-relaxed">{item}</span>
-            </div>
-          ))}
+        <div className="bg-white border border-gray-200 rounded-xl p-4">
+          <div className="flex items-center gap-2 mb-4">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            <span className="font-semibold text-gray-900 text-sm">Não é adequado:</span>
+          </div>
+          <div className="space-y-2.5">
+            {nao.map((item, i) => (
+              <div key={i} className="flex items-start gap-2">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2" className="flex-shrink-0 mt-0.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                <span className="text-xs text-gray-600 leading-relaxed">{item}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-      <div className="bg-white border border-gray-200 rounded-xl p-4 mb-5">
-        <div className="flex items-center gap-2 mb-4">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-          <span className="font-semibold text-gray-900 text-sm">Não é adequado:</span>
-        </div>
-        <div className="space-y-2.5">
-          {nao.map((item, i) => (
-            <div key={i} className="flex items-start gap-2">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2" className="flex-shrink-0 mt-0.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-              <span className="text-xs text-gray-600 leading-relaxed">{item}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-      <p className="text-xs text-[#0F766E] italic text-center leading-relaxed">Não tem certeza se seu desafio se encaixa? Nossa equipe avalia e te orienta antes de qualquer compromisso.</p>
+      <p className="text-xs text-[#0F766E] italic text-center leading-relaxed mt-5">Não tem certeza se seu desafio se encaixa? Nossa equipe avalia e te orienta antes de qualquer compromisso.</p>
     </section>
   );
 }
@@ -252,7 +283,7 @@ function OQueEsperamos() {
     { titulo: 'Calibrar expectativas', desc: 'A entrega é acadêmica — mas estruturada. Não espere nível sênior, mas espere comprometimento, método e visão fresca.', icon: iconTarget },
   ];
   return (
-    <section className="px-5 pb-14 pt-10">
+    <section className="@container px-5 @[640px]:px-24 pb-24 pt-24" style={{ background: 'rgba(15,118,110,0.05)' }}>
       <div className="mb-2 flex items-center gap-1.5">
         <div className="h-0.5 w-6 rounded-full bg-[#34D399]"/>
         <span className="text-xs font-medium text-[#0F766E]">Sua parte</span>
@@ -262,9 +293,9 @@ function OQueEsperamos() {
       <div className="space-y-3">
         {itens.map((item, i) => (
           <div key={i} className="flex items-start gap-4 p-4 bg-white border border-gray-200 rounded-xl">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-              style={{ background: 'rgba(15,118,110,0.08)' }}>
-              {item.icon}
+            <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+              style={{ background: 'rgba(15,118,110,0.1)' }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0F766E" strokeWidth="2.5"><path d="M20 6L9 17l-5-5"/></svg>
             </div>
             <div>
               <div className="font-semibold text-gray-900 text-sm mb-1">{item.titulo}</div>
@@ -279,13 +310,13 @@ function OQueEsperamos() {
 
 function ExemploReal() {
   return (
-    <section className="px-5 pb-14 bg-gray-50 pt-10">
+    <section className="@container px-5 @[640px]:px-24 pb-14 bg-gray-50 pt-10">
       <div className="mb-2 flex items-center gap-1.5">
         <div className="h-0.5 w-6 rounded-full bg-[#34D399]"/>
         <span className="text-xs font-medium text-[#0F766E]">Caso real</span>
       </div>
       <h2 className="text-2xl font-bold text-gray-900 mb-6 leading-snug">Veja exemplos de como funciona</h2>
-      <div className="flex gap-4 overflow-x-auto pb-2" style={{ scrollbarWidth: 'none' }}>
+      <div className="flex gap-4 overflow-x-auto pb-2 @[640px]:grid @[640px]:grid-cols-3 @[640px]:overflow-x-visible" style={{ scrollbarWidth: 'none' }}>
         {[
           {
             icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F766E" strokeWidth="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>,
@@ -324,7 +355,7 @@ function ExemploReal() {
             resultados: ['Taxa de rejeição de exames caiu 28% nas unidades teste.', '1 aluno foi contratado como estagiário técnico após apresentação na banca.'],
           },
         ].map((card, idx) => (
-          <div key={idx} className="bg-white border border-gray-200 rounded-xl p-5 flex-shrink-0 w-[300px]">
+          <div key={idx} className="bg-white border border-gray-200 rounded-xl p-5 flex-shrink-0 w-[300px] @[640px]:w-auto @[640px]:flex-shrink">
             <div className="flex items-center gap-3 mb-4 pb-4 border-b border-gray-100">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: `${card.cor}18` }}>
                 {card.icon}
@@ -361,62 +392,76 @@ function ExemploReal() {
 function FormularioDesafio() {
   const areas = ['Segurança do Trabalho','Saúde','Tecnologia','Logística','Administração','Meio Ambiente','Outro'];
   return (
-    <section id="formulario" className="px-5 pb-20 pt-10">
-      <div className="bg-[#0F766E]/8 border border-[#0F766E]/20 rounded-2xl p-5 mb-6"
-        style={{ background: 'rgba(15,118,110,0.06)' }}>
-        <h2 className="text-xl font-bold text-gray-900 leading-snug mb-2">
-          Sua empresa tem um problema que a sala de aula pode resolver.
-        </h2>
-        <p className="text-sm text-gray-500 leading-relaxed mb-3">
-          Conta pra gente o que você tem em mente. Nossa equipe avalia se o desafio se encaixa e entra em contato — sem burocracia, sem compromisso.
-        </p>
-        <p className="text-xs text-[#0F766E] italic">
-          Não precisa ter tudo definido. Um parágrafo já é suficiente para começarmos.
-        </p>
-      </div>
-      <div className="bg-white border border-gray-200 rounded-2xl p-5">
-        <div className="text-xs font-bold tracking-widest mb-5 text-[#0F766E]">PROPOSTA INICIAL DE DESAFIO</div>
-        <div className="space-y-4">
-          {[
-            { label: 'Nome completo', placeholder: 'Seu nome', type: 'text' },
-            { label: 'E-mail corporativo', placeholder: 'voce@empresa.com.br', type: 'email' },
-            { label: 'Empresa', placeholder: 'Nome da empresa', type: 'text' },
-          ].map(f => (
-            <div key={f.label}>
-              <label className="text-sm font-medium text-gray-900 block mb-1">{f.label}</label>
-              <input type={f.type} placeholder={f.placeholder}
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#0F766E]" />
-            </div>
-          ))}
-          <div>
-            <label className="text-sm font-medium text-gray-900 block mb-1">Área do desafio</label>
-            <select className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-500 focus:outline-none focus:border-[#0F766E] bg-white">
-              <option value="">Selecione uma área</option>
-              {areas.map(a => <option key={a}>{a}</option>)}
-            </select>
+    <section id="formulario" className="@container @[640px]:h-screen">
+      <div className="@[640px]:grid @[640px]:grid-cols-2 @[640px]:h-full">
+
+        {/* Coluna esquerda — texto com fundo verde */}
+        <div className="flex flex-col justify-between"
+          style={{ background: 'linear-gradient(135deg, #0F766E, #3B82F6)' }}>
+          <div className="px-10 pt-16 pb-8">
+            <h2 className="text-2xl font-bold text-white leading-snug mb-4">
+              Sua empresa tem um problema que a sala de aula pode resolver.
+            </h2>
+            <p className="text-sm text-white/80 leading-relaxed mb-5">
+              Conta pra gente o que você tem em mente. Nossa equipe avalia se o desafio se encaixa e entra em contato — sem burocracia, sem compromisso.
+            </p>
+            <p className="text-sm text-white/60 italic">
+              Não precisa ter tudo definido. Um parágrafo já é suficiente para começarmos.
+            </p>
           </div>
-          <div>
-            <label className="text-sm font-medium text-gray-900 block mb-2">Seu desafio tem urgência operacional?</label>
-            {['Sim','Não','Não tenho certeza'].map(op => (
-              <label key={op} className="flex items-center gap-2 mb-2 cursor-pointer">
-                <input type="radio" name="urgencia" className="w-4 h-4 accent-[#0F766E]"/>
-                <span className="text-sm text-gray-700">{op}</span>
-              </label>
-            ))}
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-900 block mb-1">Descreva o problema em 2 ou 3 frases</label>
-            <textarea rows={4} placeholder="Ex: Temos dificuldade em mapear riscos em nosso processo de coleta..."
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#0F766E] resize-none"/>
-          </div>
-          <p className="text-xs text-gray-400 leading-relaxed">
-            Não compartilhe informações confidenciais aqui. Os detalhes serão alinhados com sigilo após a curadoria.
-          </p>
-          <button className="w-full py-4 rounded-xl bg-[#0F766E] text-white font-medium text-sm flex items-center justify-center gap-2 hover:bg-[#0D6560] transition-colors">
-            → Enviar proposta
-          </button>
-          <p className="text-xs text-gray-400 text-center">Nossa equipe responde em até 2 dias úteis.</p>
+          <img src="/student-project-dashboard/fotolp.jpg" alt="" className="w-full object-cover object-top flex-shrink-0" style={{ maxHeight: '380px' }} />
         </div>
+
+        {/* Coluna direita — formulário */}
+        <div className="px-5 @[640px]:px-10 pt-10 pb-6 bg-white overflow-y-auto">
+          <div className="text-xs font-bold tracking-widest mb-5 text-[#0F766E]">PROPOSTA INICIAL DE DESAFIO</div>
+          <div className="space-y-4">
+            {/* 2 colunas × 2 linhas */}
+            <div className="grid grid-cols-1 @[500px]:grid-cols-2 gap-4">
+              {[
+                { label: 'Nome completo', placeholder: 'Seu nome', type: 'text' },
+                { label: 'E-mail corporativo', placeholder: 'voce@empresa.com.br', type: 'email' },
+                { label: 'Empresa', placeholder: 'Nome da empresa', type: 'text' },
+                { label: 'Área do desafio', placeholder: '', type: 'select' },
+              ].map(f => (
+                <div key={f.label}>
+                  <label className="text-sm font-medium text-gray-900 block mb-1">{f.label}</label>
+                  {f.type === 'select' ? (
+                    <select className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-500 focus:outline-none focus:border-[#0F766E] bg-white">
+                      <option value="">Selecione uma área</option>
+                      {areas.map(a => <option key={a}>{a}</option>)}
+                    </select>
+                  ) : (
+                    <input type={f.type} placeholder={f.placeholder}
+                      className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#0F766E]" />
+                  )}
+                </div>
+              ))}
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-900 block mb-2">Seu desafio tem urgência operacional?</label>
+              {['Sim','Não','Não tenho certeza'].map(op => (
+                <label key={op} className="flex items-center gap-2 mb-2 cursor-pointer">
+                  <input type="radio" name="urgencia" className="w-4 h-4 accent-[#0F766E]"/>
+                  <span className="text-sm text-gray-700">{op}</span>
+                </label>
+              ))}
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-900 block mb-1">Descreva o problema em 2 ou 3 frases</label>
+              <textarea rows={4} placeholder="Ex: Temos dificuldade em mapear riscos em nosso processo de coleta..."
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#0F766E] resize-none"/>
+            </div>
+            <p className="text-xs text-gray-400 leading-relaxed">
+              Não compartilhe informações confidenciais aqui. Os detalhes serão alinhados com sigilo após a curadoria.
+            </p>
+            <button className="w-full py-4 rounded-xl bg-[#0F766E] text-white font-medium text-sm flex items-center justify-center gap-2 hover:bg-[#0D6560] transition-colors">
+              → Enviar proposta
+            </button>
+            <p className="text-xs text-gray-400 text-center">Nossa equipe responde em até 2 dias úteis.</p>
+          </div>
+        </div>
+
       </div>
     </section>
   );
@@ -425,7 +470,7 @@ function FormularioDesafio() {
 function Footer() {
   const nav = ['Como funciona','Para empresas','Para professores','Para alunos','Contato'];
   return (
-    <footer className="px-5 pt-8 pb-8 bg-gray-50 border-t border-gray-200">
+    <footer className="px-5 @[640px]:px-24 pt-8 pb-8 bg-gray-50 border-t border-gray-200">
       <div className="mb-5">
         <div className="flex items-center gap-2 mb-2">
           <img src="/student-project-dashboard/logolaboracolorido.svg" alt="Labora" className="h-7" />
@@ -461,5 +506,249 @@ function Footer() {
         <p className="text-xs text-gray-400 text-center">© 2025 Labora. Todos os direitos reservados.</p>
       </div>
     </footer>
+  );
+}
+
+// ─── ChatBot ────────────────────────────────────────────────────────────────
+
+type MsgAutor = 'bot' | 'usuario';
+interface Msg {
+  id: number;
+  autor: MsgAutor;
+  texto: string;
+  opcoes?: string[];
+  input?: boolean;
+}
+
+const fluxo: Omit<Msg, 'id'>[] = [
+  {
+    autor: 'bot',
+    texto: 'Olá! Sou o assistente da Labora 👋\nVou te ajudar a descobrir se sua empresa tem um desafio ideal para nossos alunos. Leva menos de 2 minutos!',
+    opcoes: ['Sim, vamos lá!', 'Agora não'],
+  },
+  {
+    autor: 'bot',
+    texto: 'Qual área da empresa tem o desafio?',
+    opcoes: ['Segurança do Trabalho', 'Saúde', 'Tecnologia', 'Design / Interiores', 'Outra área'],
+  },
+  {
+    autor: 'bot',
+    texto: 'Em quanto tempo você precisa de um resultado?',
+    opcoes: ['Até 4 meses', 'De 4 a 6 meses', 'Mais de 6 meses', 'Sem prazo definido'],
+  },
+  {
+    autor: 'bot',
+    texto: 'O desafio envolve dados sigilosos ou sistemas críticos da operação?',
+    opcoes: ['Não, é tranquilo', 'Parcialmente', 'Sim, envolve dados sensíveis'],
+  },
+  {
+    autor: 'bot',
+    texto: 'Você já tem ideia do que espera receber ao final do projeto?',
+    opcoes: ['Sim, tenho claro', 'Tenho uma ideia geral', 'Ainda não sei'],
+  },
+  {
+    autor: 'bot',
+    texto: 'Ótimo! Descreva em uma frase o problema que você quer resolver:',
+    input: true,
+  },
+];
+
+function diagnostico(respostas: string[]): string {
+  const sensivel = respostas[3] === 'Sim, envolve dados sensíveis';
+  const prazoOk = respostas[2] !== 'Até 4 meses';
+  const entregaClara = respostas[4] === 'Sim, tenho claro' || respostas[4] === 'Tenho uma ideia geral';
+
+  if (sensivel) {
+    return 'Seu desafio tem potencial, mas o ponto de dados sensíveis merece atenção. Nossa equipe pode te orientar sobre como adaptar o escopo para que os alunos consigam trabalhar com segurança. 🔒';
+  }
+  if (!prazoOk) {
+    return 'Desafios com prazo muito curto costumam gerar projetos superficiais. Mas não se preocupe — nossa equipe pode te ajudar a calibrar o escopo para caber num semestre. 📅';
+  }
+  if (entregaClara) {
+    return 'Ótima notícia! Seu desafio tem tudo para dar certo: problema claro, prazo viável e entrega definida. Esse é exatamente o perfil que os alunos precisam para entregar algo com valor real. 🎯';
+  }
+  return 'Seu desafio tem potencial! Com um pouco de refinamento na entrega esperada, conseguimos encaixá-lo perfeitamente num semestre. Nossa equipe pode te ajudar nessa etapa. ✨';
+}
+
+export function ChatBot({ posicao = 'absolute' }: { posicao?: 'absolute' | 'fixed' }) {
+  const [aberto, setAberto] = useState(false);
+  const [notificacao, setNotificacao] = useState(true);
+  const [msgs, setMsgs] = useState<Msg[]>([]);
+  const [etapa, setEtapa] = useState(0);
+  const [respostas, setRespostas] = useState<string[]>([]);
+  const [inputTexto, setInputTexto] = useState('');
+  const [finalizado, setFinalizado] = useState(false);
+  const [digitando, setDigitando] = useState(false);
+  const fimRef = useRef<HTMLDivElement>(null);
+  const idRef = useRef(0);
+
+  const novaId = () => ++idRef.current;
+
+  useEffect(() => {
+    if (aberto && msgs.length === 0) {
+      adicionarBotMsg(0);
+    }
+  }, [aberto]);
+
+  useEffect(() => {
+    fimRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [msgs, digitando]);
+
+  function adicionarBotMsg(idx: number) {
+    if (idx >= fluxo.length) return;
+    setDigitando(true);
+    setTimeout(() => {
+      setDigitando(false);
+      const f = fluxo[idx];
+      setMsgs(prev => [...prev, { ...f, id: novaId() }]);
+    }, 900);
+  }
+
+  function responder(texto: string) {
+    const novasRespostas = [...respostas, texto];
+    setRespostas(novasRespostas);
+    setMsgs(prev => [...prev, { id: novaId(), autor: 'usuario', texto }]);
+
+    if (etapa === 0 && texto === 'Agora não') {
+      setTimeout(() => {
+        setMsgs(prev => [...prev, {
+          id: novaId(), autor: 'bot',
+          texto: 'Sem problema! Quando quiser, é só me chamar. Fique à vontade para explorar a página. 😊',
+        }]);
+        setFinalizado(true);
+      }, 900);
+      return;
+    }
+
+    const proxEtapa = etapa + 1;
+    setEtapa(proxEtapa);
+
+    if (proxEtapa >= fluxo.length) {
+      setDigitando(true);
+      setTimeout(() => {
+        setDigitando(false);
+        const resultado = diagnostico(novasRespostas);
+        setMsgs(prev => [...prev, { id: novaId(), autor: 'bot', texto: resultado }]);
+        setTimeout(() => {
+          setMsgs(prev => [...prev, {
+            id: novaId(), autor: 'bot',
+            texto: 'Que tal preencher o formulário agora? Nossa equipe vai analisar o seu desafio e entra em contato em até 2 dias úteis. 🚀',
+            opcoes: ['Preencher o formulário'],
+          }]);
+          setFinalizado(true);
+        }, 1200);
+      }, 1000);
+    } else {
+      adicionarBotMsg(proxEtapa);
+    }
+  }
+
+  function enviarInput() {
+    if (!inputTexto.trim()) return;
+    responder(inputTexto.trim());
+    setInputTexto('');
+  }
+
+  function irParaFormulario() {
+    setAberto(false);
+    document.getElementById('formulario')?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  return (
+    <div className={`${posicao} bottom-0 left-0 right-0 z-50 flex flex-col items-end px-4 pb-4 pointer-events-none`} style={{}}>
+      {/* Chat panel */}
+      {aberto && (
+        <div className="pointer-events-auto flex flex-col bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden mb-3" style={{ width: '360px', height: '75vh' }}>
+          {/* Header */}
+          <div className="flex items-center gap-3 px-4 py-3 flex-shrink-0" style={{ background: 'linear-gradient(to right, #0F766E, #3B82F6)' }}>
+            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
+              <img src="/student-project-dashboard/favicon.svg" alt="Labora" className="w-5 h-5" />
+            </div>
+            <div className="flex-1">
+              <div className="text-white text-sm font-semibold leading-tight">Assistente Labora</div>
+              <div className="text-white/70 text-xs">Online agora</div>
+            </div>
+            <button onClick={() => setAberto(false)} className="text-white/70 hover:text-white pointer-events-auto">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+
+          {/* Mensagens */}
+          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-gray-50">
+            {msgs.map(msg => (
+              <div key={msg.id} className={`flex flex-col ${msg.autor === 'usuario' ? 'items-end' : 'items-start'}`}>
+                <div className={`max-w-[80%] px-3 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-line ${
+                  msg.autor === 'bot'
+                    ? 'bg-white border border-gray-200 text-gray-800 rounded-tl-sm'
+                    : 'text-white rounded-tr-sm'
+                }`} style={msg.autor === 'usuario' ? { background: 'linear-gradient(135deg, #0F766E, #3B82F6)' } : {}}>
+                  {msg.texto}
+                </div>
+                {msg.opcoes && (
+                  <div className="flex flex-col gap-1.5 mt-2 w-full">
+                    {msg.opcoes.map(op => (
+                      <button
+                        key={op}
+                        onClick={() => op === 'Preencher o formulário' ? irParaFormulario() : responder(op)}
+                        disabled={etapa > fluxo.indexOf(fluxo.find(f => f.opcoes?.includes(op))!) || finalizado && op !== 'Preencher o formulário'}
+                        className="pointer-events-auto text-left px-3 py-2 rounded-xl text-sm border border-[#0F766E] text-[#0F766E] bg-white hover:bg-[#0F766E]/5 transition-colors disabled:opacity-40 disabled:cursor-default"
+                      >
+                        {op}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {msg.input && etapa === fluxo.indexOf(fluxo.find(f => f.input)!) && (
+                  <div className="flex gap-2 mt-2 w-full pointer-events-auto">
+                    <input
+                      value={inputTexto}
+                      onChange={e => setInputTexto(e.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && enviarInput()}
+                      placeholder="Digite aqui..."
+                      className="flex-1 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#0F766E] bg-white"
+                    />
+                    <button onClick={enviarInput} className="px-3 py-2 rounded-xl text-white text-sm" style={{ background: 'linear-gradient(135deg, #0F766E, #3B82F6)' }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
+            {digitando && (
+              <div className="flex items-start">
+                <div className="bg-white border border-gray-200 rounded-2xl rounded-tl-sm px-4 py-3 flex gap-1 items-center">
+                  {[0, 1, 2].map(i => (
+                    <div key={i} className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
+                  ))}
+                </div>
+              </div>
+            )}
+            <div ref={fimRef} />
+          </div>
+        </div>
+      )}
+
+      {/* Botão flutuante */}
+      <button
+        onClick={() => { setAberto(v => !v); setNotificacao(false); }}
+        className="pointer-events-auto relative w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-105 active:scale-95 flex-shrink-0"
+        style={{ background: 'linear-gradient(135deg, #0F766E, #3B82F6)' }}
+      >
+        {aberto ? (
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        ) : (
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        )}
+        {notificacao && !aberto && (
+          <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold">1</span>
+        )}
+      </button>
+    </div>
   );
 }

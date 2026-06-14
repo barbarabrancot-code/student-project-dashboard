@@ -8,9 +8,10 @@ import BancoDeTalentos from './components/BancoDeTalentos';
 import Onboarding from './components/Onboarding';
 import Perfil from './components/Perfil';
 import Avaliacoes from './components/Avaliacoes';
-import LandingPage from './components/LandingPage';
+import LandingPage, { ChatBot } from './components/LandingPage';
 
 type ViewId = 't1' | 't2' | 'teacher' | 'grading' | 'company' | 'talents' | 'onboarding' | 'perfil' | 'avaliacoes' | 'empresa-app' | 'lp';
+type LpMode = 'mobile' | 'desktop';
 
 const navItems: { id: ViewId; short: string; label: string; views: ViewId[] }[] = [
   { id: 'onboarding',  short: 'EN', label: 'Entrada',          views: ['onboarding']                          },
@@ -28,6 +29,7 @@ export default function App() {
   const isEmpresa = appParam === 'empresa';
   const isLP = appParam === 'lp';
   const [currentView, setCurrentView] = useState<ViewId>(isMobile ? 'onboarding' : 't1');
+  const [lpMode, setLpMode] = useState<LpMode>('mobile');
 
   if (isEmpresa) {
     return (
@@ -39,8 +41,9 @@ export default function App() {
 
   if (isLP) {
     return (
-      <div className="w-screen overflow-y-auto" style={{ height: '100dvh' }}>
+      <div className="w-screen" style={{ height: '100dvh' }}>
         <LandingPage />
+        <ChatBot posicao="fixed" />
       </div>
     );
   }
@@ -89,9 +92,47 @@ export default function App() {
       ) : currentView === 'talents' ? (
         <BancoDeTalentos onNavigate={(v: string) => setCurrentView(v as ViewId)} />
       ) : currentView === 'lp' ? (
-        <div className="flex items-start justify-center min-h-full">
-          <div className="w-[375px] bg-white shadow-xl border border-gray-200 rounded-2xl overflow-y-auto" style={{ minHeight: '812px' }}>
-            <LandingPage />
+        <div className="flex flex-col h-full">
+          {/* Barra de controle */}
+          <div className="flex-shrink-0 flex items-center justify-between px-6 py-3 bg-white border-b border-gray-200">
+            <span className="text-sm font-medium text-gray-700">Pré-visualização — Landing Page</span>
+            <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+              <button
+                onClick={() => setLpMode('mobile')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${lpMode === 'mobile' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>
+                </svg>
+                Mobile
+              </button>
+              <button
+                onClick={() => setLpMode('desktop')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${lpMode === 'desktop' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
+                Desktop
+              </button>
+            </div>
+          </div>
+
+          {/* Área de preview */}
+          <div className={`flex-1 overflow-auto ${lpMode === 'mobile' ? 'flex items-start justify-center pt-6 pb-6 bg-gray-100' : 'bg-gray-50'}`}>
+            {lpMode === 'mobile' ? (
+              <div className="relative w-[375px] bg-white shadow-xl border border-gray-200 rounded-2xl overflow-hidden flex-shrink-0" style={{ height: '812px' }}>
+                <div className="w-full h-full overflow-y-auto">
+                  <LandingPage />
+                </div>
+                <ChatBot />
+              </div>
+            ) : (
+              <div className="relative w-full min-h-full bg-white">
+                <LandingPage />
+                <ChatBot posicao="fixed" />
+              </div>
+            )}
           </div>
         </div>
       ) : currentView === 'empresa-app' ? (
