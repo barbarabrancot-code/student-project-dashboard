@@ -659,7 +659,7 @@ export function ChatBot({ posicao = 'absolute' }: { posicao?: 'absolute' | 'fixe
     <div className={`${posicao} bottom-0 left-0 right-0 z-50 flex flex-col items-end px-4 pb-4 pointer-events-none`} style={{}}>
       {/* Chat panel */}
       {aberto && (
-        <div className="pointer-events-auto flex flex-col bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden mb-3" style={{ width: 'min(360px, calc(100vw - 32px))', height: '75vh' }}>
+        <div className="pointer-events-auto flex flex-col bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden mb-3 w-full max-w-[360px]" style={{ height: '75vh' }}>
           {/* Header */}
           <div className="flex items-center gap-3 px-4 py-3 flex-shrink-0" style={{ background: 'linear-gradient(to right, #0F766E, #3B82F6)' }}>
             <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
